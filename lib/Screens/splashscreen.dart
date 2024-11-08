@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'Sign-In.dart'; // Import halaman sign-in
+import 'log_in.dart'; // Import halaman sign-in
 
 // import '../main.dart'; // Import main.dart untuk navigasi ke MainScreen
 
@@ -18,7 +18,7 @@ class SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => const SignInScreen(), // Navigasi ke halaman sign-in
+          builder: (_) => const LogInScreen(), // Navigasi ke halaman sign-in
         ),
       );
     });

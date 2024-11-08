@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/splashscreen.dart';
-// import 'package:uts_linkaja/screens/splash_screen.dart';
-// import 'package:uts_linkaja/screens/account.dart';
-// import 'package:uts_linkaja/screens/history.dart';
-// import 'package:uts_linkaja/screens/homepage.dart';
 
 void main() {
   runApp(const MyApp());
