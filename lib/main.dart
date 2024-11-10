@@ -29,13 +29,7 @@ class MainScreen extends StatefulWidget {
 
 class MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-  final List<Widget> _pages = [
-    // const HomePage(), // Home Page located in screens/homepage.dart
-    // const HistoryPage(), // History Page located in screens/history.dart
-    // const Center(child: Text('Pay Page')), // Placeholder for the Pay page
-    // const Center(child: Text('Inbox Page')), // Placeholder for the Inbox page
-    // const AccountPage(), // Account Page located in screens/account.dart
-  ];
+  final List<Widget> _pages = [];
 
   @override
   Widget build(BuildContext context) {

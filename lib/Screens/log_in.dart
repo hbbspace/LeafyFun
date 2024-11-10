@@ -41,9 +41,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 ),
               ),
               height: MediaQuery.of(context).size.height * 0.65,
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, // Align to the left
+              child: ListView(
                 children: [
                   // Teks "Login" di sebelah kiri
                   const Padding(
@@ -51,6 +49,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     child: Text(
                       'Login',
                       style: TextStyle(
+                        fontFamily: 'Poppins',
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
@@ -66,19 +65,23 @@ class _LogInScreenState extends State<LogInScreen> {
                       children: [
                         TextField(
                           decoration: InputDecoration(
-                            labelText: 'Username/Email',
+                            labelText: 'Username / Email',
+                            labelStyle: const TextStyle(
+                                fontFamily: 'Poppins', fontSize: 13),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 15),
 
                         // Kolom input password dengan ikon mata
                         TextField(
                           obscureText: _obscureText,
                           decoration: InputDecoration(
                             labelText: 'Password',
+                            labelStyle: const TextStyle(
+                                fontFamily: 'Poppins', fontSize: 13),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -92,7 +95,7 @@ class _LogInScreenState extends State<LogInScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 20),
 
                         // Teks Forgot Password
                         Align(
@@ -104,8 +107,9 @@ class _LogInScreenState extends State<LogInScreen> {
                             child: const Text(
                               'Forgot Password?',
                               style: TextStyle(
+                                fontFamily: 'Poppins',
                                 color: Colors.black,
-                                fontSize: 14,
+                                fontSize: 13,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -126,8 +130,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         backgroundColor: const Color.fromRGBO(10, 66, 63, 1),
                         padding: const EdgeInsets.symmetric(
                           vertical: 20,
-                          horizontal:
-                              100, // Ubah padding horizontal agar lebih pas
+                          horizontal: 200,
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -136,8 +139,103 @@ class _LogInScreenState extends State<LogInScreen> {
                       child: const Text(
                         'Login',
                         style: TextStyle(
+                          fontFamily: 'Poppins',
                           color: Colors.white,
                         ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+
+                  const Center(
+                    child: Text(
+                      'or continue with',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: Color.fromRGBO(81, 89, 120, 1),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+
+                  // Tombol Login dengan Google
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Tambahkan navigasi atau fungsi login Google di sini
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 15,
+                          horizontal: 135,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(350),
+                          side: const BorderSide(
+                              color: Color.fromARGB(255, 0, 0, 0)),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(
+                            'assets/devicon_google.png', // Tambahkan ikon Google di sini
+                            height: 24,
+                            width: 24,
+                          ),
+                          const SizedBox(width: 10),
+                          const Text(
+                            'Login with Google',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Tombol Login dengan Apple
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Tambahkan navigasi atau fungsi login Apple di sini
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 15,
+                          horizontal: 140,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(350),
+                          side: const BorderSide(
+                              color: Color.fromARGB(255, 0, 0, 0)),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(
+                            'assets/devicon_apple.png', // Tambahkan ikon Apple di sini
+                            height: 24,
+                            width: 24,
+                          ),
+                          const SizedBox(width: 10),
+                          const Text(
+                            'Login with Apple',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

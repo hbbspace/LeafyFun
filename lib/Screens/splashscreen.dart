@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'log_in.dart'; // Import halaman sign-in
 
-// import '../main.dart'; // Import main.dart untuk navigasi ke MainScreen
-
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -48,15 +46,16 @@ class SplashScreenState extends State<SplashScreen> {
                   const Text(
                     'LeafyFun',
                     style: TextStyle(
+                      fontFamily: 'Poppins',
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 30),
                   const CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      Color.fromARGB(255, 98, 98, 98),
+                      Color.fromARGB(255, 150, 150, 150),
                     ),
                   ),
                 ],
