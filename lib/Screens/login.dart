@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/register.dart';
+import 'package:leafyfun/Screens/homepage.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -220,6 +221,10 @@ class LoginButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             // Add navigation or login functionality here
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePageScreeen()),
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromRGBO(10, 66, 63, 1),
@@ -330,7 +335,7 @@ class SignUpText extends StatelessWidget {
             // Navigasi ke halaman Sign Up di sini
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => RegisterScreen()),
+              MaterialPageRoute(builder: (context) => const RegisterScreen()),
             );
           },
           child: const Text(

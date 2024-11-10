@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/log_in.dart';
+import 'package:leafyfun/Screens/login.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -235,7 +235,7 @@ class SignUpText extends StatelessWidget {
             // Navigasi ke halaman Sign Up di sini
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => LogInScreen()),
+              MaterialPageRoute(builder: (context) => const LogInScreen()),
             );
           },
           child: const Text(

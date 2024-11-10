@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/component/menu_item.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePageScreeen extends StatefulWidget {
+  const HomePageScreeen({super.key});
 
   @override
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePageScreeen> {
   late final PageController _pageController = PageController();
   int _currentPage = 0;
 

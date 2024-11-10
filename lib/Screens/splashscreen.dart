@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'log_in.dart'; // Import halaman sign-in
+import 'login.dart'; // Import halaman sign-in
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
