@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/register.dart';
+import 'package:leafyfun/Screens/log_in.dart';
 
-class LogInScreen extends StatefulWidget {
-  const LogInScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  _LogInScreenState createState() => _LogInScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _LogInScreenState extends State<LogInScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscureText = true;
 
   void _togglePasswordVisibility() {
@@ -41,7 +41,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 children: [
                   // Teks "Welcome Back" dan "Sign in Again"
                   Text(
-                    'Welcome \nBack!',
+                    'Welcome \nUser!',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 40,
@@ -51,11 +51,10 @@ class _LogInScreenState extends State<LogInScreen> {
                   ),
                   SizedBox(height: 10), // Memberikan jarak antar teks
                   Text(
-                    'Sign in to continue',
+                    'Sign up to join',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
-                      // fontWeight: FontWeight.normal,
                       color: Color.fromARGB(255, 255, 255, 255),
                     ),
                   ),
@@ -76,10 +75,10 @@ class _LogInScreenState extends State<LogInScreen> {
                     topRight: Radius.circular(50),
                   ),
                 ),
-                height: MediaQuery.of(context).size.height * 0.65,
+                height: MediaQuery.of(context).size.height * 0.52,
                 child: ListView(
                   children: const [
-                    //Text Login
+                    //Text Register
                     HeaderText(),
                     SizedBox(height: 20),
 
@@ -87,27 +86,9 @@ class _LogInScreenState extends State<LogInScreen> {
                     LoginForm(),
                     SizedBox(height: 30),
 
-                    //Tombol Login
+                    //Tombol Register
                     LoginButton(),
                     SizedBox(height: 30),
-
-                    //Teks
-                    ContinueWithText(),
-                    SizedBox(height: 15),
-
-                    //Button login google
-                    SocialLoginButton(
-                      assetPath: 'assets/devicon_google.png',
-                      label: 'Login with Google',
-                    ),
-                    SizedBox(height: 10),
-
-                    //Button login apple
-                    SocialLoginButton(
-                      assetPath: 'assets/devicon_apple.png',
-                      label: 'Login with Apple',
-                    ),
-                    SizedBox(height: 20),
 
                     //Text SignUp
                     SignUpText(),
@@ -128,7 +109,7 @@ class HeaderText extends StatelessWidget {
     return const Padding(
       padding: EdgeInsets.only(left: 10),
       child: Text(
-        'Login',
+        'Register',
         style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 24,
@@ -162,7 +143,17 @@ class _LoginFormState extends State<LoginForm> {
       children: [
         TextField(
           decoration: InputDecoration(
-            labelText: 'Username / Email',
+            labelText: 'Enter your first name',
+            labelStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        TextField(
+          decoration: InputDecoration(
+            labelText: 'Email Address',
             labelStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -173,7 +164,7 @@ class _LoginFormState extends State<LoginForm> {
         TextField(
           obscureText: _obscureText,
           decoration: InputDecoration(
-            labelText: 'Password',
+            labelText: 'Create Password',
             labelStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -186,24 +177,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
         ),
-        const SizedBox(height: 20),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: InkWell(
-            onTap: () {
-              // Add navigation or action for forgot password
-            },
-            child: const Text(
-              'Forgot Password?',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: Colors.black,
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
+        const SizedBox(height: 15),
       ],
     );
   }
@@ -228,80 +202,11 @@ class LoginButton extends StatelessWidget {
             ),
           ),
           child: const Text(
-            'Login',
+            'Register',
             style: TextStyle(
               fontFamily: 'Poppins',
               color: Colors.white,
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ContinueWithText extends StatelessWidget {
-  const ContinueWithText({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'or continue with',
-        style: TextStyle(
-          fontFamily: 'Poppins',
-          color: Color.fromRGBO(81, 89, 120, 1),
-          fontSize: 12,
-        ),
-      ),
-    );
-  }
-}
-
-class SocialLoginButton extends StatelessWidget {
-  final String assetPath;
-  final String label;
-
-  const SocialLoginButton({
-    super.key,
-    required this.assetPath,
-    required this.label,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () {
-            // Add navigation or social login functionality here
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(350),
-              side: const BorderSide(color: Colors.black),
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                assetPath,
-                height: 24,
-                width: 24,
-              ),
-              const SizedBox(width: 10),
-              Text(
-                label,
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  color: Colors.black,
-                  fontSize: 14,
-                ),
-              ),
-            ],
           ),
         ),
       ),
@@ -318,7 +223,7 @@ class SignUpText extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text(
-          "Don't have an account? ",
+          "Already have an account? ",
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 13,
@@ -330,11 +235,11 @@ class SignUpText extends StatelessWidget {
             // Navigasi ke halaman Sign Up di sini
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => RegisterScreen()),
+              MaterialPageRoute(builder: (context) => LogInScreen()),
             );
           },
           child: const Text(
-            'Sign Up',
+            'Log In',
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 13,
