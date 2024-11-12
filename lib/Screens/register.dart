@@ -25,7 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           // Background image
           Positioned.fill(
             child: Image.asset(
-              'assets/Background_LogIn.jpg',
+              'assets/images/Background_LogIn.jpg',
               fit: BoxFit.cover,
             ),
           ),

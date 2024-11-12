@@ -1,15 +1,36 @@
-version: '3'
+version: "3.9"  # hapus jika diperlukan karena Docker sudah memberikan peringatan
+
 services:
-  app:
-    build: .
+  frontend:
+    image: google/flutter  # menggunakan image google/flutter yang umum dipakai
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"  # Sesuaikan port bila perlu
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    env_file:
+      - .env
     depends_on:
       - db
+
   db:
-    image: mysql:5.7
+    image: mysql:8
     environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: leafyfun_db
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: leafyfun
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

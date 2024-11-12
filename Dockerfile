@@ -1,18 +1,18 @@
-# Menggunakan Python versi 3.12.4 sebagai image dasar
-FROM python:3.12.4
+# Menggunakan image Python sebagai base
+FROM python:3.10
 
-# Set work directory dalam container
+# Menetapkan direktori kerja
 WORKDIR /app
 
-# Salin file requirements.txt ke container dan install dependencies
+# Menyalin requirements dan menginstal dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
-# Salin semua kode proyek ke dalam container
+# Menyalin semua file proyek ke container
 COPY . .
 
-# Expose port yang akan digunakan oleh FastAPI
+# Mengekspose port untuk FastAPI
 EXPOSE 8000
 
-# Perintah untuk menjalankan aplikasi
+# Menjalankan aplikasi dengan Uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

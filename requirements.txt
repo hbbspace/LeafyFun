@@ -2,6 +2,8 @@ fastapi
 uvicorn
 sqlalchemy
 passlib[bcrypt]
+mysql-connector-python
+databases
 pydantic
 oauthlib
 requests-oauthlib
@@ -10,3 +12,5 @@ python-dotenv
 # docker build -t leafyfun-backend .
 # docker run -d -p 8000:8000 --env-file .env leafyfun-backend
 # docker-compose up --build
+# uvicorn main:app --reload
+# flutter run

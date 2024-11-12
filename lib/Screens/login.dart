@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/forgot_password.dart';
 import 'package:leafyfun/Screens/register.dart';
@@ -27,7 +29,7 @@ class _LogInScreenState extends State<LogInScreen> {
           // Background image
           Positioned.fill(
             child: Image.asset(
-              'assets/Background_LogIn.jpg',
+              'assets/images/Background_LogIn.jpg',
               fit: BoxFit.cover,
             ),
           ),
@@ -99,14 +101,14 @@ class _LogInScreenState extends State<LogInScreen> {
 
                     //Button login google
                     SocialLoginButton(
-                      assetPath: 'assets/devicon_google.png',
+                      assetPath: 'assets/images/devicon_google.png',
                       label: 'Login with Google',
                     ),
                     SizedBox(height: 10),
 
                     //Button login apple
                     SocialLoginButton(
-                      assetPath: 'assets/devicon_apple.png',
+                      assetPath: 'assets/images/devicon_apple.png',
                       label: 'Login with Apple',
                     ),
                     SizedBox(height: 20),
@@ -355,5 +357,22 @@ class SignUpText extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+Future<void> login(String email, String password) async {
+  final response = await http.post(
+    Uri.parse('http://localhost:8000/login'),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({'email': email, 'password': password}),
+  );
+
+  if (response.statusCode == 200) {
+    // Login berhasil
+    jsonDecode(response.body);
+    // Simpan token atau data user jika diperlukan
+  } else {
+    // Tampilkan pesan kesalahan
+    print('Login gagal: ${response.body}');
   }
 }

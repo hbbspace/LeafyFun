@@ -17,7 +17,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           // Background image
           Positioned.fill(
             child: Image.asset(
-              'assets/Background_LogIn.jpg',
+              'assets/images/Background_LogIn.jpg',
               fit: BoxFit.cover,
             ),
           ),
@@ -60,7 +60,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           BorderRadius.circular(15), // Border rounded gambar
                     ),
                     child: Image.asset(
-                      'assets/arrow-left.png', // Path gambar icon custom
+                      'assets/images/arrow-left.png', // Path gambar icon custom
                       fit: BoxFit.cover,
                     ),
                   ),

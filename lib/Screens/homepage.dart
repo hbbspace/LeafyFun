@@ -48,7 +48,7 @@ class HomePageState extends State<HomePageScreeen> {
           children: [
             // Background Image
             Image.asset(
-              'assets/background_homepage.jpg',
+              'assets/images/background_homepage.jpg',
               fit: BoxFit.cover,
             ),
             Column(
@@ -125,7 +125,7 @@ class HomePageState extends State<HomePageScreeen> {
                     itemBuilder: (context, index) {
                       return BannerItem(
                         imageUrl:
-                            'assets/iklan${index + 1}.jpg', // Gambar iklan
+                            'assets/images/iklan${index + 1}.jpg', // Gambar iklan
                       );
                     },
                   ),
@@ -161,7 +161,7 @@ class HomePageState extends State<HomePageScreeen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Image.asset('assets/logo.png', width: 50),
+                        Image.asset('assets/images/logo.png', width: 50),
                         Row(
                           children: [
                             IconButton(

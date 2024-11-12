@@ -39,7 +39,7 @@ class SplashScreenState extends State<SplashScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/Logo_LeafyFun.png', // Gambar logo utama
+                    'assets/images/Logo_LeafyFun.png', // Gambar logo utama
                     height: 80,
                   ),
                   const SizedBox(height: 10),
@@ -67,7 +67,7 @@ class SplashScreenState extends State<SplashScreen> {
             left: 0,
             right: 0,
             child: Image.asset(
-              'assets/College_Library.png', // Gambar dekorasi bawah
+              'assets/images/College_Library.png', // Gambar dekorasi bawah
               width: MediaQuery.of(context).size.width,
               height:
                   MediaQuery.of(context).size.height * 0.5, // Setengah halaman
