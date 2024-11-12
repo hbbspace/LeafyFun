@@ -1,6 +1,11 @@
 # leafyfun
 
-A new Flutter project.
+A Mobile Application for plant recognition through a leaf. Lets introduce our member:
+
+- Diantoro Kadarman
+- Febby Mathelda S M
+- Habibatul Mustofa
+- Maya Melanesia R
 
 ## Getting Started
 
