@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+sqlalchemy
+passlib[bcrypt]
+pydantic
+oauthlib
+requests-oauthlib
+python-dotenv
+
+# docker build -t leafyfun-backend .
+# docker run -d -p 8000:8000 --env-file .env leafyfun-backend
+# docker-compose up --build
