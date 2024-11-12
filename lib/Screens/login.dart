@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leafyfun/Screens/forgot_password.dart';
 import 'package:leafyfun/Screens/register.dart';
 import 'package:leafyfun/Screens/homepage.dart';
 
@@ -166,7 +167,7 @@ class _LoginFormState extends State<LoginForm> {
             labelText: 'Username / Email',
             labelStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(15),
             ),
           ),
         ),
@@ -177,7 +178,7 @@ class _LoginFormState extends State<LoginForm> {
             labelText: 'Password',
             labelStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(15),
             ),
             suffixIcon: IconButton(
               icon: Icon(
@@ -193,6 +194,10 @@ class _LoginFormState extends State<LoginForm> {
           child: InkWell(
             onTap: () {
               // Add navigation or action for forgot password
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ForgotPassword()),
+            );
             },
             child: const Text(
               'Forgot Password?',

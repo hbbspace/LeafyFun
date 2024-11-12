@@ -83,11 +83,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(height: 20),
 
                     //Kolom Input
-                    LoginForm(),
+                    RegisterForm(),
                     SizedBox(height: 30),
 
                     //Tombol Register
-                    LoginButton(),
+                    RegisterButton(),
                     SizedBox(height: 30),
 
                     //Text SignUp
@@ -121,14 +121,14 @@ class HeaderText extends StatelessWidget {
   }
 }
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+class RegisterForm extends StatefulWidget {
+  const RegisterForm({super.key});
 
   @override
-  _LoginFormState createState() => _LoginFormState();
+  _RegisterFormState createState() => _RegisterFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _RegisterFormState extends State<RegisterForm> {
   bool _obscureText = true;
 
   void _togglePasswordVisibility() {
@@ -146,7 +146,7 @@ class _LoginFormState extends State<LoginForm> {
             labelText: 'Enter your first name',
             labelStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(15),
             ),
           ),
         ),
@@ -183,8 +183,8 @@ class _LoginFormState extends State<LoginForm> {
   }
 }
 
-class LoginButton extends StatelessWidget {
-  const LoginButton({super.key});
+class RegisterButton extends StatelessWidget {
+  const RegisterButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +193,7 @@ class LoginButton extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            // Add navigation or login functionality here
+            // Add navigation or Register functionality here
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromRGBO(10, 66, 63, 1),
