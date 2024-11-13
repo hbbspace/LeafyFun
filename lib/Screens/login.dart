@@ -360,11 +360,11 @@ class SignUpText extends StatelessWidget {
   }
 }
 
-Future<void> login(String email, String password) async {
+Future<void> login(String username, String password) async {
   final response = await http.post(
-    Uri.parse('http://localhost:8000/login'),
+    Uri.parse('/login/'),
     headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'email': email, 'password': password}),
+    body: jsonEncode({'email': username, 'password': password}),
   );
 
   if (response.statusCode == 200) {

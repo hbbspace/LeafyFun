@@ -1,3 +1,6 @@
 {
-    "cmake.sourceDirectory": "C:/Users/Diantoro/Documents/SEMESTER 5/PBL/leafyfun/linux"
+    "cmake.sourceDirectory": "C:/Users/Diantoro/Documents/SEMESTER 5/PBL/leafyfun/linux",
+    "python.analysis.extraPaths": [
+        "./lib/services"
+    ]
 }
