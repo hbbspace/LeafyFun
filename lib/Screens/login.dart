@@ -230,7 +230,7 @@ class LoginButton extends StatelessWidget {
             // Add navigation or login functionality here
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const HomePageScreeen()),
+              MaterialPageRoute(builder: (context) => const HomePageScreen()),
             );
           },
           style: ElevatedButton.styleFrom(
