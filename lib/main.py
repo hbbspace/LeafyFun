@@ -1,17 +1,19 @@
-from fastapi import FastAPI, HTTPException, Depends, status, Request
+# lib/main.py
+from fastapi import FastAPI, HTTPException, Depends, status
 from pydantic import BaseModel
 from typing import Annotated
 from sqlalchemy.orm import Session
-from lib.models import user as UserModel  
-from lib.models import plant as PlantModel
-from lib.services.database import engine, SessionLocal
-from passlib.context import CryptContext  
+from lib.models.user import User as UserModel
+from lib.services.database import engine, SessionLocal, Base  # Import Base dari database.py
+from passlib.context import CryptContext
 
 app = FastAPI()
-UserModel.Base.metadata.create_all(bind=engine)
+
+# Ganti UserModel.Base.metadata.create_all(bind=engine) dengan Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 # Pydantic Models
-class User(BaseModel):
+class UserCreate(BaseModel):
     username: str
     email: str
     password: str
@@ -37,29 +39,29 @@ def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
 @app.post("/users/", status_code=status.HTTP_201_CREATED)
-async def create_user(user: User, db: db_dependency):
+async def create_user(user: UserCreate, db: db_dependency):
     try:
-        # Check if the user already exists
+        # Cek apakah pengguna sudah ada
         db_user = db.query(UserModel).filter(UserModel.email == user.email).first()
         if db_user:
-            raise HTTPException(status_code=400, detail="Email already registered")
+            raise HTTPException(status_code=400, detail="Email sudah terdaftar")
 
-        # Hash the password before storing it
+        # Hash password sebelum disimpan
         hashed_password = hash_password(user.password)
 
-        # Create a new user object for the database
+        # Buat objek pengguna baru
         new_user = UserModel(
             username=user.username,
             email=user.email,
-            password=hashed_password  # Store the hashed password
+            password=hashed_password
         )
 
-        # Add the new user to the database session and commit
+        # Tambahkan pengguna baru ke sesi database dan commit
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
 
-        return {"message": "User created successfully", "user_id": new_user.id}
+        return {"message": "User created successfully", "user_id": new_user.user_id}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
