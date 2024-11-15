@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/homepage.dart';
+import 'package:leafyfun/Screens/splashscreen.dart';
 
 void main() {
   runApp(const MyApp());
