@@ -16,7 +16,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.green,
         ),
-        home: const HomePageScreen() // Splash Screen
-        );
+        home: HomePageScreen());
   }
 }

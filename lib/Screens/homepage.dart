@@ -1,5 +1,7 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
 
 class HomePageScreen extends StatelessWidget {
   const HomePageScreen({super.key});
@@ -14,7 +16,7 @@ class HomePageScreen extends StatelessWidget {
           const TopBarWidget(
             greeting: "Hello,",
             userName: "User123",
-            profileImagePath: 'assets/images/profile.png',
+            profileImagePath: 'assets/images/plants1.png',
           ),
           const SizedBox(height: 20),
 
@@ -28,7 +30,7 @@ class HomePageScreen extends StatelessWidget {
                   'Article',
                   style: TextStyle(
                     fontFamily: 'Poppins',
-                    fontSize: 24,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
@@ -41,61 +43,59 @@ class HomePageScreen extends StatelessWidget {
           const SizedBox(height: 30),
 
           // Carousel Banner menggunakan ArticleCarousel
-          Column(
+          const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 20),
                 child: Text(
                   'New Added Plants',
                   style: TextStyle(
                     fontFamily: 'Poppins',
-                    fontSize: 24,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
-              ArticleCarousel(),
+              SizedBox(height: 10),
+              NewAddedPlantItem(
+                plantName: "Pohon Pepaya",
+                plantImage: "assets/images/plants1.png",
+                plantDescription: "Tanaman pepaya dengan rasa manis segar.",
+              ),
+              NewAddedPlantItem(
+                plantName: "Pohon Jambu",
+                plantImage: "assets/images/plants2.png",
+                plantDescription:
+                    "Tanaman Jambu yang menghasilkan buah besar dan manis.",
+              ),
+              NewAddedPlantItem(
+                plantName: "Lemon",
+                plantImage: "assets/images/plants3.png",
+                plantDescription:
+                    "Tanaman mangga yang menghasilkan buah besar dan manis.",
+              ),
+              NewAddedPlantItem(
+                plantName: "Pohon Pepaya",
+                plantImage: "assets/images/plants1.png",
+                plantDescription: "Tanaman pepaya dengan rasa manis segar.",
+              ),
+              NewAddedPlantItem(
+                plantName: "Pohon Jambu",
+                plantImage: "assets/images/plants2.png",
+                plantDescription:
+                    "Tanaman Jambu yang menghasilkan buah besar dan manis.",
+              ),
+              NewAddedPlantItem(
+                plantName: "Lemon",
+                plantImage: "assets/images/plants3.png",
+                plantDescription:
+                    "Tanaman mangga yang menghasilkan buah besar dan manis.",
+              ),
             ],
           ),
           const SizedBox(height: 30),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Text(
-                  'New Added Plants',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              ArticleCarousel(),
-            ],
-          ),
-
-          // Konten utama lainnya
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: Center(
-              child: Text(
-                "Main content here",
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -231,6 +231,86 @@ class TopBarWidget extends StatelessWidget {
           CircleAvatar(
             radius: 24,
             backgroundImage: AssetImage(profileImagePath),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class NewAddedPlantItem extends StatelessWidget {
+  final String plantName;
+  final String plantImage;
+  final String plantDescription;
+
+  const NewAddedPlantItem({
+    Key? key,
+    required this.plantName,
+    required this.plantImage,
+    required this.plantDescription,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.grey,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Foto tanaman di sebelah kiri
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset(
+              plantImage,
+              height: 70,
+              width: 70,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(width: 12), // Jarak antara foto dan teks
+          // Nama tanaman dan deskripsi singkat
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  plantName,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  plantDescription,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey,
+                  ),
+                  maxLines: 2,
+                  overflow:
+                      TextOverflow.ellipsis, // Jika deskripsi terlalu panjang
+                ),
+              ],
+            ),
           ),
         ],
       ),
