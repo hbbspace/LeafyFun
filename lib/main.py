@@ -4,6 +4,8 @@ from pydantic import BaseModel
 from typing import Annotated
 from sqlalchemy.orm import Session
 from lib.models.user import User as UserModel
+from lib.models.plant import Plant as PlantModel
+from lib.models.achievement import Achievement as AchievementModel
 from lib.services.database import engine, SessionLocal, Base  # Import Base dari database.py
 from passlib.context import CryptContext
 
