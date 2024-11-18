@@ -11,8 +11,15 @@ oauthlib
 requests-oauthlib
 python-dotenv
 
-# pip install fastapi uvicorn sqlalchemy pymysql passlib[bcrypt]
+# pip install fastapi uvicorn sqlalchemy pymysql passlib[bcrypt] alembic
 # pip install sqlmodel mysql-connector-python databases pydantic requests-oauthlib python-dotenv
 
 # uvicorn lib.main:app --reload
 # flutter run
+
+
+# NEXT TASKS
+# Memperbaiki setiap atribut pada setiap tabel
+# Memperbaiki relasi antar tabel
+# Mempelajari folder models dan schemas
+# Tb Tb alembic gjls
