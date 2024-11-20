@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:leafyfun/Screens/article1.dart';
 import 'package:leafyfun/Screens/homepage.dart';
-import 'package:leafyfun/Screens/splashscreen.dart';
+// import 'package:leafyfun/Screens/homepage1.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.green,
         ),
-        home: HomePageScreen());
+        home: Article1());
+    // home: MyHomePage(title: 'Test'));
   }
 }

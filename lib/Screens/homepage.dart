@@ -1,10 +1,41 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
+import 'package:leafyfun/Screens/article1.dart';
+import 'package:leafyfun/Screens/article2.dart';
+// import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
 
-class HomePageScreen extends StatelessWidget {
+class HomePageScreen extends StatefulWidget {
   const HomePageScreen({super.key});
+
+  @override
+  State<HomePageScreen> createState() => _HomePageScreenState();
+}
+
+class _HomePageScreenState extends State<HomePageScreen> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    // Tambahkan logika navigasi di sini
+    switch (index) {
+      case 0:
+        // Navigasi ke Home
+        break;
+      case 1:
+        // Navigasi ke Search
+        break;
+      case 2:
+        // Navigasi ke Favorite
+        break;
+      case 3:
+        // Navigasi ke Profile
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +73,7 @@ class HomePageScreen extends StatelessWidget {
           ),
           const SizedBox(height: 30),
 
-          // Carousel Banner menggunakan ArticleCarousel
+          // New Added Plants
           const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -96,13 +127,24 @@ class HomePageScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 30),
+
+          // Floating Navigation Bar
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: FloatingNavigationButtonBar(
+                currentIndex: _selectedIndex,
+                onItemTapped: _onItemTapped,
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-// Widget untuk ArticleCarousel
 class ArticleCarousel extends StatelessWidget {
   ArticleCarousel({super.key});
 
@@ -114,8 +156,14 @@ class ArticleCarousel extends StatelessWidget {
 
   final List<String> bannerTitles = [
     'Cara Mudah Menanam Jeruk di Rumah!',
-    'Cara Mudah Menanam Jeruk di Rumah!',
-    'Cara Mudah Menanam Jeruk di Rumah!',
+    'Tips Merawat Anggrek untuk Pemula',
+    'Panduan Lengkap Berkebun di Lahan Sempit',
+  ];
+
+  final List<Widget> targetPages = [
+    Article1(), // Ganti dengan halaman target Anda
+    Article2(),
+    Page3(),
   ];
 
   @override
@@ -133,43 +181,63 @@ class ArticleCarousel extends StatelessWidget {
           viewportFraction: 0.8, // Mengatur ukuran item carousel
         ),
         items: List.generate(bannerImages.length, (index) {
-          return Stack(
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  image: DecorationImage(
-                    image: AssetImage(bannerImages[index]),
-                    fit: BoxFit.cover,
-                  ),
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => targetPages[index],
                 ),
-              ),
-              Positioned(
-                bottom: 10,
-                left: 20,
-                child: Container(
-                  width: 375, // Batas lebar teks agar dapat membungkus
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      bannerTitles[index],
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                      ),
-                      softWrap: true, // Memungkinkan teks untuk pindah baris
-                      overflow: TextOverflow.visible, // Teks tidak dipotong
+              );
+            },
+            child: Stack(
+              children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    image: DecorationImage(
+                      image: AssetImage(bannerImages[index]),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
-              ),
-            ],
+                Positioned(
+                  bottom: 10,
+                  left: 20,
+                  child: Container(
+                    width: 375, // Batas lebar teks agar dapat membungkus
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        bannerTitles[index],
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                        softWrap: true, // Memungkinkan teks untuk pindah baris
+                        overflow: TextOverflow.visible, // Teks tidak dipotong
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
         }),
       ),
+    );
+  }
+}
+
+class Page3 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Artikel 3')),
+      body: Center(child: Text('Halaman Artikel 3')),
     );
   }
 }
@@ -313,6 +381,111 @@ class NewAddedPlantItem extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class FloatingNavigationButtonBar extends StatelessWidget {
+  final int currentIndex;
+  final Function(int) onItemTapped;
+
+  const FloatingNavigationButtonBar({
+    super.key,
+    required this.currentIndex,
+    required this.onItemTapped,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 70,
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: const Color.fromRGBO(10, 66, 63, 1),
+        borderRadius: BorderRadius.circular(40),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildNavItem(
+            assetPath: 'assets/images/plants1.png',
+            index: 0,
+            label: 'Home',
+            isSelected: currentIndex == 0,
+          ),
+          _buildNavItem(
+            assetPath: 'assets/images/plants1.png',
+            index: 1,
+            label: 'Quiz',
+            isSelected: currentIndex == 1,
+          ),
+          _buildNavItem(
+            assetPath: 'assets/images/plants1.png',
+            index: 2,
+            label: 'Scan',
+            isSelected: currentIndex == 2,
+          ),
+          _buildNavItem(
+            assetPath: 'assets/images/plants1.png',
+            index: 3,
+            label: 'Garden',
+            isSelected: currentIndex == 3,
+          ),
+          _buildNavItem(
+            assetPath: 'assets/images/plants1.png',
+            index: 4,
+            label: 'Profile',
+            isSelected: currentIndex == 4,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavItem({
+    required String assetPath,
+    required int index,
+    required String label,
+    required bool isSelected,
+  }) {
+    return GestureDetector(
+      onTap: () => onItemTapped(index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        padding:
+            isSelected ? const EdgeInsets.all(8.0) : const EdgeInsets.all(0.0),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.white : Colors.transparent,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              assetPath,
+              height: 25,
+              width: 25,
+              color: isSelected
+                  ? const Color.fromRGBO(10, 66, 63, 1)
+                  : const Color.fromRGBO(255, 255, 255, 1),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: isSelected
+                    ? 14
+                    : 12, // Ukuran font berbeda untuk selected & unselected
+                color: isSelected
+                    ? const Color.fromRGBO(10, 66, 63, 1)
+                    : const Color.fromARGB(255, 255, 255, 255),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
