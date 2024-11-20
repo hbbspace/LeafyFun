@@ -458,7 +458,13 @@ class FloatingNavigationButtonBar extends StatelessWidget {
             isSelected ? const EdgeInsets.all(8.0) : const EdgeInsets.all(0.0),
         decoration: BoxDecoration(
           color: isSelected ? Colors.white : Colors.transparent,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius:
+              BorderRadius.circular(360), // Radius untuk rounded corner
+          border: Border.all(
+            color:
+                isSelected ? Colors.white : Colors.transparent, // Warna border
+            width: 2, // Lebar border
+          ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
