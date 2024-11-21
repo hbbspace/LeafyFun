@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/homepage.dart';
+import 'package:leafyfun/Screens/otp_verification.dart';
+import 'package:leafyfun/Screens/splashscreen.dart';
 // import 'package:leafyfun/Screens/homepage1.dart';
 
 void main() {
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.green,
         ),
         // home: Article1());
-        home: HomePageScreen());
+        home: SplashScreen());
+    // home: OtpVerificationPage());
     // home: MyHomePage(title: 'Test'));
   }
 }

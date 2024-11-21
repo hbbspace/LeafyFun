@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/forgot_password.dart';
+import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/register.dart';
 
 class LogInScreen extends StatefulWidget {
@@ -196,9 +197,9 @@ class _LoginFormState extends State<LoginForm> {
             onTap: () {
               // Add navigation or action for forgot password
               Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ForgotPassword()),
-            );
+                context,
+                MaterialPageRoute(builder: (context) => const ForgotPassword()),
+              );
             },
             child: const Text(
               'Forgot Password?',
@@ -227,10 +228,10 @@ class LoginButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             // Add navigation or login functionality here
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => const HomePageScreen()),
-            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePageScreen()),
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromRGBO(10, 66, 63, 1),

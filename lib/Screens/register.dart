@@ -194,6 +194,10 @@ class RegisterButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             // Add navigation or Register functionality here
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const LogInScreen()),
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromRGBO(10, 66, 63, 1),

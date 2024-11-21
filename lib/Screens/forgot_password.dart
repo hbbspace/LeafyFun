@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/login.dart';
+import 'package:leafyfun/Screens/otp_verification.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -189,6 +190,10 @@ class ForgotPasswordButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             // Add navigation or ForgotPassword functionality here
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => OtpVerificationPage()),
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromRGBO(10, 66, 63, 1),
