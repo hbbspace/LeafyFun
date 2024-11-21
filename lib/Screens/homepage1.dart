@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({super.key, required this.title});
   final String title;
 
   @override
@@ -201,10 +201,10 @@ class InfiniteListPage extends StatelessWidget {
   final Color color;
 
   const InfiniteListPage({
-    Key? key,
+    super.key,
     required this.controller,
     required this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

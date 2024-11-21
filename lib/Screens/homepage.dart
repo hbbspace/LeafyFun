@@ -168,7 +168,7 @@ class ArticleCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 230,
       width: double.maxFinite,
       child: CarouselSlider(
@@ -205,7 +205,7 @@ class ArticleCarousel extends StatelessWidget {
                 Positioned(
                   bottom: 10,
                   left: 20,
-                  child: Container(
+                  child: SizedBox(
                     width: 375, // Batas lebar teks agar dapat membungkus
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -233,6 +233,8 @@ class ArticleCarousel extends StatelessWidget {
 }
 
 class Page3 extends StatelessWidget {
+  const Page3({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -248,11 +250,11 @@ class TopBarWidget extends StatelessWidget {
   final String profileImagePath;
 
   const TopBarWidget({
-    Key? key,
+    super.key,
     required this.greeting,
     required this.userName,
     required this.profileImagePath,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -312,11 +314,11 @@ class NewAddedPlantItem extends StatelessWidget {
   final String plantDescription;
 
   const NewAddedPlantItem({
-    Key? key,
+    super.key,
     required this.plantName,
     required this.plantImage,
     required this.plantDescription,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -463,7 +465,7 @@ class FloatingNavigationButtonBar extends StatelessWidget {
           border: Border.all(
             color:
                 isSelected ? Colors.white : Colors.transparent, // Warna border
-            width: 2, // Lebar border
+            width: 2  , // Lebar border
           ),
         ),
         child: Column(

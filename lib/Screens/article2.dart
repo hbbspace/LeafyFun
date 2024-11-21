@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Article2 extends StatelessWidget {
-  const Article2({Key? key}) : super(key: key);
+  const Article2({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class Article2 extends StatelessWidget {
 class ArrowBackButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const ArrowBackButton({Key? key, required this.onPressed}) : super(key: key);
+  const ArrowBackButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

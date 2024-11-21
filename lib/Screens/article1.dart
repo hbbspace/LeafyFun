@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Article1 extends StatelessWidget {
-  const Article1({Key? key}) : super(key: key);
+  const Article1({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -159,11 +159,11 @@ class ArrowBackButton extends StatelessWidget {
   final Color borderColor; // Warna border stroke
 
   const ArrowBackButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     this.iconPath = 'assets/images/arrow-left.png', // Path default
     this.borderColor = Colors.grey, // Warna default
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
