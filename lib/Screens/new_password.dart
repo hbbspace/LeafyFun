@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/login.dart';
-import 'package:leafyfun/Screens/otp_verification.dart';
 
-class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({super.key});
+class NewPassword extends StatefulWidget {
+  const NewPassword({super.key});
 
   @override
-  _ForgotPasswordState createState() => _ForgotPasswordState();
+  _NewPasswordState createState() => _NewPasswordState();
 }
 
-class _ForgotPasswordState extends State<ForgotPassword> {
+class _NewPasswordState extends State<NewPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,10 +29,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             child: GestureDetector(
               onTap: () {
                 // Navigasi ke halaman Login atau kembali ke halaman sebelumnya
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LogInScreen()),
-                );
+                Navigator.pop(context);
               },
               child: Stack(
                 alignment: Alignment.center,
@@ -80,7 +76,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 children: [
                   // Teks "Forgot Password"
                   Text(
-                    'Forgot \nPassword',
+                    'New \nPassword',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 40,
@@ -90,7 +86,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Enter your email',
+                    'Enter your new password',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -118,9 +114,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 children: const [
                   HeaderText(),
                   SizedBox(height: 20),
-                  ForgotPasswordForm(),
+                  NewPasswordForm(),
                   SizedBox(height: 30),
-                  ForgotPasswordButton(),
+                  NewPasswordButton(),
                   SizedBox(height: 30),
                 ],
               ),
@@ -140,7 +136,7 @@ class HeaderText extends StatelessWidget {
     return const Padding(
       padding: EdgeInsets.only(left: 10),
       child: Text(
-        'Email Address',
+        'New Password',
         style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 24,
@@ -152,24 +148,70 @@ class HeaderText extends StatelessWidget {
   }
 }
 
-class ForgotPasswordForm extends StatefulWidget {
-  const ForgotPasswordForm({super.key});
+class NewPasswordForm extends StatefulWidget {
+  const NewPasswordForm({super.key});
 
   @override
-  _ForgotPasswordFormState createState() => _ForgotPasswordFormState();
+  _NewPasswordFormState createState() => _NewPasswordFormState();
 }
 
-class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
+class _NewPasswordFormState extends State<NewPasswordForm> {
+  // Variabel untuk mengontrol visibilitas masing-masing TextField
+  bool _obscureText1 = true;
+  bool _obscureText2 = true;
+
+  // Fungsi toggle untuk TextField pertama
+  void _togglePasswordVisibility1() {
+    setState(() {
+      _obscureText1 = !_obscureText1;
+    });
+  }
+
+  // Fungsi toggle untuk TextField kedua
+  void _togglePasswordVisibility2() {
+    setState(() {
+      _obscureText2 = !_obscureText2;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        const SizedBox(height: 15),
         TextField(
+          obscureText:
+              _obscureText1, // Menggunakan variabel untuk TextField pertama
           decoration: InputDecoration(
-            labelText: 'Enter your email',
+            labelText: 'New Password',
             labelStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                _obscureText1 ? Icons.visibility : Icons.visibility_off,
+              ),
+              onPressed:
+                  _togglePasswordVisibility1, // Menggunakan toggle pertama
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        TextField(
+          obscureText:
+              _obscureText2, // Menggunakan variabel untuk TextField kedua
+          decoration: InputDecoration(
+            labelText: 'Repeat Password',
+            labelStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                _obscureText2 ? Icons.visibility : Icons.visibility_off,
+              ),
+              onPressed: _togglePasswordVisibility2, // Menggunakan toggle kedua
             ),
           ),
         ),
@@ -179,8 +221,8 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
   }
 }
 
-class ForgotPasswordButton extends StatelessWidget {
-  const ForgotPasswordButton({super.key});
+class NewPasswordButton extends StatelessWidget {
+  const NewPasswordButton({super.key});
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -188,10 +230,10 @@ class ForgotPasswordButton extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            // Add navigation or ForgotPassword functionality here
+            // Add navigation or NewPassword functionality here
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => OtpVerificationPage()),
+              MaterialPageRoute(builder: (context) => LogInScreen()),
             );
           },
           style: ElevatedButton.styleFrom(
@@ -201,7 +243,7 @@ class ForgotPasswordButton extends StatelessWidget {
             ),
           ),
           child: const Text(
-            'Reset Password',
+            'Confirm',
             style: TextStyle(
               fontFamily: 'Poppins',
               color: Colors.white,

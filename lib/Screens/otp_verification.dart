@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leafyfun/Screens/new_password.dart';
 
 class OtpVerificationPage extends StatefulWidget {
   const OtpVerificationPage({super.key});
@@ -25,61 +26,99 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
-        title: const Text('Email Verification'),
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 20),
-              const Text(
-                'We sent a verification code to',
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                '***man03@gmail.com',
-                style: const TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      backgroundColor: Colors.white, // Background halaman putih
+      body: Stack(
+        children: [
+          Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min, // Supaya column tetap di tengah
+                crossAxisAlignment:
+                    CrossAxisAlignment.center, // Posisi teks di tengah
                 children: [
-                  for (int i = 0; i < _otpControllers.length; i++)
-                    _buildOtpInput(index: i),
+                  const SizedBox(height: 40), // Memberikan jarak dari atas
+                  const Text(
+                    'Email Verification',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'We sent a verification code to',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '***man03@gmail.com',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(
+                      _otpControllers.length,
+                      (index) => _buildOtpInput(index: index),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Didn't receive the code? ",
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 13,
+                          color: Colors.black,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // Navigasi ke...
+                        },
+                        child: const Text(
+                          'Resend',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 0, 0, 0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 40),
+                  const VerifyButton(),
                 ],
               ),
-              const SizedBox(height: 20),
-              TextButton(
-                onPressed: () {
-                  // TODO: Implement resend functionality
-                },
-                child: const Text('Didn\'t receive the code? Resend'),
-              ),
-              const SizedBox(height: 40),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // TODO: Implement verification logic
-                  }
-                },
-                child: const Text('Verify'),
-              ),
-            ],
+            ),
           ),
-        ),
+          Positioned(
+            top: 0, // Jarak dari atas
+            left: 25, // Jarak dari kiri
+            child: ArrowBackButton(
+              onPressed: () {
+                Navigator.pop(context); // Navigasi kembali ke halaman sebelumnya
+              },
+              borderColor: Colors.black, // Warna border
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -98,7 +137,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
         textAlign: TextAlign.center,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Required';
+            return '';
           }
           return null;
         },
@@ -109,6 +148,92 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
             FocusScope.of(context).previousFocus();
           }
         },
+      ),
+    );
+  }
+}
+
+class VerifyButton extends StatelessWidget {
+  const VerifyButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () {
+            // Add navigation
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const NewPassword()),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromRGBO(10, 66, 63, 1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          child: const Text(
+            'Verify',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ArrowBackButton extends StatelessWidget {
+  final VoidCallback onPressed; // Fungsi fleksibel untuk navigasi atau aksi
+  final String iconPath; // Path ke gambar icon
+  final Color borderColor; // Warna border stroke
+
+  const ArrowBackButton({
+    super.key,
+    required this.onPressed,
+    this.iconPath = 'assets/images/ArrowLeftBlack.png', // Path default
+    this.borderColor = Colors.grey, // Warna default
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Container luar sebagai "stroke"
+          Container(
+            width:
+                35, // Lebar dan tinggi lebih besar dari gambar untuk "stroke"
+            height: 35,
+            decoration: BoxDecoration(
+              color: Colors.transparent, // Warna latar belakang stroke
+              borderRadius: BorderRadius.circular(10), // Border rounded
+              border: Border.all(
+                color: borderColor, // Warna "stroke"
+                width: 1, // Ketebalan "stroke"
+              ),
+            ),
+          ),
+          // Container dalam berisi gambar icon
+          Container(
+            width: 20, // Lebar dan tinggi sesuai dengan ukuran gambar
+            height: 20,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15), // Border rounded gambar
+            ),
+            child: Image.asset(
+              iconPath, // Path gambar icon custom
+              fit: BoxFit.cover,
+            ),
+          ),
+        ],
       ),
     );
   }
