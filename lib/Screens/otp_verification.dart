@@ -45,26 +45,42 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 crossAxisAlignment:
                     CrossAxisAlignment.center, // Posisi teks di tengah
                 children: [
-                  const SizedBox(height: 40), // Memberikan jarak dari atas
-                  const Text(
-                    'Email Verification',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'We sent a verification code to',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '***man03@gmail.com',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  const SizedBox(height: 40),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Email Verification',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Image.asset(
+                            'assets/images/mailbox.png', // Path logo Anda
+                            width: 24,
+                            height: 24,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'We\'ve sent a verification code to',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '***man03@gmail.com',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 40),
                   Row(
@@ -113,7 +129,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
             left: 25, // Jarak dari kiri
             child: ArrowBackButton(
               onPressed: () {
-                Navigator.pop(context); // Navigasi kembali ke halaman sebelumnya
+                Navigator.pop(
+                    context); // Navigasi kembali ke halaman sebelumnya
               },
               borderColor: Colors.black, // Warna border
             ),
