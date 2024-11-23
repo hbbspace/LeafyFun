@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:leafyfun/Screens/homepage.dart';
+import 'package:leafyfun/Widgets/floating_navbar.dart';
 
 class LeafyQuiz extends StatefulWidget {
   const LeafyQuiz({super.key});
@@ -8,6 +11,41 @@ class LeafyQuiz extends StatefulWidget {
 }
 
 class _LeafyQuizState extends State<LeafyQuiz> {
+  int _selectedIndex = 1; // Set index sesuai dengan posisi di navbar
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    // Logika navigasi antar halaman
+    switch (index) {
+      case 0:
+        // Navigasi ke HomePage
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePageScreen()),
+        );
+        break;
+      case 1:
+        // Navigasi ke LeafyQuiz
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const LeafyQuiz()),
+        );
+        break;
+      case 2:
+        Navigator.pushNamed(context, '/scan');
+        break;
+      case 3:
+        Navigator.pushNamed(context, '/garden');
+        break;
+      case 4:
+        Navigator.pushNamed(context, '/profile');
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +90,8 @@ class _LeafyQuizState extends State<LeafyQuiz> {
             alignment: Alignment.bottomCenter,
             child: SingleChildScrollView(
               child: Container(
-                padding: const EdgeInsets.all(30),
+                padding: const EdgeInsets.only(
+                    top: 30, right: 1, left: 1, bottom: 30),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -65,84 +104,49 @@ class _LeafyQuizState extends State<LeafyQuiz> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Welcome to Leafy Quiz!',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                    Container(
+                      padding: EdgeInsets.only(left: 30, right: 30),
+                      child: const Text(
+                        'Select Your Quiz',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
-                      'Test your knowledge about plants in a fun way!',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        color: Colors.black54,
-                      ),
-                    ),
-                    const SizedBox(height: 30),
 
-                    // Tombol mulai quiz
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const QuizPage(), // Halaman quiz
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromRGBO(10, 66, 63, 1),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 15,
-                            horizontal: 50,
-                          ),
-                          child: Text(
-                            'Start Quiz',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
+                    // Menambahkan ArticleCarousel di bawah judul
+                    ArticleCarousel(),
+                    const SizedBox(height: 40),
+
+                    Container(
+                      padding: EdgeInsets.only(left: 30, right: 30),
+                      child: const Text(
+                        'Finished Quiz',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal,
+                          color: Color.fromARGB(255, 80, 80, 80),
                         ),
                       ),
                     ),
-
-                    // Konten tambahan agar bisa di-scroll
-                    const SizedBox(height: 50),
-                    const Text(
-                      'Why take this quiz?',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      'This quiz helps you understand more about plants in an engaging and educational way. Dive into the world of flora and expand your knowledge!',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        color: Colors.black54,
-                      ),
-                    ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
+            ),
+          ),
+          Positioned(
+            bottom: 15,
+            left: 20,
+            right: 20,
+            child: FloatingNavigationButtonBar(
+              currentIndex: _selectedIndex,
+              onItemTapped: _onItemTapped,
             ),
           ),
         ],
@@ -151,28 +155,90 @@ class _LeafyQuizState extends State<LeafyQuiz> {
   }
 }
 
-// Placeholder untuk halaman quiz
-class QuizPage extends StatelessWidget {
-  const QuizPage({super.key});
+// Widget Carousel Slider
+class ArticleCarousel extends StatelessWidget {
+  ArticleCarousel({super.key});
+
+  final List<String> bannerImages = [
+    'assets/images/plants1.png',
+    'assets/images/plants2.png',
+    'assets/images/plants3.png',
+  ];
+
+  final List<String> bannerTitles = [
+    'Cara Mudah Menanam Jeruk di Rumah!',
+    'Tips Merawat Anggrek untuk Pemula',
+    'Panduan Lengkap Berkebun di Lahan Sempit',
+  ];
+
+  final List<Widget> targetPages = [];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Quiz Page'),
-        backgroundColor: const Color.fromRGBO(10, 66, 63, 1),
-      ),
-      body: const Center(
-        child: Text(
-          'Quiz content goes here',
-          style: TextStyle(fontFamily: 'Poppins', fontSize: 18),
+    return SizedBox(
+      height: 230,
+      width: double.infinity,
+      child: CarouselSlider(
+        options: CarouselOptions(
+          aspectRatio: 2.0,
+          enlargeCenterPage: true,
+          enableInfiniteScroll: false,
+          initialPage: 0,
+          autoPlay: false,
+          viewportFraction: 0.8, // Mengatur ukuran item carousel
         ),
+        items: List.generate(bannerImages.length, (index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => targetPages[index],
+                ),
+              );
+            },
+            child: Stack(
+              children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    image: DecorationImage(
+                      image: AssetImage(bannerImages[index]),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 10,
+                  left: 20,
+                  child: SizedBox(
+                    width: 375, // Batas lebar teks agar dapat membungkus
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        bannerTitles[index],
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                        softWrap: true, // Memungkinkan teks untuk pindah baris
+                        overflow: TextOverflow.visible, // Teks tidak dipotong
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
 }
 
-// TopBarWidget (disesuaikan)
 class TopBarWidget extends StatelessWidget {
   final String greeting;
   final String userName;

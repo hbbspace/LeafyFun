@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:leafyfun/Screens/article1.dart';
 import 'package:leafyfun/Screens/article2.dart';
-// import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
+import 'package:leafyfun/Screens/leafyQuiz.dart';
+import 'package:leafyfun/widgets/floating_navbar.dart';
 
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({super.key});
@@ -22,15 +23,26 @@ class _HomePageScreenState extends State<HomePageScreen> {
     // Tambahkan logika navigasi di sini
     switch (index) {
       case 0:
-        // Navigasi ke Home
+        // Navigasi ke HomePage
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePageScreen()),
+        );
         break;
       case 1:
-        // Navigasi ke Search
+        // Navigasi ke LeafyQuiz
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const LeafyQuiz()),
+        );
         break;
       case 2:
-        // Navigasi ke Favorite
+        // Navigasi ke ScanPage
         break;
       case 3:
+        // Navigasi ke LeafyGarden
+        break;
+      case 4:
         // Navigasi ke Profile
         break;
     }
@@ -40,102 +52,110 @@ class _HomePageScreenState extends State<HomePageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: ListView(
+      body: Stack(
         children: [
-          // Top Bar Widget
-          const TopBarWidget(
-            greeting: "Hello,",
-            userName: "User123",
-            profileImagePath: 'assets/images/plants1.png',
-          ),
-          const SizedBox(height: 20),
-
-          // Carousel Banner menggunakan ArticleCarousel
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Text(
-                  'Article',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+          // Konten Utama
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                // Top Bar Widget
+                const TopBarWidget(
+                  greeting: "Hello,",
+                  userName: "User123",
+                  profileImagePath: 'assets/images/plants1.png',
                 ),
-              ),
-              const SizedBox(height: 20),
-              ArticleCarousel(),
-            ],
-          ),
-          const SizedBox(height: 30),
+                const SizedBox(height: 20),
 
-          // New Added Plants
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Text(
-                  'New Added Plants',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                // Carousel Banner menggunakan ArticleCarousel
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20),
+                      child: Text(
+                        'Article',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ArticleCarousel(),
+                  ],
                 ),
-              ),
-              SizedBox(height: 10),
-              NewAddedPlantItem(
-                plantName: "Pohon Pepaya",
-                plantImage: "assets/images/plants1.png",
-                plantDescription: "Tanaman pepaya dengan rasa manis segar.",
-              ),
-              NewAddedPlantItem(
-                plantName: "Pohon Jambu",
-                plantImage: "assets/images/plants2.png",
-                plantDescription:
-                    "Tanaman Jambu yang menghasilkan buah besar dan manis.",
-              ),
-              NewAddedPlantItem(
-                plantName: "Lemon",
-                plantImage: "assets/images/plants3.png",
-                plantDescription:
-                    "Tanaman mangga yang menghasilkan buah besar dan manis.",
-              ),
-              NewAddedPlantItem(
-                plantName: "Pohon Pepaya",
-                plantImage: "assets/images/plants1.png",
-                plantDescription: "Tanaman pepaya dengan rasa manis segar.",
-              ),
-              NewAddedPlantItem(
-                plantName: "Pohon Jambu",
-                plantImage: "assets/images/plants2.png",
-                plantDescription:
-                    "Tanaman Jambu yang menghasilkan buah besar dan manis.",
-              ),
-              NewAddedPlantItem(
-                plantName: "Lemon",
-                plantImage: "assets/images/plants3.png",
-                plantDescription:
-                    "Tanaman mangga yang menghasilkan buah besar dan manis.",
-              ),
-            ],
-          ),
-          const SizedBox(height: 30),
+                const SizedBox(height: 30),
 
-          // Floating Navigation Bar
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
-              child: FloatingNavigationButtonBar(
-                currentIndex: _selectedIndex,
-                onItemTapped: _onItemTapped,
-              ),
+                // New Added Plants
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 20),
+                      child: Text(
+                        'New Added Plants',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    NewAddedPlantItem(
+                      plantName: "Pohon Pepaya",
+                      plantImage: "assets/images/plants1.png",
+                      plantDescription:
+                          "Tanaman pepaya dengan rasa manis segar.",
+                    ),
+                    NewAddedPlantItem(
+                      plantName: "Pohon Jambu",
+                      plantImage: "assets/images/plants2.png",
+                      plantDescription:
+                          "Tanaman Jambu yang menghasilkan buah besar dan manis.",
+                    ),
+                    NewAddedPlantItem(
+                      plantName: "Lemon",
+                      plantImage: "assets/images/plants3.png",
+                      plantDescription:
+                          "Tanaman mangga yang menghasilkan buah besar dan manis.",
+                    ),
+                    NewAddedPlantItem(
+                      plantName: "Pohon Pepaya",
+                      plantImage: "assets/images/plants1.png",
+                      plantDescription:
+                          "Tanaman pepaya dengan rasa manis segar.",
+                    ),
+                    NewAddedPlantItem(
+                      plantName: "Pohon Jambu",
+                      plantImage: "assets/images/plants2.png",
+                      plantDescription:
+                          "Tanaman Jambu yang menghasilkan buah besar dan manis.",
+                    ),
+                    NewAddedPlantItem(
+                      plantName: "Lemon",
+                      plantImage: "assets/images/plants3.png",
+                      plantDescription:
+                          "Tanaman mangga yang menghasilkan buah besar dan manis.",
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 100),
+              ],
+            ),
+          ),
+
+          // Floating Navigation Bar Tetap di Bawah
+          Positioned(
+            bottom: 15,
+            left: 20,
+            right: 20,
+            child: FloatingNavigationButtonBar(
+              currentIndex: _selectedIndex,
+              onItemTapped: _onItemTapped,
             ),
           ),
         ],
@@ -160,7 +180,7 @@ class ArticleCarousel extends StatelessWidget {
   ];
 
   final List<Widget> targetPages = [
-    Article1(), // Ganti dengan halaman target Anda
+    Article1(),
     Article2(),
     Page3(),
   ];
@@ -382,117 +402,6 @@ class NewAddedPlantItem extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class FloatingNavigationButtonBar extends StatelessWidget {
-  final int currentIndex;
-  final Function(int) onItemTapped;
-
-  const FloatingNavigationButtonBar({
-    super.key,
-    required this.currentIndex,
-    required this.onItemTapped,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 70,
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: const Color.fromRGBO(10, 66, 63, 1),
-        borderRadius: BorderRadius.circular(40),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(
-            assetPath: 'assets/images/plants1.png',
-            index: 0,
-            label: 'Home',
-            isSelected: currentIndex == 0,
-          ),
-          _buildNavItem(
-            assetPath: 'assets/images/plants1.png',
-            index: 1,
-            label: 'Quiz',
-            isSelected: currentIndex == 1,
-          ),
-          _buildNavItem(
-            assetPath: 'assets/images/plants1.png',
-            index: 2,
-            label: 'Scan',
-            isSelected: currentIndex == 2,
-          ),
-          _buildNavItem(
-            assetPath: 'assets/images/plants1.png',
-            index: 3,
-            label: 'Garden',
-            isSelected: currentIndex == 3,
-          ),
-          _buildNavItem(
-            assetPath: 'assets/images/plants1.png',
-            index: 4,
-            label: 'Profile',
-            isSelected: currentIndex == 4,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem({
-    required String assetPath,
-    required int index,
-    required String label,
-    required bool isSelected,
-  }) {
-    return GestureDetector(
-      onTap: () => onItemTapped(index),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        padding:
-            isSelected ? const EdgeInsets.all(8.0) : const EdgeInsets.all(0.0),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.transparent,
-          borderRadius:
-              BorderRadius.circular(360), // Radius untuk rounded corner
-          border: Border.all(
-            color:
-                isSelected ? Colors.white : Colors.transparent, // Warna border
-            width: 2  , // Lebar border
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              assetPath,
-              height: 25,
-              width: 25,
-              color: isSelected
-                  ? const Color.fromRGBO(10, 66, 63, 1)
-                  : const Color.fromRGBO(255, 255, 255, 1),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: isSelected
-                    ? 14
-                    : 12, // Ukuran font berbeda untuk selected & unselected
-                color: isSelected
-                    ? const Color.fromRGBO(10, 66, 63, 1)
-                    : const Color.fromARGB(255, 255, 255, 255),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
