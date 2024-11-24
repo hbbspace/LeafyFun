@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:leafyfun/Screens/article1.dart';
 import 'package:leafyfun/Screens/article2.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
+import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/widgets/floating_navbar.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -44,6 +45,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
         break;
       case 4:
         // Navigasi ke Profile
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ProfilePage()),
+        );
         break;
     }
   }
@@ -62,7 +67,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 const TopBarWidget(
                   greeting: "Hello,",
                   userName: "User123",
-                  profileImagePath: 'assets/images/plants1.png',
+                  profileImagePath: 'assets/images/profilePicture.png',
                 ),
                 const SizedBox(height: 20),
 

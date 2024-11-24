@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:leafyfun/Screens/homepage.dart';
+import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Widgets/floating_navbar.dart';
 
 class LeafyQuiz extends StatefulWidget {
@@ -69,7 +70,10 @@ class _LeafyQuizState extends State<LeafyQuiz> {
         Navigator.pushNamed(context, '/garden');
         break;
       case 4:
-        Navigator.pushNamed(context, '/profile');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ProfilePage()),
+        );
         break;
     }
   }
@@ -110,7 +114,7 @@ class _LeafyQuizState extends State<LeafyQuiz> {
                   TopBarWidget(
                     greeting: "Welcome to Leafy Quiz,",
                     userName: "User123",
-                    profileImagePath: 'assets/images/profile_image.png',
+                    profileImagePath: 'assets/images/profilePicture.png',
                   ),
                   const SizedBox(height: 10),
 
