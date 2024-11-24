@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/forgot_password.dart';
 import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/register.dart';
-import 'package:leafyfun/widgets/success_popup.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});

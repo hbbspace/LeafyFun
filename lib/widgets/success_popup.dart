@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SuccessPopup extends StatelessWidget {
   final Function onTap;
 
-  SuccessPopup({required this.onTap});
+  const SuccessPopup({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

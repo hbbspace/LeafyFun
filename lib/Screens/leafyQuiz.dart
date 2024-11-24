@@ -14,7 +14,7 @@ class LeafyQuiz extends StatefulWidget {
 class _LeafyQuizState extends State<LeafyQuiz> {
   int _selectedIndex = 1; // Set index sesuai dengan posisi di navbar
   final TextEditingController _searchController = TextEditingController();
-  List<String> _allQuizItems = [
+  final List<String> _allQuizItems = [
     'Aloe Vera',
     'Sunflower',
     'Cactus',
@@ -184,7 +184,7 @@ class _LeafyQuizState extends State<LeafyQuiz> {
                       plantImage: 'assets/images/plants3.png',
                       QuizDescription: 'Description for $quiz.',
                     );
-                  }).toList(),
+                  }),
 
                   const SizedBox(height: 100), // Tambahan ruang untuk navigasi
                 ],
