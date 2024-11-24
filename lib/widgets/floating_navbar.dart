@@ -38,8 +38,9 @@ class FloatingNavigationButtonBar extends StatelessWidget {
         selectedItemColor: Colors.white, // Warna icon/text terpilih
         unselectedItemColor: Colors.white.withOpacity(0.7), // Warna default
         selectedLabelStyle: const TextStyle(
+          fontFamily: 'Poppins  ',
           fontWeight: FontWeight.bold,
-          fontSize: 14,
+          fontSize: 12,
         ),
         unselectedLabelStyle: const TextStyle(
           fontSize: 12,
@@ -47,35 +48,35 @@ class FloatingNavigationButtonBar extends StatelessWidget {
         items: [
           BottomNavigationBarItem(
             icon: _buildNavItemIcon(
-              'assets/images/plants1.png',
+              'assets/images/navbar_home.png',
               isSelected: currentIndex == 0,
             ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: _buildNavItemIcon(
-              'assets/images/plants1.png',
+              'assets/images/navbar_quiz.png',
               isSelected: currentIndex == 1,
             ),
             label: 'Quiz',
           ),
           BottomNavigationBarItem(
             icon: _buildNavItemIcon(
-              'assets/images/plants1.png',
+              'assets/images/navbar_scan.png',
               isSelected: currentIndex == 2,
             ),
             label: 'Scan',
           ),
           BottomNavigationBarItem(
             icon: _buildNavItemIcon(
-              'assets/images/plants1.png',
+              'assets/images/navbar_garden.png',
               isSelected: currentIndex == 3,
             ),
             label: 'Garden',
           ),
           BottomNavigationBarItem(
             icon: _buildNavItemIcon(
-              'assets/images/plants1.png',
+              'assets/images/navbar_profile.png',
               isSelected: currentIndex == 4,
             ),
             label: 'Profile',
@@ -98,7 +99,7 @@ class FloatingNavigationButtonBar extends StatelessWidget {
       child: Image.asset(
         assetPath,
         height: 25,
-        width: 25,
+        width: 40,
         color: isSelected
             ? const Color.fromRGBO(10, 66, 63, 1)
             : Colors.white.withOpacity(0.7),
