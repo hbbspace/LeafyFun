@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/forgot_password.dart';
 import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/register.dart';
+import 'package:leafyfun/widgets/success_popup.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -224,30 +225,62 @@ class LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () {
-            // Add navigation or login functionality here
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const HomePageScreen()),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromRGBO(10, 66, 63, 1),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              // Tampilkan pop-up
+              showDialog(
+                context: context,
+                builder: (context) {
+                  // Mulai penghitung waktu untuk menutup dialog secara otomatis
+                  Future.delayed(const Duration(seconds: 1), () {
+                    Navigator.of(context).pop(); // Tutup pop-up setelah 1 detik
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePageScreen()),
+                    );
+                  });
+
+                  // Pop-up yang ditampilkan
+                  return AlertDialog(
+                    backgroundColor: Colors.white, // Pop-up transparan
+                    elevation: 0, // Hilangkan bayangan
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(50), // Sudut melengkung
+                    ),
+                    content: Column(
+                      mainAxisSize:
+                          MainAxisSize.min, // Sesuaikan ukuran berdasarkan isi
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(40),
+                          child: Image.asset(
+                            'assets/images/success_popup.png', // Path gambar Anda
+                            width: 200,
+                            height: 200,
+                            fit: BoxFit
+                                .contain, // Atur ukuran gambar agar sesuai
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color.fromRGBO(10, 66, 63, 1),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
-          ),
-          child: const Text(
-            'Login',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: Colors.white,
+            child: const Text(
+              "Login",
+              style: TextStyle(color: Colors.white),
             ),
-          ),
-        ),
-      ),
+          )),
     );
   }
 }
