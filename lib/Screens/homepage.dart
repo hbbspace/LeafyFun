@@ -4,6 +4,7 @@ import 'package:leafyfun/Screens/article1.dart';
 import 'package:leafyfun/Screens/article2.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/profile.dart';
+import 'package:leafyfun/Screens/scanPage.dart';
 import 'package:leafyfun/widgets/floating_navbar.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -39,6 +40,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
         break;
       case 2:
         // Navigasi ke ScanPage
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ScanPage()),
+        );
         break;
       case 3:
         // Navigasi ke LeafyGarden

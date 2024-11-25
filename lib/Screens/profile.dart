@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/login.dart';
+import 'package:leafyfun/Screens/scanPage.dart';
 import 'package:leafyfun/widgets/floating_navbar.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -21,18 +22,31 @@ class _ProfilePageState extends State<ProfilePage> {
 
     switch (index) {
       case 0:
+        // Navigasi ke HomePage
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const HomePageScreen()),
         );
         break;
       case 1:
+        // Navigasi ke LeafyQuiz
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const LeafyQuiz()),
         );
         break;
+      case 2:
+        // Navigasi ke ScanPage
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ScanPage()),
+        );
+        break;
+      case 3:
+        // Navigasi ke LeafyGarden
+        break;
       case 4:
+        // Navigasi ke Profile
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const ProfilePage()),

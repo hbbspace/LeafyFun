@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/login.dart';
+import 'package:leafyfun/Screens/scanPage.dart';
 // import 'package:leafyfun/Screens/homepage1.dart';
 
 void main() {
@@ -14,11 +16,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'LeafyFun',
         theme: ThemeData(primarySwatch: Colors.green),
-        home: LogInScreen());
-    // home: SplashScreen());
-    // home: LeafyQuiz());
-    // home: ProfilePage());
-    // home: HomePageScreen());
+        // home: LogInScreen());
+        // home: ScanPage());
+        // home: SplashScreen());
+        // home: LeafyQuiz());
+        // home: ProfilePage());
+        home: HomePageScreen());
     // home: MyHomePage(title: 'Test'));
   }
 }

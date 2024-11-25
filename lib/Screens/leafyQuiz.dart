@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/profile.dart';
+import 'package:leafyfun/Screens/scanPage.dart';
 import 'package:leafyfun/Widgets/floating_navbar.dart';
 
 class LeafyQuiz extends StatefulWidget {
@@ -64,12 +65,17 @@ class _LeafyQuizState extends State<LeafyQuiz> {
         );
         break;
       case 2:
-        Navigator.pushNamed(context, '/scan');
+        // Navigasi ke ScanPage
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ScanPage()),
+        );
         break;
       case 3:
-        Navigator.pushNamed(context, '/garden');
+        // Navigasi ke LeafyGarden
         break;
       case 4:
+        // Navigasi ke Profile
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const ProfilePage()),
