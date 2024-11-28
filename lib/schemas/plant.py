@@ -1,35 +1,25 @@
 from pydantic import BaseModel
-from typing import Optional
 
 
 class PlantBase(BaseModel):
     common_name: str
-    latin_name: Optional[str]
-    description: Optional[str]
-    vitamin_content: Optional[str]
-    fruit_type: Optional[str]
-    fruit_season: Optional[str]
-    region: Optional[str]
-    price_range: Optional[str]
-    image_file: Optional[str]
-
-
-class PlantCreate(BaseModel):
-    name: str
+    latin_name: str
     description: str
-    price: float
+    fruit_content: str
+    fruit_season: str
+    region: str
+    price_range: str
+    image_file: str
 
 
-class PlantRead(BaseModel):
-    plant_id: int
-    name: str
-    description: str
-    price: float
+class PlantCreate(PlantBase):
+    pass
 
 
-class PlantOut(PlantBase):
+class PlantRead(PlantBase):
     plant_id: int
 
 
-class Config:
-    orm_mode = True
+class PlantOut(PlantRead):
+    class Config:
+        from_attributes = True

@@ -11,9 +11,11 @@ class UserAchievementCreate(UserAchievementBase):
     pass
 
 
-class UserAchievementOut(UserAchievementBase):
+class UserAchievementRead(UserAchievementBase):
     user_achievement_id: int
     date_earned: datetime
 
+
+class UserAchievementOut(UserAchievementRead):
     class Config:
-        orm_mode = True
+        from_attributes = True

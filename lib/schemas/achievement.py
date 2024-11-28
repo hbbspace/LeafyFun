@@ -7,19 +7,16 @@ class AchievementBase(BaseModel):
     coin_reward: int
 
 
-class AchievementCreate(BaseModel):
-    name: str
-    description: str
+class AchievementCreate(AchievementBase):
+    pass
 
 
-class AchievementRead(BaseModel):
+class AchievementRead(AchievementBase):
     achievement_id: int
-    name: str
-    description: str
 
 
 class AchievementOut(AchievementBase):
     achievement_id: int
 
-class Config:
-    orm_mode = True
+    class Config:
+        from_attributes = True

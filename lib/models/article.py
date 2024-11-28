@@ -6,6 +6,6 @@ class Article(Base):
     __tablename__ = "articles"
     
     article_id = Column(Integer, primary_key=True, index=True)
-    title = Column(String(200))
+    title = Column(String(200), index=True)
     content = Column(Text)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, index=True)

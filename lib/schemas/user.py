@@ -1,30 +1,27 @@
-from pydantic import BaseModel, EmailStr
-from typing import Optional, List
-from datetime import datetime
+from pydantic import BaseModel
+from typing import List, Optional
 
-# Base class for User with optional profile_border, profile_image, and coins
+
 class UserBase(BaseModel):
     username: str
-    email: EmailStr
-    profile_border: Optional[str] = None  # Optional
-    profile_image: Optional[str] = None  # Optional
-    coins: Optional[int] = 0  # Optional with default 0
+    email: str
+    google_auth: Optional[bool] = False
+    profile_border: Optional[str] = None
+    profile_image: Optional[str] = None
+    coins: int
 
-# Schema for creating a new User
-class UserCreate(BaseModel):
-    username: str
-    email: EmailStr
+
+class UserCreate(UserBase):
     password: str
 
-# Schema for reading User (without sensitive information)
-class UserRead(BaseModel):
-    user_id: int
-    username: str
-    email: EmailStr
 
-# Output schema for returning User with full details
-class UserOut(UserBase):
-    user_id: int  # Add user_id to the output
+class UserRead(UserBase):
+    user_id: int
+
+
+class UserOut(UserRead):
+    user_plants: List[int] = []
+    user_achievements: List[int] = []
 
     class Config:
-        orm_mode = True  # Important for converting SQLAlchemy model to Pydantic model
+        from_attributes = True

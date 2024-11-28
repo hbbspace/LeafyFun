@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import List
 
 
 class QuizBase(BaseModel):
@@ -11,8 +10,10 @@ class QuizCreate(QuizBase):
     pass
 
 
-class QuizOut(QuizBase):
+class QuizRead(QuizBase):
     quiz_id: int
 
+
+class QuizOut(QuizRead):
     class Config:
-        orm_mode = True
+        from_attributes = True

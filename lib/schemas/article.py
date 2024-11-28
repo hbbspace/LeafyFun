@@ -11,9 +11,11 @@ class ArticleCreate(ArticleBase):
     pass
 
 
-class ArticleOut(ArticleBase):
+class ArticleRead(ArticleBase):
     article_id: int
     created_at: datetime
 
+
+class ArticleOut(ArticleRead):
     class Config:
-        orm_mode = True
+        from_attributes = True

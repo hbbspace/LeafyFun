@@ -11,9 +11,11 @@ class UserPlantCreate(UserPlantBase):
     pass
 
 
-class UserPlantOut(UserPlantBase):
+class UserPlantRead(UserPlantBase):
     user_plant_id: int
     date_saved: datetime
 
+
+class UserPlantOut(UserPlantRead):
     class Config:
-        orm_mode = True
+        from_attributes = True

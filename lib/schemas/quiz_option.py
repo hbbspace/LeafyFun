@@ -11,8 +11,10 @@ class QuizOptionCreate(QuizOptionBase):
     pass
 
 
-class QuizOptionOut(QuizOptionBase):
+class QuizOptionRead(QuizOptionBase):
     option_id: int
 
+
+class QuizOptionOut(QuizOptionRead):
     class Config:
-        orm_mode = True
+        from_attributes = True
