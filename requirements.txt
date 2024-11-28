@@ -11,7 +11,7 @@ oauthlib
 requests-oauthlib
 python-dotenv
 
-# pip install fastapi uvicorn sqlalchemy pymysql passlib[bcrypt] alembic
+# pip install fastapi uvicorn sqlalchemy pymysql passlib[bcrypt] python-jose
 # pip install sqlmodel mysql-connector-python databases pydantic requests-oauthlib python-dotenv
 
 # uvicorn lib.main:app --reload

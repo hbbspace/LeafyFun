@@ -18,6 +18,9 @@ class UserCreate(UserBase):
 class UserRead(UserBase):
     user_id: int
 
+class LoginRequest(BaseModel):
+    email: str
+    password: str
 
 class UserOut(UserRead):
     user_plants: List[int] = []

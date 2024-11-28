@@ -11,7 +11,7 @@ router = APIRouter()
 # Initialize CryptContext for hashing passwords
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-@router.post("/", response_model=UserRead, status_code=status.HTTP_201_CREATED)
+@router.post("/add_user", response_model=UserRead, status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = db.query(UserModel).filter(UserModel.email == user.email).first()
     if db_user:

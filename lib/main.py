@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from lib.services.database import engine, Base, SessionLocal
-from lib.routers import user_router, plant_router, achievement_router
+from lib.routers import user_router, plant_router, achievement_router, auth_router
 from lib.models.__init__ import initialize_data
 
 # Inisialisasi FastAPI
@@ -28,5 +28,6 @@ def on_startup():
 
 # Include Routers
 app.include_router(user_router, prefix="/users", tags=["Users"])
-# app.include_router(plant_router, prefix="/plants", tags=["Plants"])
-# app.include_router(achievement_router, prefix="/achievements", tags=["Achievements"])
+app.include_router(plant_router, prefix="/plants", tags=["Plants"])
+app.include_router(achievement_router, prefix="/achievements", tags=["Achievements"])
+app.include_router(auth_router, prefix="/login", tags=["Login"])
