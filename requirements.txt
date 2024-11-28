@@ -19,7 +19,3 @@ python-dotenv
 
 
 # NEXT TASKS
-# Memperbaiki setiap atribut pada setiap tabel
-# Memperbaiki relasi antar tabel
-# Mempelajari folder models dan schemas
-# Tb Tb alembic gjls
