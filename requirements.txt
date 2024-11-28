@@ -19,3 +19,5 @@ python-dotenv
 
 
 # NEXT TASKS
+
+# flutter pub add camera path_provider path

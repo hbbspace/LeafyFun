@@ -5,6 +5,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
 class ScanPage extends StatefulWidget {
+  const ScanPage({super.key});
+
   @override
   _ScanPageState createState() => _ScanPageState();
 }

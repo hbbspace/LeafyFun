@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:leafyfun/Screens/homepage.dart';
+import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
 import 'package:leafyfun/Widgets/floating_navbar.dart';
@@ -73,6 +74,10 @@ class _LeafyQuizState extends State<LeafyQuiz> {
         break;
       case 3:
         // Navigasi ke LeafyGarden
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LeafyGarden()),
+        );
         break;
       case 4:
         // Navigasi ke Profile

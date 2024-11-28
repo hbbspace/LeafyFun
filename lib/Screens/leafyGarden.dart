@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:leafyfun/Screens/article1.dart';
 import 'package:leafyfun/Screens/article2.dart';
+import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
@@ -15,7 +16,7 @@ class LeafyGarden extends StatefulWidget {
 }
 
 class _LeafyGardenState extends State<LeafyGarden> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 3;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -28,7 +29,7 @@ class _LeafyGardenState extends State<LeafyGarden> {
         // Navigasi ke HomePage
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const LeafyGarden()),
+          MaterialPageRoute(builder: (context) => const HomePageScreen()),
         );
         break;
       case 1:
@@ -47,6 +48,10 @@ class _LeafyGardenState extends State<LeafyGarden> {
         break;
       case 3:
         // Navigasi ke LeafyGarden
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LeafyGarden()),
+        );
         break;
       case 4:
         // Navigasi ke Profile
@@ -62,22 +67,13 @@ class _LeafyGardenState extends State<LeafyGarden> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-      ),
       body: Stack(
         children: [
           // Konten Utama
           SingleChildScrollView(
             child: Column(
               children: [
-                // Top Bar Widget
-                const TopBarWidget(
-                  greeting: "Hello,",
-                  userName: "User123",
-                  profileImagePath: 'assets/images/profilePicture.png',
-                ),
                 const SizedBox(height: 20),
-
                 // Carousel Banner menggunakan ArticleCarousel
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,19 +81,34 @@ class _LeafyGardenState extends State<LeafyGarden> {
                     const Padding(
                       padding: EdgeInsets.only(left: 20),
                       child: Text(
-                        'Article',
+                        'My Garden',
                         style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 30,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const Padding(
+                      padding: EdgeInsets.only(
+                          left: 20, top: 8), // Tambahkan padding untuk jarak
+                      child: Text(
+                        'You have 3 plants.',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                          color:
+                              Colors.black54, // Warna teks sedikit lebih terang
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20), // Spasi sebelum carousel
                     ArticleCarousel(),
                   ],
                 ),
+
                 const SizedBox(height: 30),
 
                 // New Added Plants
@@ -110,7 +121,7 @@ class _LeafyGardenState extends State<LeafyGarden> {
                         'New Added Plants',
                         style: TextStyle(
                           fontFamily: 'Poppins',
-                          fontSize: 30,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -275,70 +286,6 @@ class Page3 extends StatelessWidget {
   }
 }
 
-class TopBarWidget extends StatelessWidget {
-  final String greeting;
-  final String userName;
-  final String profileImagePath;
-
-  const TopBarWidget({
-    super.key,
-    required this.greeting,
-    required this.userName,
-    required this.profileImagePath,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 40, left: 16, right: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Kata sambutan
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                greeting,
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black,
-                ),
-              ),
-              Row(
-                children: [
-                  Text(
-                    userName,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(width: 5), // Jarak antara teks dan gambar
-                  Image.asset(
-                    'assets/images/waving_hands.png',
-                    height: 20,
-                    width: 20,
-                  ),
-                ],
-              ),
-            ],
-          ),
-          // Gambar profil bulat kecil
-          CircleAvatar(
-            radius: 24,
-            backgroundImage: AssetImage(profileImagePath),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class NewAddedPlantItem extends StatelessWidget {
   final String plantName;
   final String plantImage;
@@ -418,3 +365,4 @@ class NewAddedPlantItem extends StatelessWidget {
     );
   }
 }
+

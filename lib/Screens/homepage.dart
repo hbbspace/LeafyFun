@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:leafyfun/Screens/article1.dart';
 import 'package:leafyfun/Screens/article2.dart';
+import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
@@ -47,6 +48,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
         break;
       case 3:
         // Navigasi ke LeafyGarden
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LeafyGarden()),
+        );
         break;
       case 4:
         // Navigasi ke Profile
@@ -206,7 +211,7 @@ class ArticleCarousel extends StatelessWidget {
           enlargeCenterPage: true,
           enableInfiniteScroll: false,
           initialPage: 0,
-          autoPlay: false,
+          autoPlay: true,
           viewportFraction: 0.8, // Mengatur ukuran item carousel
         ),
         items: List.generate(bannerImages.length, (index) {

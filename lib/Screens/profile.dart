@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/homepage.dart';
+import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/login.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
@@ -44,6 +45,10 @@ class _ProfilePageState extends State<ProfilePage> {
         break;
       case 3:
         // Navigasi ke LeafyGarden
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LeafyGarden()),
+        );
         break;
       case 4:
         // Navigasi ke Profile

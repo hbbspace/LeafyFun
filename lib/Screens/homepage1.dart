@@ -1,224 +1,396 @@
-import 'package:flutter/gestures.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+final List<String> imgList = [
+  'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
+  'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
+  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+  'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
+  'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
+  'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
+];
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
+void main() => runApp(CarouselDemo());
 
-class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin {
-  late int currentPage;
-  late TabController tabController;
-  final List<Color> colors = [
-    Colors.yellow,
-    Colors.red,
-    Colors.green,
-    Colors.blue,
-    Colors.pink,
-  ];
+final themeMode = ValueNotifier(2);
 
-  @override
-  void initState() {
-    currentPage = 0;
-    tabController = TabController(length: 5, vsync: this);
-    tabController.animation?.addListener(
-      () {
-        final value = tabController.animation!.value.round();
-        if (value != currentPage && mounted) {
-          changePage(value);
-        }
-      },
-    );
-    super.initState();
-  }
-
-  void changePage(int newPage) {
-    setState(() {
-      currentPage = newPage;
-    });
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
-  }
+class CarouselDemo extends StatelessWidget {
+  const CarouselDemo({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final Color unselectedColor = colors[currentPage].computeLuminance() < 0.5
-        ? Colors.black
-        : Colors.white;
-    final Color unselectedColorReverse =
-        colors[currentPage].computeLuminance() < 0.5
-            ? Colors.white
-            : Colors.black;
+    return ValueListenableBuilder(
+      builder: (context, value, g) {
+        return MaterialApp(
+          initialRoute: '/',
+          darkTheme: ThemeData.dark(),
+          themeMode: ThemeMode.values.toList()[value],
+          debugShowCheckedModeBanner: false,
+          routes: {
+            '/': (ctx) => CarouselDemoHome(),
+            '/basic': (ctx) => BasicDemo(),
+            '/nocenter': (ctx) => NoCenterDemo(),
+            '/image': (ctx) => ImageSliderDemo(),
+            '/complicated': (ctx) => ComplicatedImageDemo(),
+            '/enlarge': (ctx) => EnlargeStrategyDemo(),
+            '/manual': (ctx) => ManuallyControlledSlider(),
+            '/noloop': (ctx) => NoonLoopingDemo(),
+            '/vertical': (ctx) => VerticalSliderDemo(),
+            '/fullscreen': (ctx) => FullscreenSliderDemo(),
+            '/ondemand': (ctx) => OnDemandCarouselDemo(),
+            '/indicator': (ctx) => CarouselWithIndicatorDemo(),
+            '/prefetch': (ctx) => PrefetchImageDemo(),
+            '/reason': (ctx) => CarouselChangeReasonDemo(),
+            '/position': (ctx) => KeepPageviewPositionDemo(),
+            '/multiple': (ctx) => MultipleItemDemo(),
+            '/zoom': (ctx) => EnlargeStrategyZoomDemo(),
+          },
+        );
+      },
+      valueListenable: themeMode,
+    );
+  }
+}
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          backgroundColor: Colors.black,
+class DemoItem extends StatelessWidget {
+  final String title;
+  final String route;
+  const DemoItem(this.title, this.route, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(title),
+      onTap: () {
+        Navigator.pushNamed(context, route);
+      },
+    );
+  }
+}
+
+class CarouselDemoHome extends StatelessWidget {
+  const CarouselDemoHome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Carousel demo'),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.nightlight_round),
+              onPressed: () {
+                themeMode.value = themeMode.value == 1 ? 2 : 1;
+              })
+        ],
+      ),
+      body: ListView(
+        children: <Widget>[
+          DemoItem('Basic demo', '/basic'),
+          DemoItem('No center mode demo', '/nocenter'),
+          DemoItem('Image carousel slider', '/image'),
+          DemoItem('More complicated image slider', '/complicated'),
+          DemoItem('Enlarge strategy demo slider', '/enlarge'),
+          DemoItem('Manually controlled slider', '/manual'),
+          DemoItem('Noon-looping carousel slider', '/noloop'),
+          DemoItem('Vertical carousel slider', '/vertical'),
+          DemoItem('Fullscreen carousel slider', '/fullscreen'),
+          DemoItem('Carousel with indicator controller demo', '/indicator'),
+          DemoItem('On-demand carousel slider', '/ondemand'),
+          DemoItem('Image carousel slider with prefetch demo', '/prefetch'),
+          DemoItem('Carousel change reason demo', '/reason'),
+          DemoItem('Keep pageview position demo', '/position'),
+          DemoItem('Multiple item in one screen demo', '/multiple'),
+          DemoItem('Enlarge strategy: zoom demo', '/zoom'),
+        ],
+      ),
+    );
+  }
+}
+
+class BasicDemo extends StatelessWidget {
+  const BasicDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    List<int> list = [1, 2, 3, 4, 5];
+    return Scaffold(
+      appBar: AppBar(title: Text('Basic demo')),
+      body: Container(
+          child: CarouselSlider(
+        options: CarouselOptions(),
+        items: list
+            .map((item) => Container(
+                  color: Colors.green,
+                  child: Center(child: Text(item.toString())),
+                ))
+            .toList(),
+      )),
+    );
+  }
+}
+
+class NoCenterDemo extends StatelessWidget {
+  const NoCenterDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    List<int> list = [1, 2, 3, 4, 5];
+    return Scaffold(
+      appBar: AppBar(title: Text('Basic demo')),
+      body: Container(
+          child: CarouselSlider(
+        options: CarouselOptions(
+          disableCenter: true,
         ),
-        body: BottomBar(
-          clip: Clip.none,
-          fit: StackFit.expand,
-          icon: (width, height) => Center(
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              onPressed: null,
-              icon: Icon(
-                Icons.arrow_upward_rounded,
-                color: unselectedColor,
-                size: width,
-              ),
-            ),
+        items: list
+            .map((item) => Container(
+                  color: Colors.green,
+                  child: Text(item.toString()),
+                ))
+            .toList(),
+      )),
+    );
+  }
+}
+
+class ImageSliderDemo extends StatelessWidget {
+  const ImageSliderDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Image slider demo')),
+      body: Container(
+          child: CarouselSlider(
+        options: CarouselOptions(),
+        items: imgList
+            .map((item) => Container(
+                  child: Center(
+                      child:
+                          Image.network(item, fit: BoxFit.cover, width: 1000)),
+                ))
+            .toList(),
+      )),
+    );
+  }
+}
+
+final List<Widget> imageSliders = imgList
+    .map((item) => Container(
+          child: Container(
+            margin: EdgeInsets.all(5.0),
+            child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                child: Stack(
+                  children: <Widget>[
+                    Image.network(item, fit: BoxFit.cover, width: 1000.0),
+                    Positioned(
+                      bottom: 0.0,
+                      left: 0.0,
+                      right: 0.0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color.fromARGB(200, 0, 0, 0),
+                              Color.fromARGB(0, 0, 0, 0)
+                            ],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                          ),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 20.0),
+                        child: Text(
+                          'No. ${imgList.indexOf(item)} image',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
           ),
-          borderRadius: BorderRadius.circular(500),
-          duration: Duration(milliseconds: 500),
-          curve: Curves.decelerate,
-          showIcon: true,
-          width: MediaQuery.of(context).size.width * 0.8,
-          barColor: colors[currentPage].computeLuminance() > 0.5
-              ? Colors.black
-              : Colors.white,
-          start: 2,
-          end: 0,
-          offset: 10,
-          barAlignment: Alignment.bottomCenter,
-          iconHeight: 30,
-          iconWidth: 30,
-          reverse: false,
-          hideOnScroll: true,
-          scrollOpposite: false,
-          onBottomBarHidden: () {},
-          onBottomBarShown: () {},
-          body: (context, controller) => TabBarView(
-            controller: tabController,
-            dragStartBehavior: DragStartBehavior.down,
-            physics: const BouncingScrollPhysics(),
-            children: colors
-                .map(
-                  (e) => InfiniteListPage(
-                    key: ValueKey('infinite_list_key#${e.toString()}'),
-                    controller: controller,
-                    color: e,
-                  ),
-                )
-                .toList(),
+        ))
+    .toList();
+
+class ComplicatedImageDemo extends StatelessWidget {
+  const ComplicatedImageDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Complicated image slider demo')),
+      body: Container(
+        child: CarouselSlider(
+          options: CarouselOptions(
+            autoPlay: true,
+            aspectRatio: 2.0,
+            enlargeCenterPage: true,
           ),
-          child: Stack(
-            alignment: Alignment.center,
-            clipBehavior: Clip.none,
-            children: [
-              TabBar(
-                indicatorPadding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
-                controller: tabController,
-                indicator: UnderlineTabIndicator(
-                    borderSide: BorderSide(
-                      color: currentPage <= 4
-                          ? colors[currentPage]
-                          : unselectedColor,
-                      width: 4,
-                    ),
-                    insets: EdgeInsets.fromLTRB(16, 0, 16, 8)),
-                tabs: [
-                  SizedBox(
-                    height: 55,
-                    width: 40,
-                    child: Center(
-                        child: Icon(
-                      Icons.home,
-                      color: currentPage == 0 ? colors[0] : unselectedColor,
-                    )),
-                  ),
-                  SizedBox(
-                    height: 55,
-                    width: 40,
-                    child: Center(
-                      child: Icon(
-                        Icons.search,
-                        color: currentPage == 1 ? colors[1] : unselectedColor,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 55,
-                    width: 40,
-                    child: Center(
-                      child: Icon(
-                        Icons.add,
-                        color: currentPage == 2
-                            ? colors[2]
-                            : unselectedColorReverse,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 55,
-                    width: 40,
-                    child: Center(
-                      child: Icon(
-                        Icons.favorite,
-                        color: currentPage == 3 ? colors[3] : unselectedColor,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 55,
-                    width: 40,
-                    child: Center(
-                      child: Icon(
-                        Icons.settings,
-                        color: currentPage == 4 ? colors[4] : unselectedColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Positioned(
-                top: -25,
-                child: FloatingActionButton(
-                  onPressed: () {},
-                  child: Icon(Icons.add),
-                ),
-              )
-            ],
-          ),
+          items: imageSliders,
         ),
       ),
     );
   }
 }
 
-class InfiniteListPage extends StatelessWidget {
-  final ScrollController controller;
-  final Color color;
-
-  const InfiniteListPage({
-    super.key,
-    required this.controller,
-    required this.color,
-  });
+class EnlargeStrategyDemo extends StatelessWidget {
+  const EnlargeStrategyDemo({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: color,
-      child: ListView.builder(
-        controller: controller,
-        itemCount: 50, // Contoh jumlah item
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(
-              'Item $index',
-              style: const TextStyle(color: Color.fromRGBO(255, 255, 255, 1)),
+    return Scaffold(
+      appBar: AppBar(title: Text('Complicated image slider demo')),
+      body: Container(
+        child: CarouselSlider(
+          options: CarouselOptions(
+            autoPlay: true,
+            aspectRatio: 2.0,
+            enlargeCenterPage: true,
+            enlargeStrategy: CenterPageEnlargeStrategy.height,
+          ),
+          items: imageSliders,
+        ),
+      ),
+    );
+  }
+}
+
+class ManuallyControlledSlider extends StatefulWidget {
+  const ManuallyControlledSlider({super.key});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ManuallyControlledSliderState();
+  }
+}
+
+class _ManuallyControlledSliderState extends State<ManuallyControlledSlider> {
+  final CarouselSliderController _controller = CarouselSliderController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: Text('Manually controlled slider')),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              CarouselSlider(
+                items: imageSliders,
+                options: CarouselOptions(enlargeCenterPage: true, height: 200),
+                carouselController: _controller,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Flexible(
+                    child: ElevatedButton(
+                      onPressed: () => _controller.previousPage(),
+                      child: Text('←'),
+                    ),
+                  ),
+                  Flexible(
+                    child: ElevatedButton(
+                      onPressed: () => _controller.nextPage(),
+                      child: Text('→'),
+                    ),
+                  ),
+                  ...Iterable<int>.generate(imgList.length).map(
+                    (int pageIndex) => Flexible(
+                      child: ElevatedButton(
+                        onPressed: () => _controller.animateToPage(pageIndex),
+                        child: Text("$pageIndex"),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ));
+  }
+}
+
+class NoonLoopingDemo extends StatelessWidget {
+  const NoonLoopingDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Noon-looping carousel demo')),
+      body: Container(
+          child: CarouselSlider(
+        options: CarouselOptions(
+          aspectRatio: 2.0,
+          enlargeCenterPage: true,
+          enableInfiniteScroll: false,
+          initialPage: 2,
+          autoPlay: true,
+        ),
+        items: imageSliders,
+      )),
+    );
+  }
+}
+
+class VerticalSliderDemo extends StatelessWidget {
+  const VerticalSliderDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Vertical sliding carousel demo')),
+      body: Container(
+          child: CarouselSlider(
+        options: CarouselOptions(
+          aspectRatio: 2.0,
+          enlargeCenterPage: true,
+          scrollDirection: Axis.vertical,
+          autoPlay: true,
+        ),
+        items: imageSliders,
+      )),
+    );
+  }
+}
+
+class FullscreenSliderDemo extends StatelessWidget {
+  const FullscreenSliderDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Fullscreen sliding carousel demo')),
+      body: Builder(
+        builder: (context) {
+          final double height = MediaQuery.of(context).size.height;
+          return CarouselSlider(
+            options: CarouselOptions(
+              height: height,
+              viewportFraction: 1.0,
+              enlargeCenterPage: false,
+              // autoPlay: false,
             ),
+            items: imgList
+                .map((item) => Container(
+                      child: Center(
+                          child: Image.network(
+                        item,
+                        fit: BoxFit.cover,
+                        height: height,
+                      )),
+                    ))
+                .toList(),
           );
         },
       ),
@@ -226,382 +398,308 @@ class InfiniteListPage extends StatelessWidget {
   }
 }
 
+class OnDemandCarouselDemo extends StatelessWidget {
+  const OnDemandCarouselDemo({super.key});
 
-// import 'package:flutter/gestures.dart';
-// import 'package:flutter/material.dart';
-// import 'package:carousel_slider/carousel_slider.dart';
-// import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('On-demand carousel demo')),
+      body: Container(
+          child: CarouselSlider.builder(
+        itemCount: 100,
+        options: CarouselOptions(
+          aspectRatio: 2.0,
+          enlargeCenterPage: true,
+          autoPlay: true,
+        ),
+        itemBuilder: (ctx, index, realIdx) {
+          return Container(
+            child: Text(index.toString()),
+          );
+        },
+      )),
+    );
+  }
+}
 
-// class HomePageScreen extends StatefulWidget {
-//   const HomePageScreen({super.key});
+// yang dipake asddddddddddddddddddddddddddd
+// yang dipake asddddddddddddddddddddddddddd
+// yang dipake asddddddddddddddddddddddddddd
+// yang dipake asddddddddddddddddddddddddddd
+// yang dipake asddddddddddddddddddddddddddd
+class CarouselWithIndicatorDemo extends StatefulWidget {
+  const CarouselWithIndicatorDemo({super.key});
 
-//   @override
-//   State<HomePageScreen> createState() => _HomePageScreenState();
-// }
+  @override
+  State<StatefulWidget> createState() {
+    return _CarouselWithIndicatorState();
+  }
+}
 
-// class _HomePageScreenState extends State<HomePageScreen> with SingleTickerProviderStateMixin {
-//   late TabController _tabController;
-//   int _selectedIndex = 0;
+class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
+  int _current = 0;
+  final CarouselSliderController _controller = CarouselSliderController();
 
-//   final List<Color> _colors = [
-//     Colors.red,
-//     Colors.green,
-//     Colors.blue,
-//     Colors.yellow,
-//     Colors.orange,
-//   ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Carousel with indicator controller demo')),
+      body: Column(children: [
+        Expanded(
+          child: CarouselSlider(
+            items: imageSliders,
+            carouselController: _controller,
+            options: CarouselOptions(
+                autoPlay: true,
+                enlargeCenterPage: true,
+                aspectRatio: 2.0,
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    _current = index;
+                  });
+                }),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: imgList.asMap().entries.map((entry) {
+            return GestureDetector(
+              onTap: () => _controller.animateToPage(entry.key),
+              child: Container(
+                width: 12.0,
+                height: 12.0,
+                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: (Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black)
+                        .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+              ),
+            );
+          }).toList(),
+        ),
+      ]),
+    );
+  }
+}
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     _tabController = TabController(length: _colors.length, vsync: this);
-//     _tabController.addListener(() {
-//       setState(() {
-//         _selectedIndex = _tabController.index;
-//       });
-//     });
-//   }
+class PrefetchImageDemo extends StatefulWidget {
+  const PrefetchImageDemo({super.key});
 
-//   @override
-//   void dispose() {
-//     _tabController.dispose();
-//     super.dispose();
-//   }
+  @override
+  State<StatefulWidget> createState() {
+    return _PrefetchImageDemoState();
+  }
+}
 
-//   void _onItemTapped(int index) {
-//     setState(() {
-//       _selectedIndex = index;
-//       _tabController.index = index; // Update TabController
-//     });
-//   }
+class _PrefetchImageDemoState extends State<PrefetchImageDemo> {
+  final List<String> images = [
+    'https://images.unsplash.com/photo-1586882829491-b81178aa622e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80',
+    'https://images.unsplash.com/photo-1586871608370-4adee64d1794?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2862&q=80',
+    'https://images.unsplash.com/photo-1586901533048-0e856dff2c0d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
+    'https://images.unsplash.com/photo-1586902279476-3244d8d18285?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80',
+    'https://images.unsplash.com/photo-1586943101559-4cdcf86a6f87?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1556&q=80',
+    'https://images.unsplash.com/photo-1586951144438-26d4e072b891?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
+    'https://images.unsplash.com/photo-1586953983027-d7508a64f4bb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80',
+  ];
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       body: ListView(
-//         children: [
-//           // Top Bar Widget
-//           const TopBarWidget(
-//             greeting: "Hello,",
-//             userName: "User 123",
-//             profileImagePath: 'assets/images/plants1.png',
-//           ),
-//           const SizedBox(height: 20),
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (var imageUrl in images) {
+        precacheImage(NetworkImage(imageUrl), context);
+      }
+    });
+    super.initState();
+  }
 
-//           // Carousel Banner menggunakan ArticleCarousel
-//           Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               const Padding(
-//                 padding: EdgeInsets.only(left: 20),
-//                 child: Text(
-//                   'Article',
-//                   style: TextStyle(
-//                     fontFamily: 'Poppins',
-//                     fontSize: 30,
-//                     fontWeight: FontWeight.bold,
-//                     color: Colors.black,
-//                   ),
-//                 ),
-//               ),
-//               const SizedBox(height: 20),
-//               ArticleCarousel(),
-//             ],
-//           ),
-//           const SizedBox(height: 30),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Prefetch image slider demo')),
+      body: Container(
+          child: CarouselSlider.builder(
+        itemCount: images.length,
+        options: CarouselOptions(
+          autoPlay: true,
+          aspectRatio: 2.0,
+          enlargeCenterPage: true,
+        ),
+        itemBuilder: (context, index, realIdx) {
+          return Container(
+            child: Center(
+                child: Image.network(images[index],
+                    fit: BoxFit.cover, width: 1000)),
+          );
+        },
+      )),
+    );
+  }
+}
 
-//           // Carousel Banner menggunakan ArticleCarousel
-//           const Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Padding(
-//                 padding: EdgeInsets.only(left: 20),
-//                 child: Text(
-//                   'New Added Plants',
-//                   style: TextStyle(
-//                     fontFamily: 'Poppins',
-//                     fontSize: 30,
-//                     fontWeight: FontWeight.bold,
-//                     color: Colors.black,
-//                   ),
-//                 ),
-//               ),
-//               SizedBox(height: 10),
-//               NewAddedPlantItem(
-//                 plantName: "Pohon Pepaya",
-//                 plantImage: "assets/images/plants1.png",
-//                 plantDescription: "Tanaman pepaya dengan rasa manis segar.",
-//               ),
-//             ],
-//           ),
-//           const SizedBox(height: 30),
+class CarouselChangeReasonDemo extends StatefulWidget {
+  const CarouselChangeReasonDemo({super.key});
 
-//           // Floating Navigation Bar
-//           Align(
-//             alignment: Alignment.bottomCenter,
-//             child: Padding(
-//               padding: const EdgeInsets.only(bottom: 20.0),
-//               child: FloatingNavigationBar(
-//                 tabController: _tabController,
-//                 colors: _colors,
-//                 currentPage: _selectedIndex,
-//                 onPageChanged: (index) {
-//                   setState(() {
-//                     _selectedIndex = index;
-//                     _tabController.index = index; // Update TabController
-//                   });
-//                 },
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+  @override
+  State<StatefulWidget> createState() {
+    return _CarouselChangeReasonDemoState();
+  }
+}
 
-// // Widget untuk ArticleCarousel
-// class ArticleCarousel extends StatelessWidget {
-//   ArticleCarousel({super.key});
+class _CarouselChangeReasonDemoState extends State<CarouselChangeReasonDemo> {
+  String reason = '';
+  final CarouselSliderController _controller = CarouselSliderController();
 
-//   final List<String> bannerImages = [
-//     'assets/images/artikel1.png',
-//     'assets/images/artikel1.png',
-//     'assets/images/artikel1.png',
-//   ];
+  void onPageChange(int index, CarouselPageChangedReason changeReason) {
+    setState(() {
+      reason = changeReason.toString();
+    });
+  }
 
-//   final List<String> bannerTitles = [
-//     'Cara Mudah Menanam Jeruk di Rumah!',
-//     'Cara Mudah Menanam Jeruk di Rumah!',
-//     'Cara Mudah Menanam Jeruk di Rumah!',
-//   ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: Text('Change reason demo')),
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              child: CarouselSlider(
+                items: imageSliders,
+                options: CarouselOptions(
+                  enlargeCenterPage: true,
+                  aspectRatio: 16 / 9,
+                  onPageChanged: onPageChange,
+                  autoPlay: true,
+                ),
+                carouselController: _controller,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Flexible(
+                  child: ElevatedButton(
+                    onPressed: () => _controller.previousPage(),
+                    child: Text('←'),
+                  ),
+                ),
+                Flexible(
+                  child: ElevatedButton(
+                    onPressed: () => _controller.nextPage(),
+                    child: Text('→'),
+                  ),
+                ),
+                ...Iterable<int>.generate(imgList.length).map(
+                  (int pageIndex) => Flexible(
+                    child: ElevatedButton(
+                      onPressed: () => _controller.animateToPage(pageIndex),
+                      child: Text("$pageIndex"),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Center(
+              child: Column(
+                children: [
+                  Text('page change reason: '),
+                  Text(reason),
+                ],
+              ),
+            )
+          ],
+        ));
+  }
+}
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       height: 230,
-//       width: double.maxFinite,
-//       child: CarouselSlider(
-//         options: CarouselOptions(
-//           aspectRatio: 2.0,
-//           enlargeCenterPage: true,
-//           enableInfiniteScroll: false,
-//           initialPage: 0,
-//           autoPlay: false,
-//           viewportFraction: 0.8, // Mengatur ukuran item carousel
-//         ),
-//         items: List.generate(bannerImages.length, (index) {
-//           return Stack(
-//             children: [
-//               Container(
-//                 margin: const EdgeInsets.symmetric(horizontal: 8),
-//                 decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(30),
-//                   image: DecorationImage(
-//                     image: AssetImage(bannerImages[index]),
-//                     fit: BoxFit.cover,
-//                   ),
-//                 ),
-//               ),
-//               Positioned(
-//                 bottom: 10,
-//                 left: 20,
-//                 child: SizedBox(
-//                   width: 375, // Batas lebar teks agar dapat membungkus
-//                   child: Padding(
-//                     padding: const EdgeInsets.all(8.0),
-//                     child: Text(
-//                       bannerTitles[index],
-//                       style: const TextStyle(
-//                         fontFamily: 'Poppins',
-//                         color: Colors.white,
-//                         fontWeight: FontWeight.bold,
-//                         fontSize: 22,
-//                       ),
-//                       softWrap: true, // Memungkinkan teks untuk pindah baris
-//                       overflow: TextOverflow.visible, // Teks tidak dipotong
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           );
-//         }),
-//       ),
-//     );
-//   }
-// }
+class KeepPageviewPositionDemo extends StatelessWidget {
+  const KeepPageviewPositionDemo({super.key});
 
-// class TopBarWidget extends StatelessWidget {
-//   final String greeting;
-//   final String userName;
-//   final String profileImagePath;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Keep pageview position demo')),
+      body: ListView.builder(itemBuilder: (ctx, index) {
+        if (index == 3) {
+          return Container(
+              child: CarouselSlider(
+            options: CarouselOptions(
+              aspectRatio: 2.0,
+              enlargeCenterPage: true,
+              pageViewKey: PageStorageKey<String>('carousel_slider'),
+            ),
+            items: imageSliders,
+          ));
+        } else {
+          return Container(
+            margin: EdgeInsets.symmetric(vertical: 20),
+            color: Colors.blue,
+            height: 200,
+            child: Center(
+              child: Text('other content'),
+            ),
+          );
+        }
+      }),
+    );
+  }
+}
 
-//   const TopBarWidget({
-//     super.key,
-//     required this.greeting,
-//     required this.userName,
-//     required this.profileImagePath,
-//   });
+class MultipleItemDemo extends StatelessWidget {
+  const MultipleItemDemo({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.only(top: 40, left: 16, right: 16),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           // Kata sambutan
-//           Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Text(
-//                 greeting,
-//                 style: const TextStyle(
-//                   fontFamily: 'Poppins',
-//                   fontSize: 14,
-//                   fontWeight: FontWeight.w400,
-//                   color: Colors.black,
-//                 ),
-//               ),
-//               Row(
-//                 children: [
-//                   Text(
-//                     userName,
-//                     style: const TextStyle(
-//                       fontFamily: 'Poppins',
-//                       fontSize: 18,
-//                       fontWeight: FontWeight.bold,
-//                       color: Colors.black,
-//                     ),
-//                   ),
-//                   const SizedBox(width: 5), // Jarak antara teks dan gambar
-//                   Image.asset(
-//                     'assets/images/waving_hands.png',
-//                     height: 20,
-//                     width: 20,
-//                   ),
-//                 ],
-//               ),
-//             ],
-//           ),
-//           // Gambar profil bulat kecil
-//           CircleAvatar(
-//             radius: 24,
-//             backgroundImage: AssetImage(profileImagePath),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Multiple item in one slide demo')),
+      body: Container(
+          child: CarouselSlider.builder(
+        options: CarouselOptions(
+          aspectRatio: 2.0,
+          enlargeCenterPage: false,
+          viewportFraction: 1,
+        ),
+        itemCount: (imgList.length / 2).round(),
+        itemBuilder: (context, index, realIdx) {
+          final int first = index * 2;
+          final int second = first + 1;
+          return Row(
+            children: [first, second].map((idx) {
+              return Expanded(
+                flex: 1,
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  child: Image.network(imgList[idx], fit: BoxFit.cover),
+                ),
+              );
+            }).toList(),
+          );
+        },
+      )),
+    );
+  }
+}
 
-// class NewAddedPlantItem extends StatelessWidget {
-//   final String plantName;
-//   final String plantImage;
-//   final String plantDescription;
+class EnlargeStrategyZoomDemo extends StatelessWidget {
+  const EnlargeStrategyZoomDemo({super.key});
 
-//   const NewAddedPlantItem({
-//     super.key,
-//     required this.plantName,
-//     required this.plantImage,
-//     required this.plantDescription,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-//       padding: const EdgeInsets.all(12),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(16),
-//         border: Border.all(
-//           color: Colors.grey,
-//         ),
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.grey.withOpacity(0.3),
-//             blurRadius: 8,
-//             offset: const Offset(0, 4),
-//           ),
-//         ],
-//       ),
-//       child: Row(
-//         children: [
-//           // Foto tanaman di sebelah kiri
-//           ClipRRect(
-//             borderRadius: BorderRadius.circular(12),
-//             child: Image.asset(
-//               plantImage,
-//               height: 70,
-//               width: 70,
-//               fit: BoxFit.cover,
-//             ),
-//           ),
-//           const SizedBox(width: 12), // Jarak antara foto dan teks
-//           // Nama tanaman dan deskripsi singkat
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(
-//                   plantName,
-//                   style: const TextStyle(
-//                     fontFamily: 'Poppins',
-//                     fontSize: 16,
-//                     fontWeight: FontWeight.bold,
-//                     color: Colors.black,
-//                   ),
-//                 ),
-//                 const SizedBox(height: 4),
-//                 Text(
-//                   plantDescription,
-//                   style: const TextStyle(
-//                     fontFamily: 'Poppins',
-//                     fontSize: 14,
-//                     fontWeight: FontWeight.w400,
-//                     color: Colors.grey,
-//                   ),
-//                   maxLines: 2,
-//                   overflow: TextOverflow.ellipsis, // Jika deskripsi terlalu panjang
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// class FloatingNavigationBar extends StatefulWidget {
-//   final TabController tabController;
-//   final List<Color> colors;
-//   final int currentPage;
-//   final Function(int) onPageChanged;
-
-//   const FloatingNavigationBar({
-//     super.key,
-//     required this.tabController,
-//     required this.colors,
-//     required this.currentPage,
-//     required this.onPageChanged,
-//   });
-
-//   @override
-//   State<FloatingNavigationBar> createState() => _FloatingNavigationBarState();
-// }
-
-// class _FloatingNavigationBarState extends State<FloatingNavigationBar> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return FloatingNavBar(
-//       colors: widget.colors,
-//       selectedIndex: widget.currentPage,
-//       onTap: widget.onPageChanged,
-//     );
-//   }
-// }
-
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('enlarge strategy: zoom demo')),
+      body: Container(
+        child: CarouselSlider(
+          options: CarouselOptions(
+            aspectRatio: 2.0,
+            enlargeCenterPage: true,
+            enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+            enlargeFactor: 0.4,
+          ),
+          items: imageSliders,
+        ),
+      ),
+    );
+  }
+}

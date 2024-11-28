@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/homepage.dart';
-import 'package:leafyfun/Screens/leafyGarden.dart';
-import 'package:leafyfun/Screens/login.dart';
-import 'package:leafyfun/Screens/scanPage.dart';
-import 'package:leafyfun/Screens/splashscreen.dart';
-// import 'package:leafyfun/Screens/homepage1.dart';
+import 'package:leafyfun/Screens/homepage1.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +19,7 @@ class MyApp extends StatelessWidget {
         // home: LeafyQuiz());
         // home: ProfilePage());
         // home: HomePageScreen());
-        home: LeafyGarden());
-    // home: MyHomePage(title: 'Test'));
+        // home: LeafyGarden());
+        home: CarouselDemo());
   }
 }
