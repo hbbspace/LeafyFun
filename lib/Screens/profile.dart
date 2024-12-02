@@ -26,7 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
         // Navigasi ke HomePage
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const HomePageScreen()),
+          MaterialPageRoute(builder: (context) => const LeafyQuiz()),
         );
         break;
       case 1:

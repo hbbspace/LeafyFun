@@ -9,7 +9,8 @@ import 'package:leafyfun/Screens/scanPage.dart';
 import 'package:leafyfun/widgets/floating_navbar.dart';
 
 class HomePageScreen extends StatefulWidget {
-  const HomePageScreen({super.key});
+  final String token;
+  const HomePageScreen({super.key, required this.token});
 
   @override
   State<HomePageScreen> createState() => _HomePageScreenState();
@@ -17,6 +18,7 @@ class HomePageScreen extends StatefulWidget {
 
 class _HomePageScreenState extends State<HomePageScreen> {
   int _selectedIndex = 0;
+  
 
   void _onItemTapped(int index) {
     setState(() {
@@ -29,7 +31,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
         // Navigasi ke HomePage
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const HomePageScreen()),
+          MaterialPageRoute(builder: (context) => const LeafyQuiz()),
         );
         break;
       case 1:
@@ -65,6 +67,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(widget.token);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(

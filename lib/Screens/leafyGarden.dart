@@ -29,7 +29,7 @@ class _LeafyGardenState extends State<LeafyGarden> {
         // Navigasi ke HomePage
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const HomePageScreen()),
+          MaterialPageRoute(builder: (context) => const LeafyQuiz()),
         );
         break;
       case 1:

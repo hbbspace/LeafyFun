@@ -22,6 +22,10 @@ class LoginRequest(BaseModel):
     email: str
     password: str
 
+class LoginResponse(BaseModel):
+    token: str
+    message: str
+
 class UserOut(UserRead):
     user_plants: List[int] = []
     user_achievements: List[int] = []

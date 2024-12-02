@@ -15,6 +15,10 @@ class LogInScreen extends StatefulWidget {
 class _LogInScreenState extends State<LogInScreen> {
   bool _obscureText = true;
 
+  // Menambahkan controller untuk username dan password
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   void _togglePasswordVisibility() {
     setState(() {
       _obscureText = !_obscureText;
@@ -82,17 +86,17 @@ class _LogInScreenState extends State<LogInScreen> {
                 ),
                 height: MediaQuery.of(context).size.height * 0.65,
                 child: ListView(
-                  children: const [
+                  children: [
                     //Text Login
                     HeaderText(),
                     SizedBox(height: 20),
 
                     //Kolom Input
-                    LoginForm(),
+                    LoginForm(usernameController: _usernameController, passwordController: _passwordController),
                     SizedBox(height: 30),
 
                     //Tombol Login
-                    LoginButton(),
+                    LoginButton(usernameController: _usernameController, passwordController: _passwordController),
                     SizedBox(height: 30),
 
                     //Teks
@@ -145,7 +149,14 @@ class HeaderText extends StatelessWidget {
 }
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+  final TextEditingController usernameController;
+  final TextEditingController passwordController;
+
+  const LoginForm({
+    super.key,
+    required this.usernameController,
+    required this.passwordController,
+  });
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -165,6 +176,7 @@ class _LoginFormState extends State<LoginForm> {
     return Column(
       children: [
         TextField(
+          controller: widget.usernameController,
           decoration: InputDecoration(
             labelText: 'Username / Email',
             labelStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
@@ -175,6 +187,7 @@ class _LoginFormState extends State<LoginForm> {
         ),
         const SizedBox(height: 15),
         TextField(
+          controller: widget.passwordController,
           obscureText: _obscureText,
           decoration: InputDecoration(
             labelText: 'Password',
@@ -195,7 +208,6 @@ class _LoginFormState extends State<LoginForm> {
           alignment: Alignment.centerLeft,
           child: InkWell(
             onTap: () {
-              // Add navigation or action for forgot password
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const ForgotPassword()),
@@ -212,74 +224,64 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
         ),
+        // LoginButton(
+        //   usernameController: widget.usernameController,
+        //   passwordController: widget.passwordController,
+        // ),
       ],
     );
   }
 }
 
 class LoginButton extends StatelessWidget {
-  const LoginButton({super.key});
+  final TextEditingController usernameController;
+  final TextEditingController passwordController;
+
+  const LoginButton({
+    super.key,
+    required this.usernameController,
+    required this.passwordController,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () {
-              // Tampilkan pop-up
-              showDialog(
-                context: context,
-                builder: (context) {
-                  // Mulai penghitung waktu untuk menutup dialog secara otomatis
-                  Future.delayed(const Duration(seconds: 1), () {
-                    Navigator.of(context).pop(); // Tutup pop-up setelah 1 detik
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomePageScreen()),
-                    );
-                  });
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () async {
+            // Simulate login API call
+            final username = usernameController.text;
+            final password = passwordController.text;
+            final token = await login(username, password);
 
-                  // Pop-up yang ditampilkan
-                  return AlertDialog(
-                    backgroundColor: Colors.white, // Pop-up transparan
-                    elevation: 0, // Hilangkan bayangan
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(50), // Sudut melengkung
-                    ),
-                    content: Column(
-                      mainAxisSize:
-                          MainAxisSize.min, // Sesuaikan ukuran berdasarkan isi
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(40),
-                          child: Image.asset(
-                            'assets/images/success_popup.png', // Path gambar Anda
-                            width: 200,
-                            height: 200,
-                            fit: BoxFit
-                                .contain, // Atur ukuran gambar agar sesuai
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+            if (token != null) {
+              // Navigate to HomePage with token
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePageScreen(token: token),
+                ),
               );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromRGBO(10, 66, 63, 1),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+            } else {
+              // Show error message
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Login failed")),
+              );
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromRGBO(10, 66, 63, 1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-            child: const Text(
-              "Login",
-              style: TextStyle(color: Colors.white),
-            ),
-          )),
+          ),
+          child: const Text(
+            "Login",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -392,19 +394,39 @@ class SignUpText extends StatelessWidget {
   }
 }
 
-Future<void> login(String username, String password) async {
-  final response = await http.post(
-    Uri.parse('/login/'),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'email': username, 'password': password}),
-  );
+// Future<void> login(String username, String password) async {
+//   final response = await http.post(
+//     Uri.parse('/login/'),
+//     headers: {'Content-Type': 'application/json'},
+//     body: jsonEncode({'email': username, 'password': password}),
+//   );
 
-  if (response.statusCode == 200) {
-    // Login berhasil
-    jsonDecode(response.body);
-    // Simpan token atau data user jika diperlukan
-  } else {
-    // Tampilkan pesan kesalahan
-    print('Login gagal: ${response.body}');
+//   if (response.statusCode == 200) {
+//     // Login berhasil
+//     jsonDecode(response.body);
+//     // Simpan token atau data user jika diperlukan
+//   } else {
+//     // Tampilkan pesan kesalahan
+//     print('Login gagal: ${response.body}');
+//   }
+// }
+Future<String?> login(String username, String password) async {
+  try {
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:8000/Login/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': username, 'password': password}),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['token']; // Return token
+    } else {
+      debugPrint('Login failed: ${response.body}');
+      return null;
+    }
+  } catch (e) {
+    debugPrint('Error: $e');
+    return null;
   }
 }

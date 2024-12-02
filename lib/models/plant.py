@@ -98,16 +98,16 @@ def plant_init(db: Session):
                     price_range="Rp10,000 - Rp30,000",
                     image_file="papaya_tree.jpg"
                 ),
-                Plant(
-                    common_name="Peach",
-                    latin_name="Prunus persica",
-                    description="Peach trees are deciduous plants that produce juicy and sweet peaches. The tree is small to medium-sized and requires a cold climate to thrive, making it rare in tropical regions.",
-                    fruit_content="Vitamin C, Vitamin A, Potassium, Fiber, Polyphenol Antioxidants",
-                    fruit_season="Summer",
-                    region="Imported or experimental farms in Indonesia",
-                    price_range="Rp250,000 - Rp500,000",
-                    image_file="peach_tree.jpg"
-                ),
+                # Plant(
+                #     common_name="Peach",
+                #     latin_name="Prunus persica",
+                #     description="Peach trees are deciduous plants that produce juicy and sweet peaches. The tree is small to medium-sized and requires a cold climate to thrive, making it rare in tropical regions.",
+                #     fruit_content="Vitamin C, Vitamin A, Potassium, Fiber, Polyphenol Antioxidants",
+                #     fruit_season="Summer",
+                #     region="Imported or experimental farms in Indonesia",
+                #     price_range="Rp250,000 - Rp500,000",
+                #     image_file="peach_tree.jpg"
+                # ),
                 Plant(
                     common_name="Starfruit",
                     latin_name="Averrhoa carambola",
@@ -118,16 +118,16 @@ def plant_init(db: Session):
                     price_range="Rp20,000 - Rp70,000",
                     image_file="starfruit_tree.jpg"
                 ),
-                Plant(
-                    common_name="Strawberry",
-                    latin_name="Fragaria x ananassa",
-                    description="Strawberry plants are low-growing perennials that produce small, sweet, and red berries. These plants thrive in cooler climates and are popular in highland regions.",
-                    fruit_content="Vitamin C, Manganese, Folate, Fiber, Antioxidants",
-                    fruit_season="Winter",
-                    region="Ciwidey (West Java), Batu (East Java)",
-                    price_range="Rp50,000 - Rp150,000",
-                    image_file="strawberry_plant.jpg"
-                ),
+                # Plant(
+                #     common_name="Strawberry",
+                #     latin_name="Fragaria x ananassa",
+                #     description="Strawberry plants are low-growing perennials that produce small, sweet, and red berries. These plants thrive in cooler climates and are popular in highland regions.",
+                #     fruit_content="Vitamin C, Manganese, Folate, Fiber, Antioxidants",
+                #     fruit_season="Winter",
+                #     region="Ciwidey (West Java), Batu (East Java)",
+                #     price_range="Rp50,000 - Rp150,000",
+                #     image_file="strawberry_plant.jpg"
+                # ),
                 Plant(
                     common_name="Tomato",
                     latin_name="Solanum lycopersicum",
