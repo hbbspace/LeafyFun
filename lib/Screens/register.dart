@@ -31,7 +31,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       final response = await http.post(
         Uri.parse('http://localhost:8000/register'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'username': username, 'email': email, 'password': password}),
+        body: jsonEncode(
+            {'username': username, 'email': email, 'password': password}),
       );
 
       if (response.statusCode == 200) {
@@ -194,7 +195,8 @@ class RegisterButton extends StatelessWidget {
           onPressed: onRegister,
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromRGBO(10, 66, 63, 1),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
           child: const Text(
             "Register",
@@ -216,7 +218,8 @@ class SignUpText extends StatelessWidget {
       children: [
         const Text(
           "Already have an account? ",
-          style: TextStyle(fontFamily: 'Poppins', fontSize: 13, color: Colors.black),
+          style: TextStyle(
+              fontFamily: 'Poppins', fontSize: 13, color: Colors.black),
         ),
         GestureDetector(
           onTap: () {
@@ -236,6 +239,26 @@ class SignUpText extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class HeaderText extends StatelessWidget {
+  const HeaderText({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.only(left: 10),
+      child: Text(
+        'Register',
+        style: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
     );
   }
 }
