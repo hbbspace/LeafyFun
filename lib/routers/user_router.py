@@ -11,24 +11,6 @@ router = APIRouter()
 # Initialize CryptContext for hashing passwords
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-@router.post("/add_user", response_model=UserRead, status_code=status.HTTP_201_CREATED)
-async def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    db_user = db.query(UserModel).filter(UserModel.email == user.email).first()
-    if db_user:
-        raise HTTPException(status_code=400, detail="Email sudah terdaftar")
-
-    # Hash password before saving
-    hashed_password = hash_password(user.password)
-    new_user = UserModel(
-        username=user.username,
-        email=user.email,
-        password=hashed_password
-    )
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return new_user
-
 @router.get("/{user_id}", response_model=UserRead, status_code=status.HTTP_200_OK)
 async def read_user(user_id: int, db: Session = Depends(get_db)):
     user = db.query(UserModel).filter(UserModel.user_id == user_id).first()

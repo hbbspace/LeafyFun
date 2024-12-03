@@ -394,22 +394,6 @@ class SignUpText extends StatelessWidget {
   }
 }
 
-// Future<void> login(String username, String password) async {
-//   final response = await http.post(
-//     Uri.parse('/login/'),
-//     headers: {'Content-Type': 'application/json'},
-//     body: jsonEncode({'email': username, 'password': password}),
-//   );
-
-//   if (response.statusCode == 200) {
-//     // Login berhasil
-//     jsonDecode(response.body);
-//     // Simpan token atau data user jika diperlukan
-//   } else {
-//     // Tampilkan pesan kesalahan
-//     print('Login gagal: ${response.body}');
-//   }
-// }
 Future<String?> login(String username, String password) async {
   try {
     final response = await http.post(

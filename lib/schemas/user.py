@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, Field
 from typing import List, Optional
 
 
@@ -25,6 +25,14 @@ class LoginRequest(BaseModel):
 class LoginResponse(BaseModel):
     token: str
     message: str
+
+class UserUpdate(BaseModel):
+    username: Optional[str] = Field(None, max_length=50)
+    email: Optional[EmailStr]
+    password: Optional[str] = Field(None, min_length=3)
+    profile_border: Optional[str]
+    profile_image: Optional[str]
+    coins: Optional[int]
 
 class UserOut(UserRead):
     user_plants: List[int] = []

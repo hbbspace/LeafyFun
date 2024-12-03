@@ -11,7 +11,7 @@ app = FastAPI()
 def on_startup():
     try:
         # Membuat tabel jika belum ada (Comment jika tabel sudah ada)
-        Base.metadata.create_all(bind=engine)
+        # Base.metadata.create_all(bind=engine)
         print("Database tables created.")
 
         db = SessionLocal()
@@ -27,7 +27,8 @@ def on_startup():
         print(f"Error during startup: {e}")
 
 # Include Routers
+app.include_router(auth_router, prefix="", tags=["Auth"])
+
 app.include_router(user_router, prefix="/users", tags=["Users"])
 app.include_router(plant_router, prefix="/plants", tags=["Plants"])
 app.include_router(achievement_router, prefix="/achievements", tags=["Achievements"])
-app.include_router(auth_router, prefix="/login", tags=["Login"])
