@@ -2,9 +2,19 @@ from fastapi import FastAPI
 from lib.services.database import engine, Base, SessionLocal
 from lib.routers import user_router, plant_router, achievement_router, auth_router
 from lib.models.__init__ import initialize_data
+from starlette.middleware.cors import CORSMiddleware
 
 # Inisialisasi FastAPI
 app = FastAPI()
+
+# Menambahkan CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Mengizinkan semua origin (Anda dapat mengganti "*" dengan domain tertentu)
+    allow_credentials=True,
+    allow_methods=["*"],  # Mengizinkan semua HTTP methods, misalnya GET, POST, PUT, DELETE
+    allow_headers=["*"],  # Mengizinkan semua header
+)
 
 # Event startup untuk membuat tabel dan menambahkan data awal
 @app.on_event("startup")

@@ -29,7 +29,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8000/register'),
+        Uri.parse('https://4b4c-180-248-47-102.ngrok-free.app/register'),
+        // Uri.parse('https://tomascan.nurulmustofa.my.id/api/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(
             {'username': username, 'email': email, 'password': password}),

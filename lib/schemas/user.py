@@ -5,10 +5,10 @@ from typing import List, Optional
 class UserBase(BaseModel):
     username: str
     email: str
-    google_auth: Optional[bool] = False
-    profile_border: Optional[str] = None
-    profile_image: Optional[str] = None
-    coins: int
+    # google_auth: Optional[bool] = False
+    # profile_border: Optional[str] = None
+    # profile_image: Optional[str] = None
+    # coins: int
 
 
 class UserCreate(UserBase):

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/forgot_password.dart';
 import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/register.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -397,14 +398,20 @@ class SignUpText extends StatelessWidget {
 Future<String?> login(String username, String password) async {
   try {
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:8000/Login/login'),
+      Uri.parse('http://127.0.0.1:8000/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': username, 'password': password}),
     );
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return data['token']; // Return token
+      String token = data['token']; // Mengambil token dari response
+
+      // Menyimpan token ke secure storage
+      final storage = FlutterSecureStorage();
+      await storage.write(key: 'auth_token', value: token);
+
+      return token; // Kembalikan token jika perlu
     } else {
       debugPrint('Login failed: ${response.body}');
       return null;

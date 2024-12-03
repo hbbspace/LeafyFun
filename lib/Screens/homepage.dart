@@ -7,6 +7,7 @@ import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
 import 'package:leafyfun/widgets/floating_navbar.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class HomePageScreen extends StatefulWidget {
   final String token;
