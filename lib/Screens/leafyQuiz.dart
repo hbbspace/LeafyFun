@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
 import 'package:leafyfun/Widgets/floating_navbar.dart';
+import 'package:leafyfun/widgets/finished_quiz.dart';
 import 'package:leafyfun/widgets/quizSlider_widget.dart';
 import 'package:leafyfun/widgets/topbar_quiz.dart';
+import 'package:leafyfun/widgets/searchbar.dart';
 
 class LeafyQuiz extends StatefulWidget {
   const LeafyQuiz({super.key});
@@ -19,12 +20,9 @@ class _LeafyQuizState extends State<LeafyQuiz> {
   int _selectedIndex = 1; // Set index sesuai dengan posisi di navbar
   final TextEditingController _searchController = TextEditingController();
   final List<String> _allQuizItems = [
-    'Aloe Vera',
-    'Sunflower',
-    'Cactus',
-    'Rose',
-    'Tulip',
-    'Daisy'
+    'Orange',
+    'Mango',
+    'Guava',
   ];
   List<String> _filteredQuizItems = [];
 
@@ -132,7 +130,7 @@ class _LeafyQuizState extends State<LeafyQuiz> {
                   const SizedBox(height: 10),
 
                   // SearchBar Widget
-                  SearchBar(
+                  SearchBarQuiz(
                     controller: _searchController,
                     hintText: "Search quizzes...",
                     onChanged: _onSearchChanged,
@@ -191,16 +189,32 @@ class _LeafyQuizState extends State<LeafyQuiz> {
                   const SizedBox(height: 10),
 
                   // Menampilkan hasil pencarian dalam bentuk daftar quiz
-                  ..._filteredQuizItems.map((quiz) {
-                    return FinishedQuiz(
-                      plantName: quiz,
-                      plantImage: 'assets/images/plants3.png',
-                      QuizDescription: 'Description for $quiz.',
-                    );
-                  }),
+                  // ..._filteredQuizItems.map((quiz) {
+                  //   return FinishedQuiz(
+                  //     plantName: quiz,
+                  //     plantImage: 'assets/images/plants3.png',
+                  //     QuizDescription: 'Description for $quiz.',
+                  //   );
+                  // }),
 
-
-                  
+                  FinishedQuiz(
+                    plantName: "Orange",
+                    plantImage: "assets/images/quiz_orange.jpg",
+                    quizDescription:
+                        "Pilih jawaban yang benar mengenai tanaman jeruk.",
+                  ),
+                  FinishedQuiz(
+                    plantName: "Mango",
+                    plantImage: "assets/images/quiz_mango.jpeg",
+                    quizDescription:
+                        "Pilih jawaban yang benar mengenai tanaman jeruk.",
+                  ),
+                  FinishedQuiz(
+                    plantName: "Guava",
+                    plantImage: "assets/images/quiz_guava.png",
+                    quizDescription:
+                        "Pilih jawaban yang benar mengenai tanaman jeruk.",
+                  ),
 
                   const SizedBox(height: 100), // Tambahan ruang untuk navigasi
                 ],
@@ -219,58 +233,6 @@ class _LeafyQuizState extends State<LeafyQuiz> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class SearchBar extends StatelessWidget {
-  final TextEditingController controller;
-  final String hintText;
-  final Function(String) onChanged;
-
-  const SearchBar({
-    super.key,
-    required this.controller,
-    required this.hintText,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: TextField(
-        controller: controller,
-        onChanged: onChanged,
-        style: const TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 16,
-        ),
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 16,
-            color: Colors.grey,
-          ),
-          border: InputBorder.none,
-          prefixIcon: const Icon(Icons.search, color: Colors.grey),
-          suffixIcon: controller.text.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.clear, color: Colors.grey),
-                  onPressed: () {
-                    controller.clear();
-                    onChanged(''); // Trigger perubahan untuk reset
-                  },
-                )
-              : null,
-        ),
       ),
     );
   }
