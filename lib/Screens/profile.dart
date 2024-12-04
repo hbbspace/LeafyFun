@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/login.dart';

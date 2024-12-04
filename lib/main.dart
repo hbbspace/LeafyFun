@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/login.dart';
-import 'package:leafyfun/Providers/auth_provider.dart';
+import 'package:leafyfun/Screens/leafyQuiz.dart';
+import 'package:leafyfun/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'LeafyFun',
         theme: ThemeData(primarySwatch: Colors.green),
-        home: LogInScreen(),
+        home: LeafyQuiz(),
         // home: ScanPage());
         // home: SplashScreen());
         // home: LeafyQuiz());

@@ -5,6 +5,8 @@ import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
 import 'package:leafyfun/Widgets/floating_navbar.dart';
+import 'package:leafyfun/widgets/quizSlider_widget.dart';
+import 'package:leafyfun/widgets/topbar_quiz.dart';
 
 class LeafyQuiz extends StatefulWidget {
   const LeafyQuiz({super.key});
@@ -122,7 +124,7 @@ class _LeafyQuizState extends State<LeafyQuiz> {
             child: SafeArea(
               child: Column(
                 children: [
-                  TopBarWidget(
+                  TopbarQuiz(
                     greeting: "Welcome to Leafy Quiz,",
                     userName: "User123",
                     profileImagePath: 'assets/images/profilePicture.png',
@@ -197,6 +199,9 @@ class _LeafyQuizState extends State<LeafyQuiz> {
                     );
                   }),
 
+
+                  
+
                   const SizedBox(height: 100), // Tambahan ruang untuk navigasi
                 ],
               ),
@@ -211,232 +216,6 @@ class _LeafyQuizState extends State<LeafyQuiz> {
             child: FloatingNavigationButtonBar(
               currentIndex: _selectedIndex,
               onItemTapped: _onItemTapped,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Widget Carousel Slider
-class QuizSlider extends StatelessWidget {
-  QuizSlider({super.key});
-
-  final List<String> bannerImages = [
-    'assets/images/plants1.png',
-    'assets/images/plants2.png',
-    'assets/images/plants3.png',
-  ];
-
-  final List<String> bannerTitles = [
-    'Cara Mudah Menanam Jeruk di Rumah!',
-    'Tips Merawat Anggrek untuk Pemula',
-    'Panduan Lengkap Berkebun di Lahan Sempit',
-  ];
-
-  final List<Widget> targetPages = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 230,
-      width: double.infinity,
-      child: CarouselSlider(
-        options: CarouselOptions(
-          aspectRatio: 2.0,
-          enlargeCenterPage: true,
-          enableInfiniteScroll: false,
-          initialPage: 0,
-          autoPlay: false,
-          viewportFraction: 0.8, // Mengatur ukuran item carousel
-        ),
-        items: List.generate(bannerImages.length, (index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => targetPages[index],
-                ),
-              );
-            },
-            child: Stack(
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    image: DecorationImage(
-                      image: AssetImage(bannerImages[index]),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 10,
-                  left: 20,
-                  child: SizedBox(
-                    width: 375, // Batas lebar teks agar dapat membungkus
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        bannerTitles[index],
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                        ),
-                        softWrap: true, // Memungkinkan teks untuk pindah baris
-                        overflow: TextOverflow.visible, // Teks tidak dipotong
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        }),
-      ),
-    );
-  }
-}
-
-class TopBarWidget extends StatelessWidget {
-  final String greeting;
-  final String userName;
-  final String profileImagePath;
-
-  const TopBarWidget({
-    super.key,
-    required this.greeting,
-    required this.userName,
-    required this.profileImagePath,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Kata sambutan
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                greeting,
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 5),
-              Row(
-                children: [
-                  Text(
-                    userName,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 5), // Jarak antara teks dan gambar
-                  Image.asset(
-                    'assets/images/waving_hands.png',
-                    height: 20,
-                    width: 20,
-                  ),
-                ],
-              ),
-            ],
-          ),
-          // Gambar profil bulat kecil
-          CircleAvatar(
-            radius: 24,
-            backgroundImage: AssetImage(profileImagePath),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class FinishedQuiz extends StatelessWidget {
-  final String plantName;
-  final String plantImage;
-  final String QuizDescription;
-
-  const FinishedQuiz({
-    super.key,
-    required this.plantName,
-    required this.plantImage,
-    required this.QuizDescription,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(13),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          // Foto tanaman di sebelah kiri
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              plantImage,
-              height: 70,
-              width: 70,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(width: 12), // Jarak antara foto dan teks
-          // Nama tanaman dan deskripsi singkat
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  plantName,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  QuizDescription,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey,
-                  ),
-                  maxLines: 2,
-                  overflow:
-                      TextOverflow.ellipsis, // Jika deskripsi terlalu panjang
-                ),
-              ],
             ),
           ),
         ],

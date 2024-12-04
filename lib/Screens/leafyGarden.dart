@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:leafyfun/Screens/article1.dart';
 import 'package:leafyfun/Screens/article2.dart';
-import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
@@ -111,14 +110,14 @@ class _LeafyGardenState extends State<LeafyGarden> {
 
                 const SizedBox(height: 30),
 
-                // New Added Plants
+                // Tips and Trick
                 const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: EdgeInsets.only(left: 20),
                       child: Text(
-                        'New Added Plants',
+                        'Tips & Trick',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 24,
@@ -128,41 +127,14 @@ class _LeafyGardenState extends State<LeafyGarden> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    NewAddedPlantItem(
-                      plantName: "Pohon Pepaya",
-                      plantImage: "assets/images/plants1.png",
-                      plantDescription:
-                          "Tanaman pepaya dengan rasa manis segar.",
+                    // Tambahkan widget TipsAndTrick
+                    TipsAndTrick(
+                      tittle: "5 tips & trick to keep your plants healthy",
+                      image: 'assets/images/tipsntrick1.png',
                     ),
-                    NewAddedPlantItem(
-                      plantName: "Pohon Jambu",
-                      plantImage: "assets/images/plants2.png",
-                      plantDescription:
-                          "Tanaman Jambu yang menghasilkan buah besar dan manis.",
-                    ),
-                    NewAddedPlantItem(
-                      plantName: "Lemon",
-                      plantImage: "assets/images/plants3.png",
-                      plantDescription:
-                          "Tanaman mangga yang menghasilkan buah besar dan manis.",
-                    ),
-                    NewAddedPlantItem(
-                      plantName: "Pohon Pepaya",
-                      plantImage: "assets/images/plants1.png",
-                      plantDescription:
-                          "Tanaman pepaya dengan rasa manis segar.",
-                    ),
-                    NewAddedPlantItem(
-                      plantName: "Pohon Jambu",
-                      plantImage: "assets/images/plants2.png",
-                      plantDescription:
-                          "Tanaman Jambu yang menghasilkan buah besar dan manis.",
-                    ),
-                    NewAddedPlantItem(
-                      plantName: "Lemon",
-                      plantImage: "assets/images/plants3.png",
-                      plantDescription:
-                          "Tanaman mangga yang menghasilkan buah besar dan manis.",
+                    TipsAndTrick(
+                      tittle: "How to plant the right seeds",
+                      image: 'assets/images/tipsntrick2.png',
                     ),
                   ],
                 ),
@@ -197,9 +169,9 @@ class ArticleCarousel extends StatelessWidget {
   ];
 
   final List<String> bannerTitles = [
-    'Cara Mudah Menanam Jeruk di Rumah!',
-    'Tips Merawat Anggrek untuk Pemula',
-    'Panduan Lengkap Berkebun di Lahan Sempit',
+    'Orange',
+    'Apple',
+    'Guava',
   ];
 
   final List<Widget> targetPages = [
@@ -286,16 +258,14 @@ class Page3 extends StatelessWidget {
   }
 }
 
-class NewAddedPlantItem extends StatelessWidget {
-  final String plantName;
-  final String plantImage;
-  final String plantDescription;
+class TipsAndTrick extends StatelessWidget {
+  final String tittle;
+  final String image;
 
-  const NewAddedPlantItem({
+  const TipsAndTrick({
     super.key,
-    required this.plantName,
-    required this.plantImage,
-    required this.plantDescription,
+    required this.tittle,
+    required this.image,
   });
 
   @override
@@ -305,10 +275,7 @@ class NewAddedPlantItem extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.grey,
-        ),
+        borderRadius: BorderRadius.circular(13),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.3),
@@ -323,9 +290,9 @@ class NewAddedPlantItem extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.asset(
-              plantImage,
-              height: 70,
-              width: 70,
+              image,
+              height: 100,
+              width: 100,
               fit: BoxFit.cover,
             ),
           ),
@@ -336,27 +303,15 @@ class NewAddedPlantItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  plantName,
+                  tittle,
                   style: const TextStyle(
                     fontFamily: 'Poppins',
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  plantDescription,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey,
-                  ),
-                  maxLines: 2,
-                  overflow:
-                      TextOverflow.ellipsis, // Jika deskripsi terlalu panjang
-                ),
               ],
             ),
           ),
@@ -365,4 +320,3 @@ class NewAddedPlantItem extends StatelessWidget {
     );
   }
 }
-
