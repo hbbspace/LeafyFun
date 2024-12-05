@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/login.dart';
+import 'package:leafyfun/widgets/header_text.dart';
 
 class NewPassword extends StatefulWidget {
   const NewPassword({super.key});
@@ -112,7 +113,12 @@ class _NewPasswordState extends State<NewPassword> {
               height: MediaQuery.of(context).size.height * 0.35,
               child: ListView(
                 children: const [
-                  HeaderText(),
+                  // HeaderText(),`
+                  HeaderText(
+                    text: 'New Password',
+                    fontSize: 24, // Ubah ukuran teks
+                    color: Colors.black, // Ubah warna teks
+                  ),
                   SizedBox(height: 20),
                   NewPasswordForm(),
                   SizedBox(height: 30),
@@ -128,25 +134,25 @@ class _NewPasswordState extends State<NewPassword> {
   }
 }
 
-class HeaderText extends StatelessWidget {
-  const HeaderText({super.key});
+// class HeaderText extends StatelessWidget {
+//   const HeaderText({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(left: 10),
-      child: Text(
-        'New Password',
-        style: TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Padding(
+//       padding: EdgeInsets.only(left: 10),
+//       child: Text(
+//         'New Password',
+//         style: TextStyle(
+//           fontFamily: 'Poppins',
+//           fontSize: 24,
+//           fontWeight: FontWeight.bold,
+//           color: Colors.black,
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class NewPasswordForm extends StatefulWidget {
   const NewPasswordForm({super.key});

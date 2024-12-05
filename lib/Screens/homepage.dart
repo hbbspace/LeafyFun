@@ -4,8 +4,8 @@ import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
 import 'package:leafyfun/widgets/NewAddedPlant.dart';
+import 'package:leafyfun/widgets/article_slider.dart';
 import 'package:leafyfun/widgets/floating_navbar.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:leafyfun/widgets/topbar_homepage.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -83,7 +83,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 ),
                 const SizedBox(height: 20),
 
-                // Carousel Banner menggunakan ArticleCarousel
+                // ArticleSlider
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -100,7 +100,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    ArticleCarousel(),
+                    ArticleSlider(),
                   ],
                 ),
                 const SizedBox(height: 30),

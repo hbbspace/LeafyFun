@@ -3,8 +3,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:leafyfun/Screens/article1.dart';
 import 'package:leafyfun/Screens/article2.dart';
 
-class ArticleCarousel extends StatelessWidget {
-  ArticleCarousel({super.key});
+class ArticleSlider extends StatelessWidget {
+  ArticleSlider({super.key});
 
   final List<String> bannerImages = [
     'assets/images/artikel1.png',
@@ -64,7 +64,7 @@ class ArticleCarousel extends StatelessWidget {
                   bottom: 10,
                   left: 20,
                   child: SizedBox(
-                    width: 375, // Batas lebar teks agar dapat membungkus
+                    width: 350, // Batas lebar teks agar dapat membungkus
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(

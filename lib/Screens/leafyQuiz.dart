@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
 import 'package:leafyfun/Widgets/floating_navbar.dart';
 import 'package:leafyfun/widgets/finished_quiz.dart';
-import 'package:leafyfun/widgets/quizSlider_widget.dart';
+import 'package:leafyfun/widgets/quiz_slider.dart';
 import 'package:leafyfun/widgets/topbar_quiz.dart';
 import 'package:leafyfun/widgets/searchbar.dart';
 

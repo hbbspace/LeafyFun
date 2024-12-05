@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leafyfun/widgets/backButton_article.dart';
 
 class Article2 extends StatelessWidget {
   const Article2({super.key});
@@ -24,7 +25,7 @@ class Article2 extends StatelessWidget {
           ),
 
           // Button kembali
-          ArrowBackButton(
+          ArrowBackButtonArticle(
             onPressed: () {
               Navigator.pop(context); // Navigasi kembali
             },
@@ -35,49 +36,3 @@ class Article2 extends StatelessWidget {
   }
 }
 
-class ArrowBackButton extends StatelessWidget {
-  final VoidCallback onPressed;
-
-  const ArrowBackButton({super.key, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      top: 40, // Atur posisi vertikal
-      left: 20, // Atur posisi horizontal
-      child: GestureDetector(
-        onTap: onPressed,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Container luar sebagai "stroke"
-            Container(
-              width: 46,
-              height: 46,
-              decoration: BoxDecoration(
-                color: Colors.transparent, // Warna latar belakang stroke
-                borderRadius: BorderRadius.circular(10), // Border rounded
-                border: Border.all(
-                  color: Colors.grey, // Warna "stroke"
-                  width: 1.5, // Ketebalan "stroke"
-                ),
-              ),
-            ),
-            // Container dalam berisi gambar icon
-            Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Image.asset(
-                'assets/images/arrow-left.png', // Path gambar icon custom
-                fit: BoxFit.cover,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/login.dart';
+import 'package:leafyfun/widgets/header_text.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -114,7 +115,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               height: MediaQuery.of(context).size.height * 0.65,
               child: ListView(
                 children: [
-                  const HeaderText(),
+                  // const HeaderText(),
+                  HeaderText(
+                    text: 'Register',
+                    fontSize: 24, // Ubah ukuran teks
+                    color: Colors.black, // Ubah warna teks
+                  ),
                   const SizedBox(height: 20),
                   RegisterForm(
                     usernameController: _usernameController,
@@ -124,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(height: 30),
                   RegisterButton(onRegister: _register),
                   const SizedBox(height: 30),
-                  const SignUpText(),
+                  const LogInText(),
                 ],
               ),
             ),
@@ -210,8 +216,8 @@ class RegisterButton extends StatelessWidget {
   }
 }
 
-class SignUpText extends StatelessWidget {
-  const SignUpText({super.key});
+class LogInText extends StatelessWidget {
+  const LogInText({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -241,26 +247,6 @@ class SignUpText extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class HeaderText extends StatelessWidget {
-  const HeaderText({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(left: 10),
-      child: Text(
-        'Register',
-        style: TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-      ),
     );
   }
 }

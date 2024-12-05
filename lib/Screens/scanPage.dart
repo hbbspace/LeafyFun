@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import '../widgets/backButton.dart';
 
 class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
@@ -199,58 +200,6 @@ class _ScanPageState extends State<ScanPage> {
                 ),
               ),
             ),
-        ],
-      ),
-    );
-  }
-}
-
-class ArrowBackButton extends StatelessWidget {
-  final VoidCallback onPressed; // Fungsi fleksibel untuk navigasi atau aksi
-  final String iconPath; // Path ke gambar icon
-  final Color borderColor; // Warna border stroke
-
-  const ArrowBackButton({
-    super.key,
-    required this.onPressed,
-    this.iconPath = 'assets/images/ArrowLeftBack.png', // Path default
-    this.borderColor = Colors.black, // Warna default
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          // Container luar sebagai "stroke"
-          Container(
-            width:
-                35, // Lebar dan tinggi lebih besar dari gambar untuk "stroke"
-            height: 35,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(
-                  255, 202, 202, 202), // Warna latar belakang stroke
-              borderRadius: BorderRadius.circular(10), // Border rounded
-              border: Border.all(
-                color: borderColor, // Warna "stroke"
-                width: 1, // Ketebalan "stroke"
-              ),
-            ),
-          ),
-          // Container dalam berisi gambar icon
-          Container(
-            width: 20, // Lebar dan tinggi sesuai dengan ukuran gambar
-            height: 20,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15), // Border rounded gambar
-            ),
-            child: Image.asset(
-              iconPath, // Path gambar icon custom
-              fit: BoxFit.cover,
-            ),
-          ),
         ],
       ),
     );

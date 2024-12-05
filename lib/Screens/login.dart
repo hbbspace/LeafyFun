@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/forgot_password.dart';
 import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/register.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:leafyfun/widgets/header_text.dart';
+import 'package:leafyfun/widgets/login_button.dart';
+import 'package:leafyfun/widgets/login_form.dart';
+import 'package:leafyfun/widgets/signup_text_button.dart';
+import 'package:leafyfun/widgets/social_login_button.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -89,15 +93,24 @@ class _LogInScreenState extends State<LogInScreen> {
                 child: ListView(
                   children: [
                     //Text Login
-                    HeaderText(),
+                    HeaderText(
+                      text: 'Login',
+                      fontSize: 24, // Ubah ukuran teks
+                      color: Colors.black, // Ubah warna teks
+                    ),
+
                     SizedBox(height: 20),
 
                     //Kolom Input
-                    LoginForm(usernameController: _usernameController, passwordController: _passwordController),
+                    LoginForm(
+                        usernameController: _usernameController,
+                        passwordController: _passwordController),
                     SizedBox(height: 30),
 
                     //Tombol Login
-                    LoginButton(usernameController: _usernameController, passwordController: _passwordController),
+                    LoginButton(
+                        usernameController: _usernameController,
+                        passwordController: _passwordController),
                     SizedBox(height: 30),
 
                     //Teks
@@ -129,164 +142,6 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 }
 
-class HeaderText extends StatelessWidget {
-  const HeaderText({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(left: 10),
-      child: Text(
-        'Login',
-        style: TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-      ),
-    );
-  }
-}
-
-class LoginForm extends StatefulWidget {
-  final TextEditingController usernameController;
-  final TextEditingController passwordController;
-
-  const LoginForm({
-    super.key,
-    required this.usernameController,
-    required this.passwordController,
-  });
-
-  @override
-  _LoginFormState createState() => _LoginFormState();
-}
-
-class _LoginFormState extends State<LoginForm> {
-  bool _obscureText = true;
-
-  void _togglePasswordVisibility() {
-    setState(() {
-      _obscureText = !_obscureText;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          controller: widget.usernameController,
-          decoration: InputDecoration(
-            labelText: 'Username / Email',
-            labelStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-          ),
-        ),
-        const SizedBox(height: 15),
-        TextField(
-          controller: widget.passwordController,
-          obscureText: _obscureText,
-          decoration: InputDecoration(
-            labelText: 'Password',
-            labelStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            suffixIcon: IconButton(
-              icon: Icon(
-                _obscureText ? Icons.visibility : Icons.visibility_off,
-              ),
-              onPressed: _togglePasswordVisibility,
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ForgotPassword()),
-              );
-            },
-            child: const Text(
-              'Forgot Password?',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: Colors.black,
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-        // LoginButton(
-        //   usernameController: widget.usernameController,
-        //   passwordController: widget.passwordController,
-        // ),
-      ],
-    );
-  }
-}
-
-class LoginButton extends StatelessWidget {
-  final TextEditingController usernameController;
-  final TextEditingController passwordController;
-
-  const LoginButton({
-    super.key,
-    required this.usernameController,
-    required this.passwordController,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () async {
-            // Simulate login API call
-            final username = usernameController.text;
-            final password = passwordController.text;
-            final token = await login(username, password);
-
-            if (token != null) {
-              // Navigate to HomePage with token
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomePageScreen(token: token),
-                ),
-              );
-            } else {
-              // Show error message
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Login failed")),
-              );
-            }
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromRGBO(10, 66, 63, 1),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          child: const Text(
-            "Login",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class ContinueWithText extends StatelessWidget {
   const ContinueWithText({super.key});
 
@@ -301,96 +156,6 @@ class ContinueWithText extends StatelessWidget {
           fontSize: 12,
         ),
       ),
-    );
-  }
-}
-
-class SocialLoginButton extends StatelessWidget {
-  final String assetPath;
-  final String label;
-
-  const SocialLoginButton({
-    super.key,
-    required this.assetPath,
-    required this.label,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () {
-            // Add navigation or social login functionality here
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(350),
-              side: const BorderSide(color: Colors.black),
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                assetPath,
-                height: 24,
-                width: 24,
-              ),
-              const SizedBox(width: 10),
-              Text(
-                label,
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  color: Colors.black,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SignUpText extends StatelessWidget {
-  const SignUpText({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text(
-          "Don't have an account? ",
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 13,
-            color: Colors.black,
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            // Navigasi ke halaman Sign Up di sini
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const RegisterScreen()),
-            );
-          },
-          child: const Text(
-            'Sign Up',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 0, 0, 0),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

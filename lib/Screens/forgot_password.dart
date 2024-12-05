@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/login.dart';
 import 'package:leafyfun/Screens/otp_verification.dart';
+import 'package:leafyfun/widgets/header_text.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -116,7 +117,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               height: MediaQuery.of(context).size.height * 0.35,
               child: ListView(
                 children: const [
-                  HeaderText(),
+                  // HeaderText(),
+                  HeaderText(
+                    text: 'Email Address',
+                    fontSize: 24, // Ubah ukuran teks
+                    color: Colors.black, // Ubah warna teks
+                  ),
                   SizedBox(height: 20),
                   ForgotPasswordForm(),
                   SizedBox(height: 30),
@@ -132,25 +138,25 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 }
 
-class HeaderText extends StatelessWidget {
-  const HeaderText({super.key});
+// class HeaderText extends StatelessWidget {
+//   const HeaderText({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(left: 10),
-      child: Text(
-        'Email Address',
-        style: TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Padding(
+//       padding: EdgeInsets.only(left: 10),
+//       child: Text(
+//         'Email Address',
+//         style: TextStyle(
+//           fontFamily: 'Poppins',
+//           fontSize: 24,
+//           fontWeight: FontWeight.bold,
+//           color: Colors.black,
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class ForgotPasswordForm extends StatefulWidget {
   const ForgotPasswordForm({super.key});

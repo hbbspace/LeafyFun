@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
-import 'package:leafyfun/Screens/login.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
+import 'package:leafyfun/widgets/activity_button.dart';
 import 'package:leafyfun/widgets/floating_navbar.dart';
+import 'package:leafyfun/widgets/logout_confirmation_dialog.dart';
+import 'package:leafyfun/widgets/profile_header.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -59,48 +61,6 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  void _showLogoutConfirmationDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          title: const Text("Konfirmasi Logout"),
-          content: const Text("Apakah anda yakin ingin keluar?"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Tutup dialog dan tetap di halaman profil
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                "Tidak",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Arahkan ke halaman login
-                Navigator.of(context).pop(); // Tutup dialog
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LogInScreen()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-              ),
-              child: const Text(
-                "Ya",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,40 +73,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   top: 50, left: 30, right: 30, bottom: 0),
               child: Column(
                 children: [
-                  Center(
-                    child: CircleAvatar(
-                      radius: 80,
-                      backgroundColor: Colors.transparent,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(60),
-                        child: Image.asset(
-                          'assets/images/profilePicture.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: Text(
-                      'user02342132',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Center(
-                    child: Text(
-                      'user02342132@gmail.com',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 15,
-                        color: Colors.grey,
-                      ),
-                    ),
+                  ProfileHeader(
+                    username: 'user02342132',
+                    email: 'user02342132@gmail.com',
+                    profileImage: 'assets/images/profilePicture.png',
                   ),
                   const SizedBox(height: 20),
                   Center(
@@ -157,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 25,
-                          vertical: 15,
+                          vertical: 20,
                         ),
                         textStyle: const TextStyle(
                           fontFamily: 'Poppins',
@@ -183,98 +113,38 @@ class _ProfilePageState extends State<ProfilePage> {
                   Expanded(
                     child: ListView(
                       children: [
-                        ElevatedButton(
+                        ActivityButton(
+                          title: 'Badges & Achievements',
+                          borderColor: Colors.grey,
+                          textColor: Colors.grey[700]!,
                           onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            padding: const EdgeInsets.only(
-                                top: 25, bottom: 25, left: 20),
-                            elevation: 0,
-                            side:
-                                const BorderSide(color: Colors.grey, width: 1),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const SizedBox(width: 10),
-                              Text(
-                                'Badges & Achievements',
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.grey[700]),
-                              ),
-                            ],
-                          ),
                         ),
                         const SizedBox(height: 10),
-                        ElevatedButton(
+                        ActivityButton(
+                          title: 'Security',
+                          borderColor: Colors.grey,
+                          textColor: Colors.grey[700]!,
                           onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            padding: const EdgeInsets.only(
-                                top: 25, bottom: 25, left: 20),
-                            elevation: 0,
-                            side:
-                                const BorderSide(color: Colors.grey, width: 1),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const SizedBox(width: 10),
-                              Text(
-                                'Security',
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.grey[700]),
-                              ),
-                            ],
-                          ),
                         ),
                         const SizedBox(height: 10),
-                        ElevatedButton(
+                        ActivityButton(
+                          title: 'About',
+                          borderColor: Colors.grey,
+                          textColor: Colors.grey[700]!,
                           onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            padding: const EdgeInsets.only(
-                                top: 25, bottom: 25, left: 20),
-                            elevation: 0,
-                            side: BorderSide(
-                                color: Colors.grey, width: 1), // Border abu-abu
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const SizedBox(width: 10),
-                              Text(
-                                'About',
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: Colors.grey[700]),
-                              ),
-                            ],
-                          ),
                         ),
                         const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: _showLogoutConfirmationDialog,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            padding: const EdgeInsets.only(
-                                top: 25, bottom: 25, left: 20),
-                            elevation: 0,
-                            side: const BorderSide(color: Colors.red, width: 1),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const SizedBox(width: 10),
-                              Text(
-                                'Logout',
-                                style: const TextStyle(
-                                    fontFamily: 'Poppins', color: Colors.red),
-                              ),
-                            ],
-                          ),
+                        ActivityButton(
+                          title: 'Logout',
+                          borderColor: Colors.red,
+                          textColor: Colors.red,
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  const LogoutConfirmationDialog(),
+                            );
+                          },
                         ),
                         const SizedBox(height: 100),
                       ],
