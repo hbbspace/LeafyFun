@@ -70,7 +70,7 @@ class SplashScreenState extends State<SplashScreen> {
               'assets/images/College_Library.png', // Gambar dekorasi bawah
               width: MediaQuery.of(context).size.width,
               height:
-                  MediaQuery.of(context).size.height * 0.5, // Setengah halaman
+                  MediaQuery.of(context).size.height * 0.47, // Setengah halaman
               fit: BoxFit.cover,
             ),
           ),

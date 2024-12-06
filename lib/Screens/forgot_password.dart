@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/login.dart';
-import 'package:leafyfun/Screens/otp_verification.dart';
+import 'package:leafyfun/widgets/backButton.dart';
+import 'package:leafyfun/widgets/forgot_password_button.dart';
+import 'package:leafyfun/widgets/forgot_password_form.dart';
 import 'package:leafyfun/widgets/header_text.dart';
+import 'package:leafyfun/widgets/title_widget.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -28,78 +30,29 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           Positioned(
             top: 85,
             left: 20,
-            child: GestureDetector(
-              onTap: () {
-                // Navigasi ke halaman Login atau kembali ke halaman sebelumnya
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LogInScreen()),
-                );
+            child: ArrowBackButton(
+              onPressed: () {
+                Navigator.pop(context); // Navigasi kembali
               },
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Container luar sebagai "stroke"
-                  Container(
-                    width:
-                        46, // Lebar dan tinggi lebih besar dari gambar untuk "stroke"
-                    height: 46,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent, // Warna latar belakang stroke
-                      borderRadius: BorderRadius.circular(10), // Border rounded
-                      border: Border.all(
-                        color: Colors.grey, // Warna "stroke"
-                        width: 1.5, // Ketebalan "stroke"
-                      ),
-                    ),
-                  ),
-                  // Container dalam berisi gambar icon
-                  Container(
-                    width: 30, // Lebar dan tinggi sesuai dengan ukuran gambar
-                    height: 30,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(15), // Border rounded gambar
-                    ),
-                    child: Image.asset(
-                      'assets/images/arrow-left.png', // Path gambar icon custom
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-              ),
+              iconPath: 'assets/images/arrow-left.png', // Path ikon custom
+              borderColor: const Color.fromARGB(
+                  255, 130, 130, 130), // Warna stroke custom
             ),
           ),
 
           const Align(
             alignment: Alignment.topLeft,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 150, 20, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Teks "Forgot Password"
-                  Text(
-                    'Forgot \nPassword',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 250, 250, 250),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Enter your email',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 16,
-                      color: Color.fromARGB(255, 255, 255, 255),
-                    ),
-                  ),
-                ],
-              ),
+            child: TitleWidget(
+              title: 'Forgot \nPassword',
+              subtitle: 'Enter your email',
+              titleColor: Color.fromARGB(255, 255, 255, 255),
+              subtitleColor: Color.fromARGB(255, 255, 255, 255),
+              titleFontSize: 40,
+              subtitleFontSize: 16,
+              paddingTop: 150,
+              paddingLeft: 20,
+              paddingRight: 20,
+              spacing: 8,
             ),
           ),
 
@@ -133,87 +86,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// class HeaderText extends StatelessWidget {
-//   const HeaderText({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Padding(
-//       padding: EdgeInsets.only(left: 10),
-//       child: Text(
-//         'Email Address',
-//         style: TextStyle(
-//           fontFamily: 'Poppins',
-//           fontSize: 24,
-//           fontWeight: FontWeight.bold,
-//           color: Colors.black,
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-class ForgotPasswordForm extends StatefulWidget {
-  const ForgotPasswordForm({super.key});
-
-  @override
-  _ForgotPasswordFormState createState() => _ForgotPasswordFormState();
-}
-
-class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          decoration: InputDecoration(
-            labelText: 'Enter your email',
-            labelStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        ),
-        const SizedBox(height: 15),
-      ],
-    );
-  }
-}
-
-class ForgotPasswordButton extends StatelessWidget {
-  const ForgotPasswordButton({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () {
-            // Add navigation or ForgotPassword functionality here
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => OtpVerificationPage()),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromRGBO(10, 66, 63, 1),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          child: const Text(
-            'Reset Password',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: Colors.white,
-            ),
-          ),
-        ),
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/login.dart';
 import 'package:leafyfun/widgets/header_text.dart';
+import 'package:leafyfun/widgets/title_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -72,34 +73,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           const Align(
             alignment: Alignment.topLeft,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 100, 20, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Welcome \nUser!',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 250, 250, 250),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Sign up to join',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 16,
-                      color: Color.fromARGB(255, 255, 255, 255),
-                    ),
-                  ),
-                ],
-              ),
+            child: TitleWidget(
+              title: 'Welcome \nUser!',
+              subtitle: 'Sign up to join',
+              titleColor: Color.fromARGB(255, 255, 255, 255),
+              subtitleColor: Color.fromARGB(255, 255, 255, 255),
+              titleFontSize: 36,
+              subtitleFontSize: 14,
+              paddingTop: 100,
+              paddingLeft: 20,
+              paddingRight: 20,
+              spacing: 8,
             ),
           ),
+          
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(

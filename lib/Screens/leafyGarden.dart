@@ -28,7 +28,10 @@ class _LeafyGardenState extends State<LeafyGarden> {
         // Navigasi ke HomePage
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const HomePageScreen(token: '',)),
+          MaterialPageRoute(
+              builder: (context) => const HomePageScreen(
+                    token: '',
+                  )),
         );
         break;
       case 1:
@@ -78,7 +81,7 @@ class _LeafyGardenState extends State<LeafyGarden> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Padding(
-                      padding: EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.only(top: 40, left: 20),
                       child: Text(
                         'My Garden',
                         style: TextStyle(
@@ -128,6 +131,14 @@ class _LeafyGardenState extends State<LeafyGarden> {
                     ),
                     SizedBox(height: 10),
                     // Tambahkan widget TipsAndTrick
+                    TipsAndTrick(
+                      tittle: "5 tips & trick to keep your plants healthy",
+                      image: 'assets/images/tipsntrick1.png',
+                    ),
+                    TipsAndTrick(
+                      tittle: "How to plant the right seeds",
+                      image: 'assets/images/tipsntrick2.png',
+                    ),
                     TipsAndTrick(
                       tittle: "5 tips & trick to keep your plants healthy",
                       image: 'assets/images/tipsntrick1.png',

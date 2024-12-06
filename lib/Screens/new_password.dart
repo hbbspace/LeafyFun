@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:leafyfun/widgets/backButton.dart';
 import 'package:leafyfun/widgets/header_text.dart';
 import 'package:leafyfun/widgets/new_password_button.dart';
 import 'package:leafyfun/widgets/new_password_form.dart';
+import 'package:leafyfun/widgets/title_widget.dart';
 
 class NewPassword extends StatefulWidget {
   const NewPassword({super.key});
@@ -28,75 +30,29 @@ class _NewPasswordState extends State<NewPassword> {
           Positioned(
             top: 85,
             left: 20,
-            child: GestureDetector(
-              onTap: () {
-                // Navigasi ke halaman Login atau kembali ke halaman sebelumnya
-                Navigator.pop(context);
+            child: ArrowBackButton(
+              onPressed: () {
+                Navigator.pop(context); // Navigasi kembali
               },
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Container luar sebagai "stroke"
-                  Container(
-                    width:
-                        46, // Lebar dan tinggi lebih besar dari gambar untuk "stroke"
-                    height: 46,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent, // Warna latar belakang stroke
-                      borderRadius: BorderRadius.circular(10), // Border rounded
-                      border: Border.all(
-                        color: Colors.grey, // Warna "stroke"
-                        width: 1.5, // Ketebalan "stroke"
-                      ),
-                    ),
-                  ),
-                  // Container dalam berisi gambar icon
-                  Container(
-                    width: 30, // Lebar dan tinggi sesuai dengan ukuran gambar
-                    height: 30,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(15), // Border rounded gambar
-                    ),
-                    child: Image.asset(
-                      'assets/images/arrow-left.png', // Path gambar icon custom
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-              ),
+              iconPath: 'assets/images/arrow-left.png', // Path ikon custom
+              borderColor: const Color.fromARGB(
+                  255, 130, 130, 130), // Warna stroke custom
             ),
           ),
 
           const Align(
             alignment: Alignment.topLeft,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 150, 20, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Teks "Forgot Password"
-                  Text(
-                    'New \nPassword',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 250, 250, 250),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Enter your new password',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 16,
-                      color: Color.fromARGB(255, 255, 255, 255),
-                    ),
-                  ),
-                ],
-              ),
+            child: TitleWidget(
+              title: 'New \nPassword',
+              subtitle: 'Enter your new password',
+              titleColor: Color.fromARGB(255, 255, 255, 255),
+              subtitleColor: Color.fromARGB(255, 255, 255, 255),
+              titleFontSize: 40,
+              subtitleFontSize: 16,
+              paddingTop: 150,
+              paddingLeft: 20,
+              paddingRight: 20,
+              spacing: 8,
             ),
           ),
 

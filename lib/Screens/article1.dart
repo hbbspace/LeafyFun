@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:leafyfun/widgets/backButton_article.dart';
+import 'package:leafyfun/widgets/backButton.dart';
 
 class Article1 extends StatelessWidget {
   const Article1({super.key});
@@ -16,7 +16,7 @@ class Article1 extends StatelessWidget {
               // Tombol Arrow Back
               Container(
                 padding: const EdgeInsets.only(top: 30, left: 20, bottom: 20),
-                child: ArrowBackButtonArticle(
+                child: ArrowBackButton(
                   onPressed: () {
                     Navigator.pop(context); // Navigasi kembali
                   },

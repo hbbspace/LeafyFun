@@ -8,6 +8,7 @@ import 'package:leafyfun/widgets/login_button.dart';
 import 'package:leafyfun/widgets/login_form.dart';
 import 'package:leafyfun/widgets/signup_text_button.dart';
 import 'package:leafyfun/widgets/social_login_button.dart';
+import 'package:leafyfun/widgets/title_widget.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -44,35 +45,17 @@ class _LogInScreenState extends State<LogInScreen> {
 
           const Align(
             alignment: Alignment.topLeft,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 100, 20, 0),
-              child: Column(
-                // Menempatkan teks di sebelah kiri
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Teks "Welcome Back" dan "Sign in Again"
-                  Text(
-                    'Welcome \nBack!',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 250, 250, 250),
-                    ),
-                  ),
-                  SizedBox(height: 10), // Memberikan jarak antar teks
-                  Text(
-                    'Sign in to continue',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 16,
-                      // fontWeight: FontWeight.normal,
-                      color: Color.fromARGB(255, 255, 255, 255),
-                    ),
-                  ),
-                ],
-              ),
+            child: TitleWidget(
+              title: 'Welcome \nBack!',
+              subtitle: 'Sign in to continue',
+              titleColor: Color.fromARGB(255, 255, 255, 255),
+              subtitleColor: Color.fromARGB(255, 255, 255, 255),
+              titleFontSize: 36,
+              subtitleFontSize: 14,
+              paddingTop: 85,
+              paddingLeft: 20,
+              paddingRight: 20,
+              spacing: 8,
             ),
           ),
 

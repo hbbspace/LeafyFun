@@ -76,22 +76,6 @@ class _ScanPageState extends State<ScanPage> {
                   height: double.infinity,
                   child: CameraPreview(_cameraController!),
                 ),
-          // Positioned(
-          //   bottom: 60, // Jarak tombol dari bagian bawah layar
-          //   left: 0,
-          //   right: 0,
-          //   child: Center(
-          //     child: GestureDetector(
-          //       onTap: _captureImage,
-          //       child: Image.asset(
-          //         'assets/images/scan_button.png',
-          //         width: 150,
-          //         height: 150,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-
           Positioned(
             bottom: 60, // Jarak dari bagian bawah layar
             left: 0,
@@ -102,7 +86,7 @@ class _ScanPageState extends State<ScanPage> {
                 // Flash Button
                 GestureDetector(
                   onTap: () {
-                    print("Upload button pressed");
+                    print("Flash button pressed");
                   },
                   child: Center(
                     child: GestureDetector(
@@ -138,7 +122,7 @@ class _ScanPageState extends State<ScanPage> {
                 // Upload Button
                 GestureDetector(
                   onTap: () {
-                    print("Flash button pressed");
+                    print("Upload button pressed");
                   },
                   child: Center(
                     child: GestureDetector(
@@ -154,7 +138,6 @@ class _ScanPageState extends State<ScanPage> {
               ],
             ),
           ),
-
           Positioned(
               child: Center(
             child: Image.asset(
@@ -169,7 +152,7 @@ class _ScanPageState extends State<ScanPage> {
               onPressed: () {
                 Navigator.pop(context); // Navigasi ke halaman sebelumnya
               },
-              iconPath: 'assets/images/ArrowLeftBlack.png',
+              iconPath: 'assets/images/arrow-left.png',
               borderColor: Colors.grey,
             ),
           ),
