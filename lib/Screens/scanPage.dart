@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:file_picker/file_picker.dart'; // Import untuk file picker
 import '../widgets/backButton.dart';
 
 class ScanPage extends StatefulWidget {
@@ -16,6 +17,7 @@ class _ScanPageState extends State<ScanPage> {
   CameraController? _cameraController;
   List<CameraDescription>? _cameras;
   File? _capturedImage;
+  bool _isFlashOn = false; // Status flash
 
   @override
   void initState() {
@@ -58,6 +60,38 @@ class _ScanPageState extends State<ScanPage> {
     }
   }
 
+  // Toggle flash on or off
+  Future<void> _toggleFlash() async {
+    if (_cameraController != null && _cameraController!.value.isInitialized) {
+      try {
+        _isFlashOn = !_isFlashOn;
+        await _cameraController!.setFlashMode(
+          _isFlashOn ? FlashMode.torch : FlashMode.off,
+        );
+        setState(() {});
+      } catch (e) {
+        print("Error toggling flash: $e");
+      }
+    }
+  }
+
+  // Open file picker to upload image
+  Future<void> _uploadImage() async {
+    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+
+    if (result != null) {
+      final pickedFile = File(result.files.single.path!);
+
+      setState(() {
+        _capturedImage = pickedFile;
+      });
+
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+        SnackBar(content: Text('Image selected: ${pickedFile.path}')),
+      );
+    }
+  }
+
   @override
   void dispose() {
     _cameraController?.dispose();
@@ -85,66 +119,46 @@ class _ScanPageState extends State<ScanPage> {
               children: [
                 // Flash Button
                 GestureDetector(
-                  onTap: () {
-                    print("Flash button pressed");
-                  },
-                  child: Center(
-                    child: GestureDetector(
-                      onTap: _captureImage,
-                      child: Image.asset(
-                        'assets/images/flash_button.png',
-                        width: 80,
-                        height: 80,
-                      ),
-                    ),
+                  onTap: _toggleFlash,
+                  child: Image.asset(
+                    'assets/images/flash_button.png',
+                    width: 80,
+                    height: 80,
                   ),
                 ),
                 SizedBox(width: 20), // Jarak antara tombol
 
                 // Scan Button
                 GestureDetector(
-                  onTap: () {
-                    print("Scan button pressed");
-                  },
-                  child: Center(
-                    child: GestureDetector(
-                      onTap: _captureImage,
-                      child: Image.asset(
-                        'assets/images/scan_button.png',
-                        width: 150,
-                        height: 150,
-                      ),
-                    ),
+                  onTap: _captureImage,
+                  child: Image.asset(
+                    'assets/images/scan_button.png',
+                    width: 150,
+                    height: 150,
                   ),
                 ),
                 SizedBox(width: 20), // Jarak antara tombol
 
                 // Upload Button
                 GestureDetector(
-                  onTap: () {
-                    print("Upload button pressed");
-                  },
-                  child: Center(
-                    child: GestureDetector(
-                      onTap: _captureImage,
-                      child: Image.asset(
-                        'assets/images/upload_button.png',
-                        width: 80,
-                        height: 80,
-                      ),
-                    ),
+                  onTap: _uploadImage,
+                  child: Image.asset(
+                    'assets/images/upload_button.png',
+                    width: 80,
+                    height: 80,
                   ),
                 ),
               ],
             ),
           ),
           Positioned(
-              child: Center(
-            child: Image.asset(
-              'assets/images/scan_border.png',
-              width: double.infinity,
+            child: Center(
+              child: Image.asset(
+                'assets/images/scan_border.png',
+                width: double.infinity,
+              ),
             ),
-          )),
+          ),
           Positioned(
             top: 60,
             left: 30,
@@ -164,8 +178,8 @@ class _ScanPageState extends State<ScanPage> {
               child: Center(
                 child: GestureDetector(
                   onTap: () {
-                    // Tambahkan logika untuk mengirim gambar ke backend
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    
+                    ScaffoldMessenger.of(context).showSnackBar( // error?
                       SnackBar(content: Text('Image sent to backend!')),
                     );
                   },
