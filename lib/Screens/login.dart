@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/homepage.dart';
-import 'package:leafyfun/Screens/register.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:leafyfun/widgets/header_text.dart';
 import 'package:leafyfun/widgets/login_button.dart';

@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-
   // Load .env file
   await dotenv.load(fileName: ".env");
   runApp(const MyApp());
@@ -24,15 +23,9 @@ class MyApp extends StatelessWidget {
         title: 'LeafyFun',
         theme: ThemeData(primarySwatch: Colors.green),
         home: LogInScreen(),
-        // home: ScanPage()
-        // home: SplashScreen());
-        // home: LeafyQuiz());
-        // home: ProfilePage());
         // home: HomePageScreen(
         //   token: '',
         // )
-        // home: LeafyGarden());
-        // home: CarouselDemo());
       ),
     );
   }
