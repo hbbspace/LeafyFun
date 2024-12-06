@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/login.dart';
@@ -30,9 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('https://4b4c-180-248-47-102.ngrok-free.app/register'),
-        // Uri.parse('https://tomascan.nurulmustofa.my.id/api/register'),
-        // Uri.parse('http://tomascan.nurulmustofa.my.id/api/register'),
+        Uri.parse('${dotenv.env['ENDPOINT_URL']}register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(
             {'username': username, 'email': email, 'password': password}),

@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/otp_verification.dart';
 import 'package:leafyfun/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+
+  // Load .env file
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 

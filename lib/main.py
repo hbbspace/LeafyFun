@@ -21,7 +21,7 @@ app.add_middleware(
 def on_startup():
     try:
         # Membuat tabel jika belum ada (Comment jika tabel sudah ada)
-        # Base.metadata.create_all(bind=engine)
+        Base.metadata.create_all(bind=engine)
         print("Database tables created.")
 
         db = SessionLocal()

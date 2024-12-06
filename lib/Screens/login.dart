@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/homepage.dart';
@@ -163,7 +164,7 @@ class ContinueWithText extends StatelessWidget {
 Future<String?> login(String username, String password) async {
   try {
     final response = await http.post(
-      Uri.parse('http://127.0.0.1:8000/login'),
+      Uri.parse('${dotenv.env['ENDPOINT_URL']}login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': username, 'password': password}),
     );
