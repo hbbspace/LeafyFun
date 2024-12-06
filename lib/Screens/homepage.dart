@@ -76,6 +76,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
             child: Column(
               children: [
                 // Top Bar Widget
+                const SizedBox(height: 30),
                 const TopbarHomepage(
                   greeting: "Hello,",
                   userName: "User123",

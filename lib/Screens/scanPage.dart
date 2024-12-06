@@ -170,7 +170,7 @@ class _ScanPageState extends State<ScanPage> {
                 Navigator.pop(context); // Navigasi ke halaman sebelumnya
               },
               iconPath: 'assets/images/ArrowLeftBlack.png',
-              borderColor: Colors.transparent,
+              borderColor: Colors.grey,
             ),
           ),
           if (_capturedImage != null)

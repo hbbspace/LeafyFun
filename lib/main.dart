@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/otp_verification.dart';
+import 'package:leafyfun/Screens/login.dart';
 import 'package:leafyfun/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -23,12 +23,14 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'LeafyFun',
         theme: ThemeData(primarySwatch: Colors.green),
-        home: OtpVerificationPage(),
-        // home: ScanPage());
+        home: LogInScreen(),
+        // home: ScanPage()
         // home: SplashScreen());
         // home: LeafyQuiz());
         // home: ProfilePage());
-        // home: HomePageScreen());
+        // home: HomePageScreen(
+        //   token: '',
+        // )
         // home: LeafyGarden());
         // home: CarouselDemo());
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
@@ -27,7 +28,7 @@ class _LeafyGardenState extends State<LeafyGarden> {
         // Navigasi ke HomePage
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const LeafyQuiz()),
+          MaterialPageRoute(builder: (context) => const HomePageScreen(token: '',)),
         );
         break;
       case 1:
