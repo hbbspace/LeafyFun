@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart';
-import 'package:file_picker/file_picker.dart'; // Import untuk file picker
-import '../widgets/backButton.dart';
+import 'package:path/path.dart' as path; // Berikan alias pada 'path'
+import 'package:file_picker/file_picker.dart';
+import '../widgets/arrowBack_button.dart';
+import 'scanDetail.dart'; // Import halaman detail
 
 class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
@@ -17,7 +18,7 @@ class _ScanPageState extends State<ScanPage> {
   CameraController? _cameraController;
   List<CameraDescription>? _cameras;
   File? _capturedImage;
-  bool _isFlashOn = false; // Status flash
+  bool _isFlashOn = false;
 
   @override
   void initState() {
@@ -30,8 +31,8 @@ class _ScanPageState extends State<ScanPage> {
     _cameras = await availableCameras();
     if (_cameras!.isNotEmpty) {
       _cameraController = CameraController(
-        _cameras![0], // Pilih kamera pertama
-        ResolutionPreset.high, // Resolusi kamera
+        _cameras![0],
+        ResolutionPreset.high,
       );
       await _cameraController?.initialize();
       setState(() {});
@@ -40,7 +41,7 @@ class _ScanPageState extends State<ScanPage> {
     }
   }
 
-  // Capture an image and save it locally
+  // Capture an image and navigate to the detail page
   Future<void> _captureImage() async {
     if (_cameraController != null && _cameraController!.value.isInitialized) {
       try {
@@ -48,19 +49,33 @@ class _ScanPageState extends State<ScanPage> {
 
         // Save the image to a local directory
         final directory = await getApplicationDocumentsDirectory();
-        final imagePath = join(directory.path, '${DateTime.now()}.jpg');
+        final imagePath = path.join(
+            directory.path, '${DateTime.now()}.jpg'); // Gunakan alias path
         final savedImage = await File(image.path).copy(imagePath);
 
         setState(() {
           _capturedImage = savedImage;
         });
+
+        // Navigate to the detail page with the captured image
+        if (mounted) {
+          // Gunakan 'mounted' tanpa 'context'
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ScanDetailPage(
+                capturedImage: savedImage,
+              ),
+            ),
+          );
+        }
       } catch (e) {
         print("Error capturing image: $e");
       }
     }
   }
 
-  // Toggle flash on or off
+  // Toggle flash
   Future<void> _toggleFlash() async {
     if (_cameraController != null && _cameraController!.value.isInitialized) {
       try {
@@ -75,7 +90,7 @@ class _ScanPageState extends State<ScanPage> {
     }
   }
 
-  // Open file picker to upload image
+  // Upload image using file picker
   Future<void> _uploadImage() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
 
@@ -86,9 +101,18 @@ class _ScanPageState extends State<ScanPage> {
         _capturedImage = pickedFile;
       });
 
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
-        SnackBar(content: Text('Image selected: ${pickedFile.path}')),
-      );
+      // Navigate to the detail page with the uploaded image
+      if (mounted) {
+        // Gunakan 'mounted' tanpa 'context'
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ScanDetailPage(
+              capturedImage: pickedFile,
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -104,20 +128,19 @@ class _ScanPageState extends State<ScanPage> {
       body: Stack(
         children: [
           _cameraController == null || !_cameraController!.value.isInitialized
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : SizedBox(
                   width: double.infinity,
                   height: double.infinity,
                   child: CameraPreview(_cameraController!),
                 ),
           Positioned(
-            bottom: 60, // Jarak dari bagian bawah layar
+            bottom: 60,
             left: 0,
             right: 0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Flash Button
                 GestureDetector(
                   onTap: _toggleFlash,
                   child: Image.asset(
@@ -126,9 +149,7 @@ class _ScanPageState extends State<ScanPage> {
                     height: 80,
                   ),
                 ),
-                SizedBox(width: 20), // Jarak antara tombol
-
-                // Scan Button
+                const SizedBox(width: 20),
                 GestureDetector(
                   onTap: _captureImage,
                   child: Image.asset(
@@ -137,9 +158,7 @@ class _ScanPageState extends State<ScanPage> {
                     height: 150,
                   ),
                 ),
-                SizedBox(width: 20), // Jarak antara tombol
-
-                // Upload Button
+                const SizedBox(width: 20),
                 GestureDetector(
                   onTap: _uploadImage,
                   child: Image.asset(
@@ -164,39 +183,12 @@ class _ScanPageState extends State<ScanPage> {
             left: 30,
             child: ArrowBackButton(
               onPressed: () {
-                Navigator.pop(context); // Navigasi ke halaman sebelumnya
+                Navigator.pop(context);
               },
               iconPath: 'assets/images/arrow-left.png',
               borderColor: Colors.grey,
             ),
           ),
-          if (_capturedImage != null)
-            Positioned(
-              bottom: 120, // Jarak tombol submit dari tombol scan
-              left: 0,
-              right: 0,
-              child: Center(
-                child: GestureDetector(
-                  onTap: () {
-                    
-                    ScaffoldMessenger.of(context).showSnackBar( // error?
-                      SnackBar(content: Text('Image sent to backend!')),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      'Submit',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-            ),
         ],
       ),
     );

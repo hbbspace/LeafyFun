@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/homepage.dart';
+import 'package:leafyfun/Screens/scanDetail.dart';
+import 'package:leafyfun/Screens/scanPage.dart';
 import 'package:leafyfun/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +16,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // File dummy yang diakses dari asset (pastikan ada di project).
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
@@ -23,9 +27,7 @@ class MyApp extends StatelessWidget {
           title: 'LeafyFun',
           theme: ThemeData(primarySwatch: Colors.green),
           // home: SplashScreen(),
-          home: HomePageScreen(
-            token: '',
-          )),
+          home: ScanPage()),
     );
   }
 }
