@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:leafyfun/Screens/questionPage.dart';
 import 'package:leafyfun/Screens/scanDetail.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
 import 'package:leafyfun/providers/auth_provider.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
           title: 'LeafyFun',
           theme: ThemeData(primarySwatch: Colors.green),
           // home: SplashScreen(),
-          home: ScanPage()),
+          home: QuestionPage()),
     );
   }
 }
