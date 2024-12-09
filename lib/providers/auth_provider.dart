@@ -11,7 +11,6 @@ class AuthProvider extends ChangeNotifier {
   String? get token => _token;
   bool get isAuthenticated => _isAuthenticated;
 
-  // Fungsi login untuk autentikasi pengguna
   Future<bool> login(String username, String password) async {
     final url = '${dotenv.env['ENDPOINT_URL']}/login';
     try {
@@ -27,12 +26,10 @@ class AuthProvider extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        // Jika login berhasil, ambil token dari response
         final responseData = json.decode(response.body);
-        final token = responseData['token'];  // Pastikan nama field sesuai dengan response dari API Anda
+        final token = responseData['access_token']; // Disesuaikan dengan field dari API
 
         if (token != null) {
-          // Menyimpan token di FlutterSecureStorage
           final storage = FlutterSecureStorage();
           await storage.write(key: 'auth_token', value: token);
 
@@ -50,17 +47,14 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  // Fungsi logout untuk menghapus token dan status autentikasi
   Future<void> logout() async {
     final storage = FlutterSecureStorage();
     await storage.delete(key: 'auth_token');
     _token = null;
     _isAuthenticated = false;
-    
     notifyListeners();
   }
 
-  // Fungsi untuk mengecek apakah pengguna sudah terautentikasi
   Future<void> checkAuthentication() async {
     final storage = FlutterSecureStorage();
     final token = await storage.read(key: 'auth_token');

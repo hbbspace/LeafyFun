@@ -35,9 +35,9 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
 
 def verify_jwt_token(token: str) -> Union[dict, None]:
     try:
-        # Decode the token and validate it
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if "sub" not in payload or "user_id" not in payload:
+            raise JWTError("Invalid token structure")
         return payload
     except JWTError:
-        # Token is invalid or expired
         return None
