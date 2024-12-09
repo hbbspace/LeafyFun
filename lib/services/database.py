@@ -5,7 +5,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 # Engine untuk koneksi ke database
-load_dotenv()
+ENV_PATH = os.path.join(os.path.dirname(__file__), "../../assets/.env")
+load_dotenv(ENV_PATH)
 DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 

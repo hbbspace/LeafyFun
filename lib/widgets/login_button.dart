@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/homepage.dart';
-import 'package:leafyfun/Screens/login.dart';
+import 'package:leafyfun/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class LoginButton extends StatelessWidget {
   final TextEditingController usernameController;
@@ -19,24 +20,36 @@ class LoginButton extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () async {
-            // Simulate login API call
+            // Mengambil instance AuthProvider
+            final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+            // Mengambil username dan password dari controller
             final username = usernameController.text;
             final password = passwordController.text;
-            final token = await login(username, password);
 
-            if (token != null) {
-              // Navigate to HomePage with token
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomePageScreen(token: token),
-                ),
-              );
+            // Panggil metode login dari AuthProvider dan simpan hasilnya di success
+            final success = await authProvider.login(username, password);
+
+            if (success == true) {
+              // Pastikan Navigator dipanggil jika widget masih terpasang
+              if (context.mounted) {
+                // Navigasi ke HomePage jika login berhasil
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePageScreen(
+                      token: authProvider.token ?? '',  // Nilai default jika token null
+                    ),
+                  ),
+                );
+              }
             } else {
-              // Show error message
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Login failed")),
-              );
+              // Tampilkan pesan error jika login gagal
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Login failed")),
+                );
+              }
             }
           },
           style: ElevatedButton.styleFrom(

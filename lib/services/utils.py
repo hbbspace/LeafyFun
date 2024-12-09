@@ -6,7 +6,8 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 
 # Load .env file
-load_dotenv()
+ENV_PATH = os.path.join(os.path.dirname(__file__), "../../assets/.env")
+load_dotenv(ENV_PATH)
 
 # Setup password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -31,3 +32,12 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+def verify_jwt_token(token: str) -> Union[dict, None]:
+    try:
+        # Decode the token and validate it
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except JWTError:
+        # Token is invalid or expired
+        return None

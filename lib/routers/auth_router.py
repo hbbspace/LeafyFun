@@ -2,31 +2,36 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from lib.services.database import get_db
-from lib.services.utils import verify_password, create_access_token, hash_password
+from lib.services.utils import verify_password, create_access_token, hash_password, verify_jwt_token
 from lib.models.user import User as UserModel
 from lib.schemas.user import LoginRequest, LoginResponse, UserCreate, UserRead
+from fastapi.security import OAuth2PasswordBearer
+
 
 router = APIRouter()
 
-@router.post("/login", response_model=LoginResponse)
-async def login(request: LoginRequest, db: Session = Depends(get_db)):
-    # Ambil data user berdasarkan email
-    user = db.query(UserModel).filter(UserModel.email == request.email).first()
 
-    # Verifikasi email dan password
-    if not user or not verify_password(request.password, user.password):
-        raise HTTPException(status_code=401, detail="Invalid email or password")
 
-    # Jika login berhasil, buat token akses (JWT)
-    access_token = create_access_token(data={"sub": user.email})
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-    # Kembalikan response
-    return JSONResponse(
-        content={
-            "token": access_token,
-            "message": "Login successful",
-        }
-    )
+@router.get("/validate-token")
+async def validate_token(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = verify_jwt_token(token)
+        return {"valid": True, "user": payload.get("sub")}
+    except Exception:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+@router.post("/login")
+async def login(email: str, password: str, db: Session = Depends(get_db)):
+    user = db.query(UserModel).filter(UserModel.email == email).first()
+    if not user or not verify_password(password, user.password):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    access_token = create_access_token(data={"sub": user.email, "user_id": user.user_id, "username": user.username})
+    return {"access_token": access_token, "token_type": "bearer"}
+
 
 @router.post("/register", response_model=UserRead, status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):

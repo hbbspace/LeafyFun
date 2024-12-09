@@ -35,6 +35,7 @@ dependencies:
   carousel_slider: ^5.0.0
   shared_preferences: ^2.0.8
   flutter_secure_storage: ^8.0.0
+  jwt_decoder: ^2.0.1
   provider: ^6.1.2
   flutter_dotenv: ^5.0.2
 
@@ -69,6 +70,7 @@ flutter:
   # uses-material-design: true
   assets:
     - assets/images/
+    - assets/fonts/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -90,6 +92,10 @@ flutter:
           weight: 700
         - asset: assets/fonts/Poppins-Italic.ttf
           style: italic
+    - family: Noto
+      fonts:
+        - asset: assets/fonts/NotoSans-Regular.ttf
+
 
   #   - family: Schyler
   #     fonts:

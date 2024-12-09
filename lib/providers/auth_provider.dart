@@ -1,53 +1,71 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthProvider extends ChangeNotifier {
   String? _token;
+  bool _isAuthenticated = false;
 
   String? get token => _token;
+  bool get isAuthenticated => _isAuthenticated;
 
-  // Future<bool> login(String email, String password) async {
-  //   final url = Uri.parse('http://localhost:8000/login/login');
-  //   try {
-  //     final response = await http.post(
-  //       url,
-  //       headers: {'Content-Type': 'application/json'},
-  //       body: json.encode({'email': email, 'password': password}),
-  //     );
+  // Fungsi login untuk autentikasi pengguna
+  Future<bool> login(String username, String password) async {
+    final url = '${dotenv.env['ENDPOINT_URL']}/login';
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: json.encode({
+          'email': username,
+          'password': password,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
 
-  //     if (response.statusCode == 200) {
-  //       final data = json.decode(response.body);
-  //       _token = data['token'];
-  //       notifyListeners();
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } catch (error) {
-  //     debugPrint('Error during login: $error');
-  //     return false;
-  //   }
-  // }
+      if (response.statusCode == 200) {
+        // Jika login berhasil, ambil token dari response
+        final responseData = json.decode(response.body);
+        final token = responseData['token'];  // Pastikan nama field sesuai dengan response dari API Anda
 
-  Future<String?> login(String username, String password) async {
-  try {
-    final response = await http.post(
-      Uri.parse('http://127.0.0.1:8000/Login/login'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': username, 'password': password}),
-    );
+        if (token != null) {
+          // Menyimpan token di FlutterSecureStorage
+          final storage = FlutterSecureStorage();
+          await storage.write(key: 'auth_token', value: token);
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return data['token']; // Return token
-    } else {
-      debugPrint('Login failed: ${response.body}');
-      return null;
+          _token = token;
+          _isAuthenticated = true;
+          notifyListeners();
+        }
+
+        return true;
+      } else {
+        throw Exception('Login failed');
+      }
+    } catch (error) {
+      throw Exception('Login failed: $error');
     }
-  } catch (e) {
-    debugPrint('Error: $e');
-    return null;
   }
-}
+
+  // Fungsi logout untuk menghapus token dan status autentikasi
+  Future<void> logout() async {
+    final storage = FlutterSecureStorage();
+    await storage.delete(key: 'auth_token');
+    _token = null;
+    _isAuthenticated = false;
+    
+    notifyListeners();
+  }
+
+  // Fungsi untuk mengecek apakah pengguna sudah terautentikasi
+  Future<void> checkAuthentication() async {
+    final storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'auth_token');
+    _isAuthenticated = token != null;
+    _token = token;
+    notifyListeners();
+  }
 }

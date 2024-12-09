@@ -1,8 +1,4 @@
-import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:leafyfun/widgets/header_text.dart';
 import 'package:leafyfun/widgets/login_button.dart';
 import 'package:leafyfun/widgets/login_form.dart';
@@ -139,32 +135,5 @@ class ContinueWithText extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-Future<String?> login(String username, String password) async {
-  try {
-    final response = await http.post(
-      Uri.parse('${dotenv.env['ENDPOINT_URL']}login'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': username, 'password': password}),
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      String token = data['token']; // Mengambil token dari response
-
-      // Menyimpan token ke secure storage
-      final storage = FlutterSecureStorage();
-      await storage.write(key: 'auth_token', value: token);
-
-      return token; // Kembalikan token jika perlu
-    } else {
-      debugPrint('Login failed: ${response.body}');
-      return null;
-    }
-  } catch (e) {
-    debugPrint('Error: $e');
-    return null;
   }
 }

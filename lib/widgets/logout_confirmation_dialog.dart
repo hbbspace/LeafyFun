@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:leafyfun/Screens/login.dart';
+import 'package:leafyfun/providers/auth_provider.dart';
 
 class LogoutConfirmationDialog extends StatelessWidget {
   const LogoutConfirmationDialog({super.key});
@@ -21,8 +23,13 @@ class LogoutConfirmationDialog extends StatelessWidget {
           ),
         ),
         ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
+            // Memanggil logout() dari AuthProvider
+            await Provider.of<AuthProvider>(context, listen: false).logout();
+
             Navigator.of(context).pop(); // Tutup dialog
+
+            // Setelah logout, arahkan pengguna kembali ke layar login
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const LogInScreen()),

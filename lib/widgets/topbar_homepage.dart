@@ -43,7 +43,7 @@ class TopbarHomepage extends StatelessWidget {
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(width: 5), // Jarak antara teks dan gambar
+                  const SizedBox(width: 5),
                   Image.asset(
                     'assets/images/waving_hands.png',
                     height: 20,
