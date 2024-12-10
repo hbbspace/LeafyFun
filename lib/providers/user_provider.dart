@@ -8,6 +8,7 @@ class UserProvider extends ChangeNotifier {
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   String? token;
   String? userName;
+  String? email;
 
   Future<String?> getToken() async {
     final storage = FlutterSecureStorage();
@@ -45,26 +46,81 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  // Fungsi untuk mengambil token dan username
-  Future<void> loadTokenAndUserName() async {
+  // Fungsi untuk mengambil token, username, dan email
+  Future<void> loadUserInfo() async {
     try {
       String? storedToken = await secureStorage.read(key: 'auth_token');
       if (storedToken != null) {
         token = storedToken;
 
-        // Decode token untuk mendapatkan username
+        // Decode token untuk mendapatkan username dan email
         final parts = storedToken.split('.');
         if (parts.length == 3) {
           final payload = utf8.decode(
             base64Url.decode(base64Url.normalize(parts[1])),
           );
           final payloadMap = json.decode(payload);
+
+          // Ambil username dan email dari payload
           userName = payloadMap['username'] ?? 'User';
+          email = payloadMap['email'] ?? 'unknown@example.com';
         }
       }
       notifyListeners(); // Notifikasi perubahan state
     } catch (e) {
       debugPrint('Error loading token: $e');
     }
+  }
+
+  String? getUserIdFromToken(String token) {
+    try {
+      final parts = token.split('.');
+      if (parts.length == 3) {
+        final payload = utf8.decode(
+          base64Url.decode(base64Url.normalize(parts[1])),
+        );
+        final payloadMap = json.decode(payload);
+        return payloadMap['user_id']?.toString(); // Ambil user_id
+      }
+    } catch (e) {
+      debugPrint('Error decoding token: $e');
+    }
+    return null;
+  }
+
+  Future<String?> getUsername(String userId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('${dotenv.env['ENDPOINT_URL']}/users/$userId'),
+        headers: {
+          'ngrok-skip-browser-warning': 'true',  // Menambahkan header ini untuk menghindari halaman warning
+        },
+      );
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data['username'];
+      }
+    } catch (e) {
+      debugPrint('Error fetching username: $e');
+    }
+    return null;
+  }
+
+  Future<String?> getEmailFromUserId(String userId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('${dotenv.env['ENDPOINT_URL']}/users/$userId'),
+        headers: {
+          'ngrok-skip-browser-warning': 'true',  // Menambahkan header ini untuk menghindari halaman warning
+        },
+      );
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data['email'];
+      }
+    } catch (e) {
+      debugPrint('Error fetching email: $e');
+    }
+    return null;
   }
 }

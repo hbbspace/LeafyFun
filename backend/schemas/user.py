@@ -5,10 +5,6 @@ from typing import List, Optional
 class UserBase(BaseModel):
     username: str
     email: str
-    # google_auth: Optional[bool] = False
-    # profile_border: Optional[str] = None
-    # profile_image: Optional[str] = None
-    # coins: int
 
 
 class UserCreate(UserBase):
@@ -27,12 +23,9 @@ class LoginResponse(BaseModel):
     token_type: str
 
 class UserUpdate(BaseModel):
-    username: Optional[str] = Field(None, max_length=50)
-    email: Optional[EmailStr]
-    password: Optional[str] = Field(None, min_length=3)
-    profile_border: Optional[str]
-    profile_image: Optional[str]
-    coins: Optional[int]
+    username: Optional[str] = Field(None, title="Username", max_length=100)
+    email: Optional[EmailStr] = Field(None, title="Email Address")
+    password: Optional[str] = Field(None, title="Password", min_length=3)
 
 class UserOut(UserRead):
     user_plants: List[int] = []

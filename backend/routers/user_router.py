@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 from backend.models.user import User as UserModel
-from backend.schemas.user import UserCreate, UserRead
+from backend.schemas.user import UserCreate, UserRead, UserUpdate
 from backend.services.database import get_db
 from backend.services.utils import hash_password, verify_password, verify_jwt_token
 from fastapi.security import OAuth2PasswordBearer
@@ -37,3 +37,67 @@ async def get_current_user_data(current_user: str = Depends(get_current_user), d
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return {"user_id": user.user_id, "username": user.username, "email": user.email}
+
+# @router.get("/quiz")
+# async def get_current_user_data(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
+#     user = db.query(UserModel).filter(UserModel.email == current_user).first()
+#     if not user:
+#         raise HTTPException(status_code=404, detail="User not found")
+#     return {"user_id": user.user_id, "username": user.username, "email": user.email}
+
+# @router.get("/scan")
+# async def get_current_user_data(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
+#     user = db.query(UserModel).filter(UserModel.email == current_user).first()
+#     if not user:
+#         raise HTTPException(status_code=404, detail="User not found")
+#     return {"user_id": user.user_id, "username": user.username, "email": user.email}
+
+# @router.get("/garden")
+# async def get_current_user_data(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
+#     user = db.query(UserModel).filter(UserModel.email == current_user).first()
+#     if not user:
+#         raise HTTPException(status_code=404, detail="User not found")
+#     return {"user_id": user.user_id, "username": user.username, "email": user.email}
+
+# @router.get("/profile")
+# async def get_current_user_data(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
+#     user = db.query(UserModel).filter(UserModel.email == current_user).first()
+#     if not user:
+#         raise HTTPException(status_code=404, detail="User not found")
+#     return {"user_id": user.user_id, "username": user.username, "email": user.email}
+
+@router.put("/updateProfile", status_code=status.HTTP_200_OK)
+async def update_profile(
+    user_update: UserUpdate,
+    current_user: str = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Update the current user's profile information.
+
+    Args:
+        user_update (UserUpdate): Data to update the user's profile.
+        current_user (str): Current user's email from the JWT token.
+        db (Session): Database session dependency.
+
+    Returns:
+        dict: A success message with updated user details.
+    """
+    # Fetch current user from the database
+    user = db.query(UserModel).filter(UserModel.email == current_user).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Update user fields with the provided data
+    if user_update.username:
+        user.username = user_update.username
+    if user_update.email:
+        user.email = user_update.email
+    if user_update.password:
+        user.password = hash_password(user_update.password)
+
+    # Commit the changes to the database
+    db.commit()
+    db.refresh(user)
+
+    return {"message": "Profile updated successfully", "user": {"user_id": user.user_id, "username": user.username, "email": user.email}}

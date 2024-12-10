@@ -3,10 +3,12 @@ import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
+import 'package:leafyfun/providers/user_provider.dart';
 import 'package:leafyfun/widgets/activity_button.dart';
 import 'package:leafyfun/widgets/floating_navbar.dart';
 import 'package:leafyfun/widgets/logout_confirmation_dialog.dart';
 import 'package:leafyfun/widgets/profile_header.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -17,6 +19,16 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int _selectedIndex = 4;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load token and username from UserProvider
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.loadUserInfo();
+    userProvider.loadUserInfo();
+    userProvider.loadUserInfo();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -65,6 +77,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final userName = Provider.of<UserProvider>(context).userName ?? 'Loading...';
+    final email = Provider.of<UserProvider>(context).email ?? 'unknown@example.com';
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -76,8 +91,8 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 children: [
                   ProfileHeader(
-                    username: 'user02342132',
-                    email: 'user02342132@gmail.com',
+                    username: userName,
+                    email: email,
                     profileImage: 'assets/images/profilePicture.png',
                   ),
                   const SizedBox(height: 20),

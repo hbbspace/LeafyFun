@@ -4,10 +4,12 @@ import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
 import 'package:leafyfun/Widgets/floating_navbar.dart';
+import 'package:leafyfun/providers/user_provider.dart';
 import 'package:leafyfun/widgets/finished_quiz.dart';
 import 'package:leafyfun/widgets/quiz_slider.dart';
 import 'package:leafyfun/widgets/topbar_quiz.dart';
 import 'package:leafyfun/widgets/searchbar.dart';
+import 'package:provider/provider.dart';
 
 class LeafyQuiz extends StatefulWidget {
   const LeafyQuiz({super.key});
@@ -30,6 +32,9 @@ class _LeafyQuizState extends State<LeafyQuiz> {
   void initState() {
     super.initState();
     _filteredQuizItems = _allQuizItems; // Awalnya tampilkan semua item
+    // Load token and username from UserProvider
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.loadUserInfo();
   }
 
   void _onSearchChanged(String query) {
@@ -91,6 +96,9 @@ class _LeafyQuizState extends State<LeafyQuiz> {
 
   @override
   Widget build(BuildContext context) {
+    // Mendapatkan username dari UserProvider
+    final userName = Provider.of<UserProvider>(context).userName ?? 'Loading...';
+    
     return Scaffold(
       body: Stack(
         children: [
@@ -124,7 +132,7 @@ class _LeafyQuizState extends State<LeafyQuiz> {
                 children: [
                   TopbarQuiz(
                     greeting: "Welcome to Leafy Quiz,",
-                    userName: "User123",
+                    userName: userName,
                     profileImagePath: 'assets/images/profilePicture.png',
                   ),
                   const SizedBox(height: 10),

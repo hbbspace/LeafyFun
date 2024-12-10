@@ -27,7 +27,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
     super.initState();
     // Load token and username from UserProvider
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    userProvider.loadTokenAndUserName();
+    userProvider.loadUserInfo();
   }
 
   void _onItemTapped(int index) {
