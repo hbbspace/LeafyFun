@@ -8,7 +8,7 @@ class PlantBase(BaseModel):
     fruit_season: str
     region: str
     price_range: str
-    image_file: str
+    # image_file: str
 
     class Config:
         orm_mode = True  # Menambahkan ini untuk mengonversi objek ORM ke JSON

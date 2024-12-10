@@ -29,7 +29,7 @@ class PlantDescription extends StatelessWidget {
         children: [
           // Nama umum dan nama latin tanaman
           Text(
-            commonName,
+            commonName.isNotEmpty ? commonName : 'Nama Umum Tidak Tersedia',
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -37,7 +37,7 @@ class PlantDescription extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            latinName,
+            latinName.isNotEmpty ? latinName : 'Nama Latin Tidak Tersedia',
             style: const TextStyle(
               fontSize: 16,
               fontStyle: FontStyle.italic,
@@ -46,19 +46,19 @@ class PlantDescription extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           // Deskripsi tanaman
-          _buildSection(title: 'Description', content: description),
+          _buildSection(title: 'Description', content: description.isNotEmpty ? description : 'Deskripsi Tidak Tersedia'),
           const SizedBox(height: 20),
           // Kandungan buah
-          _buildSection(title: 'Fruit Content', content: fruitContent),
+          _buildSection(title: 'Fruit Content', content: fruitContent.isNotEmpty ? fruitContent : 'Kandungan Buah Tidak Tersedia'),
           const SizedBox(height: 20),
           // Musim buah
-          _buildSection(title: 'Fruit Season', content: fruitSeason),
+          _buildSection(title: 'Fruit Season', content: fruitSeason.isNotEmpty ? fruitSeason : 'Musim Buah Tidak Tersedia'),
           const SizedBox(height: 20),
           // Wilayah persebaran
-          _buildSection(title: 'Region', content: region),
+          _buildSection(title: 'Region', content: region.isNotEmpty ? region : 'Wilayah Persebaran Tidak Tersedia'),
           const SizedBox(height: 20),
           // Kisaran harga
-          _buildSection(title: 'Price Range', content: priceRange),
+          _buildSection(title: 'Price Range', content: priceRange.isNotEmpty ? priceRange : 'Kisaran Harga Tidak Tersedia'),
         ],
       ),
     );

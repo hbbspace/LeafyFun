@@ -20,13 +20,13 @@ class ScanDetailPage extends StatefulWidget {
 }
 
 class _ScanDetailPageState extends State<ScanDetailPage> {
-  late String commonName;
-  late String latinName;
-  late String description;
-  late String fruitContent;
-  late String fruitSeason;
-  late String region;
-  late String priceRange;
+  String commonName = "";
+  String latinName = "";
+  String description = "";
+  String fruitContent = "";
+  String fruitSeason = "";
+  String region = "";
+  String priceRange = "";
 
   @override
   void initState() {
@@ -40,17 +40,20 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
 
     if (response.statusCode == 200) {
       List<dynamic> plantList = json.decode(response.body);
-      // You can pick one plant or loop over the list if you have more than one plant
-      var plant = plantList[0]; // Assuming you want the first plant
-      setState(() {
-        commonName = plant['common_name'];
-        latinName = plant['latin_name'];
-        description = plant['description'];
-        fruitContent = plant['fruit_content'];
-        fruitSeason = plant['fruit_season'];
-        region = plant['region'];
-        priceRange = plant['price_range'];
-      });
+      if (plantList.isNotEmpty) {
+        var plant = plantList[0]; // Mengambil data pertama
+        setState(() {
+          commonName = plant['common_name'];
+          latinName = plant['latin_name'];
+          description = plant['description'];
+          fruitContent = plant['fruit_content'];
+          fruitSeason = plant['fruit_season'];
+          region = plant['region'];
+          priceRange = plant['price_range'];
+        });
+      } else {
+        throw Exception('No plant data available');
+      }
     } else {
       throw Exception('Failed to load plant data');
     }
@@ -80,12 +83,12 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
                   const SizedBox(height: 20),
                   // Gambar hasil scan
                   Center(
-                    // child: Image.file(
-                    //   widget.capturedImage,
-                    //   height: 200,
-                    //   fit: BoxFit.cover,
-                    // ),
-                  ),
+                      // child: Image.file(
+                      //   widget.capturedImage,
+                      //   height: 200,
+                      //   fit: BoxFit.cover,
+                      // ),
+                      ),
                   const SizedBox(height: 20),
                   // Menampilkan detail tanaman
                   PlantDescription(
