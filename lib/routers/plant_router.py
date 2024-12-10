@@ -25,6 +25,20 @@ async def create_plant(plant: PlantCreate, db: Session = Depends(get_db)):
     db.refresh(new_plant)
     return new_plant
 
+# Endpoint untuk mendapatkan detail tanaman berdasarkan ID
+@router.get("/scanDetail/{plant_id}", response_model=PlantRead, status_code=status.HTTP_200_OK)
+async def read_plant_detail(plant_id: int, db: Session = Depends(get_db)):
+    # Mengambil detail tanaman berdasarkan plant_id
+    plant = db.query(PlantModel).filter(PlantModel.plant_id == plant_id).first()
+    
+    # Jika tanaman tidak ditemukan, maka akan melemparkan error
+    if not plant:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Plant with id {plant_id} not found"
+        )
+    
+    return plant
 
 # Endpoint untuk mendapatkan daftar tanaman
 @router.get("/plants/", response_model=list[PlantRead], status_code=status.HTTP_200_OK)

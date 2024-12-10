@@ -35,27 +35,64 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
   }
 
   Future<void> fetchPlantData() async {
-    final response = await http
-        .get(Uri.parse('${dotenv.env['ENDPOINT_URL']}/plants/plants/'));
+    try {
+      final response = await http.get(
+        Uri.parse('${dotenv.env['ENDPOINT_URL']}/plants/plants/'),
+        headers: {
+          'ngrok-skip-browser-warning': 'true',  // Menambahkan header ini untuk menghindari halaman warning
+        },
+      );
 
-    if (response.statusCode == 200) {
-      List<dynamic> plantList = json.decode(response.body);
-      if (plantList.isNotEmpty) {
-        var plant = plantList[0]; // Mengambil data pertama
-        setState(() {
-          commonName = plant['common_name'];
-          latinName = plant['latin_name'];
-          description = plant['description'];
-          fruitContent = plant['fruit_content'];
-          fruitSeason = plant['fruit_season'];
-          region = plant['region'];
-          priceRange = plant['price_range'];
-        });
+      if (response.statusCode == 200) {
+        // Menampilkan respons body untuk debug
+        print('Response body: ${response.body}');  // Menampilkan respons untuk memeriksa masalah
+
+        // Cek header Content-Type untuk memastikan JSON
+        if (response.headers['content-type']?.contains('application/json') ?? false) {
+          List<dynamic> plantList = json.decode(response.body);
+          
+          // Ambil data tanaman pertama jika ada
+          var plant = plantList.isNotEmpty ? plantList[0] : null; // Mengambil tanaman pertama
+          
+          if (plant != null) {
+            setState(() {
+              commonName = plant['common_name'];
+              latinName = plant['latin_name'];
+              description = plant['description'];
+              fruitContent = plant['fruit_content'];
+              fruitSeason = plant['fruit_season'];
+              region = plant['region'];
+              priceRange = plant['price_range'];
+            });
+          } else {
+            throw Exception('No plant data available');
+          }
+        } else {
+          throw Exception('Server did not return JSON, Content-Type is not application/json');
+        }
       } else {
-        throw Exception('No plant data available');
+        throw Exception('Failed to load plant data. Status code: ${response.statusCode}');
       }
-    } else {
-      throw Exception('Failed to load plant data');
+    } catch (e) {
+      // Tangani kesalahan lainnya seperti jaringan atau parsing
+      print('Error: $e');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Failed to load plant data: $e'),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
