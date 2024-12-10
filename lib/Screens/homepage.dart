@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
@@ -8,6 +9,7 @@ import 'package:leafyfun/widgets/NewAddedPlant.dart';
 import 'package:leafyfun/widgets/article_slider.dart';
 import 'package:leafyfun/widgets/floating_navbar.dart';
 import 'package:leafyfun/widgets/topbar_homepage.dart';
+import 'package:leafyfun/providers/user_provider.dart';
 
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({super.key});
@@ -18,42 +20,14 @@ class HomePageScreen extends StatefulWidget {
 
 class _HomePageScreenState extends State<HomePageScreen> {
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-
-  String? token; // Untuk menyimpan token JWT
-  String? userName; // Untuk menyimpan username
   int _selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _loadTokenAndUserName();
-  }
-
-  // Fungsi untuk mengambil token dan username dari secure storage
-  Future<void> _loadTokenAndUserName() async {
-    try {
-      // Ambil token dari secure storage
-      String? storedToken = await secureStorage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        setState(() {
-          token = storedToken;
-        });
-
-        // Decode token untuk mendapatkan username (jika tersedia dalam payload JWT)
-        final parts = storedToken.split('.');
-        if (parts.length == 3) {
-          final payload = utf8.decode(
-            base64Url.decode(base64Url.normalize(parts[1])),
-          );
-          final payloadMap = json.decode(payload);
-          setState(() {
-            userName = payloadMap['username'] ?? 'User'; // Default username
-          });
-        }
-      }
-    } catch (e) {
-      debugPrint('Error loading token: $e');
-    }
+    // Load token and username from UserProvider
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.loadTokenAndUserName();
   }
 
   void _onItemTapped(int index) {
@@ -98,6 +72,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Mendapatkan username dari UserProvider
+    final userName = Provider.of<UserProvider>(context).userName ?? 'Loading...';
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -110,7 +87,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 const SizedBox(height: 50),
                 TopbarHomepage(
                   greeting: "Hello,",
-                  userName: userName ?? 'Loading...', // Tampilkan username
+                  userName: userName, // Tampilkan username
                   profileImagePath: 'assets/images/profilePicture.png',
                 ),
                 const SizedBox(height: 20),

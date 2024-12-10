@@ -19,12 +19,12 @@ class UserRead(UserBase):
     user_id: int
 
 class LoginRequest(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 class LoginResponse(BaseModel):
-    token: str
-    message: str
+    access_token: str
+    token_type: str
 
 class UserUpdate(BaseModel):
     username: Optional[str] = Field(None, max_length=50)

@@ -4,14 +4,19 @@ import 'package:leafyfun/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 class LoginButton extends StatelessWidget {
-  final TextEditingController usernameController;
+  final TextEditingController emailController;
   final TextEditingController passwordController;
 
   const LoginButton({
     super.key,
-    required this.usernameController,
+    required this.emailController,
     required this.passwordController,
   });
+
+  // Fungsi untuk validasi input
+  bool _validateInput(String email, String password) {
+    return email.isNotEmpty && password.isNotEmpty;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,36 +25,38 @@ class LoginButton extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () async {
-            // Mengambil instance AuthProvider
+            final email = emailController.text.trim();
+            final password = passwordController.text.trim();
+
+            // Validasi input
+            if (!_validateInput(email, password)) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("email and password cannot be empty")),
+              );
+              return;
+            }
+            final navigator = Navigator.of(context);
+            final scaffoldMessenger = ScaffoldMessenger.of(context);
+
             final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-            // Mengambil username dan password dari controller
-            final username = usernameController.text;
-            final password = passwordController.text;
+            try {
+              final success = await authProvider.login(email, password);
 
-            // Panggil metode login dari AuthProvider dan simpan hasilnya di success
-            final success = await authProvider.login(username, password);
-
-            if (success == true) {
-              // Pastikan Navigator dipanggil jika widget masih terpasang
-              if (context.mounted) {
-                // Navigasi ke HomePage jika login berhasil
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePageScreen(
-                      token: authProvider.token ?? '',  // Nilai default jika token null
-                    ),
-                  ),
+              if (success == true && context.mounted) {
+                navigator.pushReplacement(
+                  MaterialPageRoute(builder: (context) => const HomePageScreen()),
+                );
+              } else {
+                scaffoldMessenger.showSnackBar(
+                  const SnackBar(content: Text("Invalid email or password")),
                 );
               }
-            } else {
-              // Tampilkan pesan error jika login gagal
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Login failed")),
-                );
-              }
+            } catch (e) {
+              // Menangani error koneksi atau lainnya
+              scaffoldMessenger.showSnackBar(
+                SnackBar(content: Text("Login failed: ${e.toString()}")),
+              );
             }
           },
           style: ElevatedButton.styleFrom(
@@ -57,10 +64,15 @@ class LoginButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
+            padding: const EdgeInsets.symmetric(vertical: 15),
           ),
           child: const Text(
             "Login",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

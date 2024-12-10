@@ -29,9 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => const HomePageScreen(
-                    token: '',
-                  )),
+              builder: (context) => const HomePageScreen()),
         );
         break;
       case 1:

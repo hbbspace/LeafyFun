@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AddLeafygardenButton extends StatelessWidget {
+  const AddLeafygardenButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Center(

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 // import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/providers/auth_provider.dart';
+import 'package:leafyfun/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:leafyfun/Screens/login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false, // Hilangkan tulisan "Debug"

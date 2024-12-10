@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class HistoryPage extends StatelessWidget {
   final List<String> historyItems;
 
-  HistoryPage({Key? key, required this.historyItems}) : super(key: key);
+  const HistoryPage({super.key, required this.historyItems});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class HistoryPage extends StatelessWidget {
 class DetailPage extends StatelessWidget {
   final String item;
 
-  DetailPage({Key? key, required this.item}) : super(key: key);
+  const DetailPage({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {

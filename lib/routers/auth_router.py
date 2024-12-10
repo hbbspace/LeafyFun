@@ -19,13 +19,19 @@ async def validate_token(token: str = Depends(oauth2_scheme)):
     return {"valid": True, "user_id": payload.get("user_id"), "username": payload.get("sub")}
 
 @router.post("/login")
-async def login(email: str, password: str, db: Session = Depends(get_db)):
+async def login(login_request: LoginRequest, db: Session = Depends(get_db)):
+    email = login_request.email
+    password = login_request.password
+
     user = db.query(UserModel).filter(UserModel.email == email).first()
     if not user or not verify_password(password, user.password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    
-    access_token = create_access_token(data={"sub": user.email, "user_id": user.user_id, "username": user.username})
+
+    access_token = create_access_token(
+        data={"sub": user.email, "user_id": user.user_id, "username": user.username}
+    )
     return {"access_token": access_token, "token_type": "bearer"}
+
 
 @router.post("/register", response_model=UserRead, status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):

@@ -55,7 +55,7 @@ class _LeafyQuizState extends State<LeafyQuiz> {
         // Navigasi ke HomePage
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const HomePageScreen(token: '',)),
+          MaterialPageRoute(builder: (context) => const HomePageScreen()),
         );
         break;
       case 1:

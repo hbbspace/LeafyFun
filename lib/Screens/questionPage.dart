@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class QuestionPage extends StatefulWidget {
+  const QuestionPage({super.key});
+
   @override
   _QuestionPageState createState() => _QuestionPageState();
 }
@@ -18,7 +20,7 @@ class _QuestionPageState extends State<QuestionPage> {
     ),
     Question(
       question: "Which part of the plant absorbs water?",
-      options: ["Roots", "Stem", "Leaves", "Flowers"ge
+      options: ["Roots", "Stem", "Leaves", "Flowers"],
       correctAnswerIndex: 0,
     ),
   ];
@@ -176,7 +178,7 @@ class OptionTile extends StatelessWidget {
   final String text;
   final bool isSelected;
 
-  OptionTile({required this.text, this.isSelected = false});
+  const OptionTile({super.key, required this.text, this.isSelected = false});
 
   @override
   Widget build(BuildContext context) {

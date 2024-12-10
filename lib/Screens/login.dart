@@ -14,24 +14,26 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
-  bool _obscureText = true;
 
-  // Menambahkan controller untuk username dan password
-  final TextEditingController _usernameController = TextEditingController();
+  // Controller untuk username dan password
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _togglePasswordVisibility() {
-    setState(() {
-      _obscureText = !_obscureText;
-    });
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Stack(
         children: [
-          // Background image
+          // Gambar latar belakang
           Positioned.fill(
             child: Image.asset(
               'assets/images/Background_LogIn.jpg',
@@ -39,13 +41,14 @@ class _LogInScreenState extends State<LogInScreen> {
             ),
           ),
 
+          // Judul Halaman
           const Align(
             alignment: Alignment.topLeft,
             child: TitleWidget(
               title: 'Welcome \nBack!',
               subtitle: 'Sign in to continue',
-              titleColor: Color.fromARGB(255, 255, 255, 255),
-              subtitleColor: Color.fromARGB(255, 255, 255, 255),
+              titleColor: Colors.white,
+              subtitleColor: Colors.white,
               titleFontSize: 36,
               subtitleFontSize: 14,
               paddingTop: 85,
@@ -55,65 +58,68 @@ class _LogInScreenState extends State<LogInScreen> {
             ),
           ),
 
+          // Kontainer Login
           Align(
-              alignment: Alignment.bottomCenter,
-              // Container berwarna putih untuk form login
-              child: Container(
-                padding: const EdgeInsets.all(30),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50),
-                  ),
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              padding: const EdgeInsets.all(30),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50),
+                  topRight: Radius.circular(50),
                 ),
-                height: MediaQuery.of(context).size.height * 0.65,
-                child: ListView(
+              ),
+              height: size.height * 0.65,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    //Text Login
-                    HeaderText(
+                    // Teks Login
+                    const HeaderText(
                       text: 'Login',
-                      fontSize: 24, // Ubah ukuran teks
-                      color: Colors.black, // Ubah warna teks
+                      fontSize: 24,
+                      color: Colors.black,
                     ),
+                    const SizedBox(height: 20),
 
-                    SizedBox(height: 20),
-
-                    //Kolom Input
+                    // Form Input Login
                     LoginForm(
-                        usernameController: _usernameController,
-                        passwordController: _passwordController),
-                    SizedBox(height: 30),
+                      usernameController: _emailController,
+                      passwordController: _passwordController,
+                    ),
+                    const SizedBox(height: 30),
 
-                    //Tombol Login
+                    // Tombol Login
                     LoginButton(
-                        usernameController: _usernameController,
-                        passwordController: _passwordController),
-                    SizedBox(height: 30),
+                      emailController: _emailController,
+                      passwordController: _passwordController,
+                    ),
+                    const SizedBox(height: 30),
 
-                    //Teks
-                    ContinueWithText(),
-                    SizedBox(height: 15),
+                    // Teks Lanjutkan
+                    const ContinueWithText(),
+                    const SizedBox(height: 15),
 
-                    //Button login google
+                    // Tombol Sosial Media Login
                     SocialLoginButton(
                       assetPath: 'assets/images/devicon_google.png',
                       label: 'Login with Google',
                     ),
-                    SizedBox(height: 10),
-
-                    //Button login apple
+                    const SizedBox(height: 10),
                     SocialLoginButton(
                       assetPath: 'assets/images/devicon_apple.png',
                       label: 'Login with Apple',
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-                    //Text SignUp
-                    SignUpText(),
+                    // Teks Sign Up
+                    const SignUpText(),
                   ],
                 ),
-              )),
+              ),
+            ),
+          ),
         ],
       ),
     );

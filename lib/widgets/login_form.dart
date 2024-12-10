@@ -32,7 +32,7 @@ class _LoginFormState extends State<LoginForm> {
         TextField(
           controller: widget.usernameController,
           decoration: InputDecoration(
-            labelText: 'Username / Email',
+            labelText: 'Email',
             labelStyle: const TextStyle(fontFamily: 'Poppins', fontSize: 13),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
