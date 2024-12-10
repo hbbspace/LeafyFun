@@ -3,9 +3,8 @@ import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
-import 'package:leafyfun/widgets/floating_navbar.dart';
-import 'package:leafyfun/widgets/garden_slider.dart';
-import 'package:leafyfun/widgets/tips&trick.dart';
+import 'package:leafyfun/Widgets/floating_navbar.dart';
+import 'package:leafyfun/widgets/plantCard.dart';
 
 class LeafyGarden extends StatefulWidget {
   const LeafyGarden({super.key});
@@ -17,44 +16,53 @@ class LeafyGarden extends StatefulWidget {
 class _LeafyGardenState extends State<LeafyGarden> {
   int _selectedIndex = 3;
 
+  // List data tanaman dan gambar
+  final List<Map<String, String>> _plants = [
+    {
+      'plantName': 'Orange',
+      'imagePath': 'assets/images/orange_garden.png',
+    },
+    {
+      'plantName': 'Apple',
+      'imagePath': 'assets/images/apple_garden.png',
+    },
+    {
+      'plantName': 'Mango',
+      'imagePath': 'assets/images/plants3.png',
+    },
+  ];
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
 
-    // Tambahkan logika navigasi di sini
     switch (index) {
       case 0:
-        // Navigasi ke HomePage
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => const HomePageScreen()),
+          MaterialPageRoute(builder: (context) => const HomePageScreen()),
         );
         break;
       case 1:
-        // Navigasi ke LeafyQuiz
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const LeafyQuiz()),
         );
         break;
       case 2:
-        // Navigasi ke ScanPage
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ScanPage()),
         );
         break;
       case 3:
-        // Navigasi ke LeafyGarden
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => LeafyGarden()),
+          MaterialPageRoute(builder: (context) => const LeafyGarden()),
         );
         break;
       case 4:
-        // Navigasi ke Profile
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const ProfilePage()),
@@ -67,102 +75,68 @@ class _LeafyGardenState extends State<LeafyGarden> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          // Konten Utama
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                // Carousel Banner menggunakan ArticleCarousel
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(top: 40, left: 20),
-                      child: Text(
-                        'My Garden',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(
-                          left: 20, top: 8), // Tambahkan padding untuk jarak
-                      child: Text(
-                        'You have 3 plants.',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                          color:
-                              Colors.black54, // Warna teks sedikit lebih terang
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20), // Spasi sebelum carousel
-                    GardenSlider(),
-                  ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(top: 30, left: 0),
+                child: Text(
+                  'My Garden',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
-
-                const SizedBox(height: 30),
-
-                // Tips and Trick
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                        'Tips & Trick',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    // Tambahkan widget TipsAndTrick
-                    TipsAndTrick(
-                      tittle: "5 tips & trick to keep your plants healthy",
-                      image: 'assets/images/tipsntrick1.png',
-                    ),
-                    TipsAndTrick(
-                      tittle: "How to plant the right seeds",
-                      image: 'assets/images/tipsntrick2.png',
-                    ),
-                    TipsAndTrick(
-                      tittle: "5 tips & trick to keep your plants healthy",
-                      image: 'assets/images/tipsntrick1.png',
-                    ),
-                    TipsAndTrick(
-                      tittle: "How to plant the right seeds",
-                      image: 'assets/images/tipsntrick2.png',
-                    ),
-                  ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: const Text(
+                  'You have 3 plants.',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black54,
+                  ),
                 ),
-                const SizedBox(height: 100),
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
+                  childAspectRatio: 1,
+                ),
+                itemCount: _plants.length,
+                itemBuilder: (context, index) {
+                  return PlantCard(
+                    plantName: _plants[index]['plantName']!,
+                    imagePath: _plants[index]['imagePath']!,
+                  );
+                },
+              ),
+            ],
           ),
-
-          // Floating Navigation Bar Tetap di Bawah
-          Positioned(
-            bottom: 15,
-            left: 20,
-            right: 20,
-            child: FloatingNavigationButtonBar(
-              currentIndex: _selectedIndex,
-              onItemTapped: _onItemTapped,
-            ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(
+            bottom: 15, left: 20, right: 20), // Space di bawah
+        child: Material(
+          borderRadius: BorderRadius.circular(35),
+          child: FloatingNavigationButtonBar(
+            currentIndex: _selectedIndex,
+            onItemTapped: _onItemTapped,
           ),
-        ],
+        ),
       ),
     );
   }
