@@ -59,8 +59,38 @@ class AuthProvider extends ChangeNotifier {
           rethrow;
         }
     }
-
   }
+
+  // Tambahkan fungsi register di bawah class AuthProvider
+Future<bool> register(String username, String email, String password) async {
+  if (username.isEmpty || email.isEmpty || password.isEmpty) {
+      throw Exception("All field must be filled.");
+  } else {
+      final url = '${dotenv.env['ENDPOINT_URL']}/register';
+      try {
+        final response = await http.post(
+          Uri.parse(url),
+          body: json.encode({
+            'username': username,
+            'email': email,
+            'password': password,
+          }),
+          headers: {'Content-Type': 'application/json'},
+        );
+
+        if (response.statusCode == 201) {
+          return true;
+        } else {
+          final responseData = json.decode(response.body);
+          throw Exception(responseData['detail'] ?? 'Registrasi gagal.');
+        }
+      } catch (error) {
+        print("Register error: $error");
+        rethrow;
+      }
+  }
+
+}
 
 
   // Fungsi logout yang menghapus token
@@ -118,13 +148,4 @@ class AuthProvider extends ChangeNotifier {
   _isAuthenticated = true;
   notifyListeners();
 }
-
-Future<void> clearToken() async {
-  final storage = FlutterSecureStorage();
-  await storage.delete(key: 'auth_token');
-  _token = null;
-  _isAuthenticated = false;
-  notifyListeners();
-}
-
 }

@@ -35,17 +35,25 @@ async def login(login_request: LoginRequest, db: Session = Depends(get_db)):
 
 @router.post("/register", response_model=UserRead, status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    # Validasi email
     db_user = db.query(UserModel).filter(UserModel.email == user.email).first()
     if db_user:
-        raise HTTPException(status_code=400, detail="Email sudah terdaftar")
+        raise HTTPException(status_code=400, detail="Email already registered")
 
+    # Dapatkan user_id terakhir dan tambahkan 1
+    last_user_id = db.query(UserModel.user_id).order_by(UserModel.user_id.desc()).first()
+    new_user_id = (last_user_id[0] if last_user_id else 0) + 1
+
+    # Hash password dan buat user baru
     hashed_password = hash_password(user.password)
     new_user = UserModel(
+        user_id=new_user_id,
         username=user.username,
         email=user.email,
-        password=hashed_password
+        password=hashed_password,
     )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
     return new_user
