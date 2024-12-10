@@ -69,7 +69,11 @@ class _QuestionPageState extends State<QuestionPage> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Image.asset(
+            'assets/images/ArrowLeftBlack.png', // Path ke gambar
+            width: 24, // Lebar gambar
+            height: 24, // Tinggi gambar
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -78,6 +82,7 @@ class _QuestionPageState extends State<QuestionPage> {
         ),
         centerTitle: true,
       ),
+      backgroundColor: Colors.white, // Tambahkan ini untuk warna latar body
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -90,8 +95,8 @@ class _QuestionPageState extends State<QuestionPage> {
                   flex: 1,
                   child: LinearProgressIndicator(
                     value: (currentQuestionIndex + 1) / questions.length,
-                    backgroundColor: Colors.grey[300],
-                    color: Colors.green,
+                    backgroundColor: Color.fromRGBO(149, 164, 164, 1),
+                    color: Color.fromRGBO(10, 66, 63, 1),
                   ),
                 ),
                 SizedBox(width: 8),
@@ -141,7 +146,8 @@ class _QuestionPageState extends State<QuestionPage> {
                         ? moveToPreviousQuestion
                         : null, // Disabled jika di pertanyaan pertama
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: Colors.grey),
+                      side:
+                          BorderSide(color: const Color.fromARGB(255, 0, 0, 0)),
                       padding: EdgeInsets.symmetric(vertical: 16),
                     ),
                     child: Text(
@@ -159,10 +165,12 @@ class _QuestionPageState extends State<QuestionPage> {
                   child: ElevatedButton(
                     onPressed: moveToNextQuestion,
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: Colors.green,
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        backgroundColor: Color.fromRGBO(10, 66, 63, 1)),
+                    child: Text(
+                      'Next Question',
+                      style: TextStyle(color: Colors.white),
                     ),
-                    child: Text('Next Question'),
                   ),
                 ),
               ],
@@ -188,21 +196,24 @@ class OptionTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected ? Colors.green[100] : Colors.white,
           border: Border.all(
-            color: isSelected ? Colors.green : Colors.grey,
+            color: isSelected ? Color.fromRGBO(149, 164, 164, 1) : Colors.grey,
             width: 1,
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(30),
         ),
         child: ListTile(
           title: Text(
             text,
             style: TextStyle(
-              color: isSelected ? Colors.green : Colors.black,
+              color:
+                  isSelected ? Color.fromRGBO(116, 169, 154, 1) : Colors.black,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),
           ),
-          trailing:
-              isSelected ? Icon(Icons.check_circle, color: Colors.green) : null,
+          trailing: isSelected
+              ? Icon(Icons.check_circle,
+                  color: Color.fromRGBO(149, 164, 164, 1))
+              : null,
         ),
       ),
     );
