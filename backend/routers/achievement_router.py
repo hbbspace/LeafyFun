@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from lib.models.achievement import Achievement as AchievementModel
-from lib.schemas.achievement import AchievementCreate, AchievementRead
-from lib.services.database import get_db
+from backend.models.achievement import Achievement as AchievementModel
+from backend.schemas.achievement import AchievementCreate, AchievementRead
+from backend.services.database import get_db
 
 router = APIRouter()
 

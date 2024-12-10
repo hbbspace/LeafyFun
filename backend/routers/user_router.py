@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-from lib.models.user import User as UserModel
-from lib.schemas.user import UserCreate, UserRead
-from lib.services.database import get_db
-from lib.services.utils import hash_password, verify_password, verify_jwt_token
+from backend.models.user import User as UserModel
+from backend.schemas.user import UserCreate, UserRead
+from backend.services.database import get_db
+from backend.services.utils import hash_password, verify_password, verify_jwt_token
 from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter()

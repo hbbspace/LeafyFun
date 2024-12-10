@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-from lib.services.database import Base
+from backend.services.database import Base
 from datetime import datetime
 
 class LeafScan(Base):

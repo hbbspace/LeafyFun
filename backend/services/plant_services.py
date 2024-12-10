@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from lib.models.plant import Plant
-from lib.schemas.plant import PlantOut
+from backend.models.plant import Plant
+from backend.schemas.plant import PlantOut
 
 def get_plants(db: Session):
     return db.query(Plant).all()

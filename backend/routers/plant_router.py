@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from lib.models.plant import Plant as PlantModel
-from lib.schemas.plant import PlantCreate, PlantRead
-from lib.services.database import get_db
-from lib.services.plant_services import get_plants
+from backend.models.plant import Plant as PlantModel
+from backend.schemas.plant import PlantCreate, PlantRead
+from backend.services.database import get_db
+from backend.services.plant_services import get_plants
 
 router = APIRouter()
 

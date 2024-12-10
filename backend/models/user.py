@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship, Session
 from sqlalchemy.sql import func
-from lib.services.database import Base
-from lib.services.utils import hash_password
+from backend.services.database import Base
+from backend.services.utils import hash_password
 
 class User(Base):
     __tablename__ = "users"

@@ -16,6 +16,7 @@ opencv-python-headless
 pillow
 starlette
 python-jose
+pydantic[email]
 
 
 # pip install fastapi uvicorn sqlalchemy pymysql passlib[bcrypt] python-jose

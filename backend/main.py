@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from lib.services.database import engine, Base, SessionLocal
-from lib.routers import user_router, plant_router, achievement_router, auth_router
-from lib.models.__init__ import initialize_data
+from backend.services.database import engine, Base, SessionLocal
+from backend.routers import user_router, plant_router, achievement_router, auth_router
+from backend.models.__init__ import initialize_data
 from starlette.middleware.cors import CORSMiddleware
 
 # Inisialisasi FastAPI

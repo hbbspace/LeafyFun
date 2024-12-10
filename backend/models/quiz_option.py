@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from lib.services.database import Base
+from backend.services.database import Base
 from sqlalchemy.orm import Session
 
 class QuizOption(Base):

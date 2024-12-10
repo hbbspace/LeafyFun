@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Enum, Integer, String, Text
-from lib.services.database import Base
+from backend.services.database import Base
 from sqlalchemy.orm import Session
 
 class Plant(Base):
