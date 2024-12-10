@@ -3,13 +3,20 @@ uvicorn
 sqlalchemy
 pymysql
 sqlmodel
-passlib[bcrypt]
+passlib
+bcrypt
 mysql-connector-python
 databases
 pydantic
 oauthlib
+authlib
 requests-oauthlib
 python-dotenv
+opencv-python-headless
+pillow
+starlette
+python-jose
+
 
 # pip install fastapi uvicorn sqlalchemy pymysql passlib[bcrypt] python-jose
 # pip install sqlmodel mysql-connector-python databases pydantic requests-oauthlib python-dotenv
