@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leafyfun/Screens/editProfile.dart';
 // import 'package:leafyfun/Screens/questionPage.dart';
 // import 'package:leafyfun/Screens/scanDetail.dart';
 import 'package:leafyfun/providers/auth_provider.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         title: 'LeafyFun',
         theme: ThemeData(primarySwatch: Colors.green),
         // home: SplashScreen(),
-        home: LogInScreen(),
+        home: EditProfilePage(),
       ),
     );
   }
