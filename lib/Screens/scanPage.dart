@@ -64,7 +64,7 @@ class _ScanPageState extends State<ScanPage> {
             context,
             MaterialPageRoute(
               builder: (context) => ScanDetailPage(
-                capturedImage: savedImage,
+                // capturedImage: savedImage,
               ),
             ),
           );
@@ -108,7 +108,7 @@ class _ScanPageState extends State<ScanPage> {
           context,
           MaterialPageRoute(
             builder: (context) => ScanDetailPage(
-              capturedImage: pickedFile,
+              // capturedImage: pickedFile,
             ),
           ),
         );

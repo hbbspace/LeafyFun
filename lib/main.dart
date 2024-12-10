@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/questionPage.dart';
+import 'package:leafyfun/Screens/scanDetail.dart';
 import 'package:leafyfun/providers/auth_provider.dart';
 import 'package:leafyfun/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -26,11 +27,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: MaterialApp(
-        debugShowCheckedModeBanner: false, // Hilangkan tulisan "Debug"
+        debugShowCheckedModeBanner: false,
         title: 'LeafyFun',
         theme: ThemeData(primarySwatch: Colors.green),
         // home: SplashScreen(),
-        home: QuestionPage(),
+        home: ScanDetailPage(),
       ),
     );
   }
