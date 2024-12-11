@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leafyfun/Screens/editProfile.dart';
 import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
@@ -40,8 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
         // Navigasi ke HomePage
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => const HomePageScreen()),
+          MaterialPageRoute(builder: (context) => const HomePageScreen()),
         );
         break;
       case 1:
@@ -77,8 +77,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final userName = Provider.of<UserProvider>(context).userName ?? 'Loading...';
-    final email = Provider.of<UserProvider>(context).email ?? 'unknown@example.com';
+    final userName =
+        Provider.of<UserProvider>(context).userName ?? 'Loading...';
+    final email =
+        Provider.of<UserProvider>(context).email ?? 'unknown@example.com';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -98,7 +100,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 20),
                   Center(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditProfilePage()),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         foregroundColor: Colors.white,
