@@ -73,7 +73,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
   @override
   Widget build(BuildContext context) {
     // Mendapatkan username dari UserProvider
-    final userName = Provider.of<UserProvider>(context).userName ?? 'Loading...';
+    final userName =
+        Provider.of<UserProvider>(context).userName ?? 'Loading...';
 
     return Scaffold(
       backgroundColor: Colors.white,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -7,11 +8,11 @@ import 'package:leafyfun/widgets/arrowBack_button.dart';
 import 'package:leafyfun/widgets/plantDescription.dart';
 
 class ScanDetailPage extends StatefulWidget {
-  // final File capturedImage;
+  final File capturedImage;
 
   const ScanDetailPage({
     super.key,
-    // required this.capturedImage,
+    required this.capturedImage,
   });
 
   @override
@@ -38,21 +39,26 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
       final response = await http.get(
         Uri.parse('${dotenv.env['ENDPOINT_URL']}/plants/plants/'),
         headers: {
-          'ngrok-skip-browser-warning': 'true',  // Menambahkan header ini untuk menghindari halaman warning
+          'ngrok-skip-browser-warning':
+              'true', // Menambahkan header ini untuk menghindari halaman warning
         },
       );
 
       if (response.statusCode == 200) {
         // Menampilkan respons body untuk debug
-        print('Response body: ${response.body}');  // Menampilkan respons untuk memeriksa masalah
+        print(
+            'Response body: ${response.body}'); // Menampilkan respons untuk memeriksa masalah
 
         // Cek header Content-Type untuk memastikan JSON
-        if (response.headers['content-type']?.contains('application/json') ?? false) {
+        if (response.headers['content-type']?.contains('application/json') ??
+            false) {
           List<dynamic> plantList = json.decode(response.body);
-          
+
           // Ambil data tanaman pertama jika ada
-          var plant = plantList.isNotEmpty ? plantList[0] : null; // Mengambil tanaman pertama
-          
+          var plant = plantList.isNotEmpty
+              ? plantList[0]
+              : null; // Mengambil tanaman pertama
+
           if (plant != null) {
             setState(() {
               commonName = plant['common_name'];
@@ -67,10 +73,12 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
             throw Exception('No plant data available');
           }
         } else {
-          throw Exception('Server did not return JSON, Content-Type is not application/json');
+          throw Exception(
+              'Server did not return JSON, Content-Type is not application/json');
         }
       } else {
-        throw Exception('Failed to load plant data. Status code: ${response.statusCode}');
+        throw Exception(
+            'Failed to load plant data. Status code: ${response.statusCode}');
       }
     } catch (e) {
       // Tangani kesalahan lainnya seperti jaringan atau parsing
@@ -119,12 +127,12 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
                   const SizedBox(height: 20),
                   // Gambar hasil scan
                   Center(
-                      // child: Image.file(
-                      //   widget.capturedImage,
-                      //   height: 200,
-                      //   fit: BoxFit.cover,
-                      // ),
-                      ),
+                    child: Image.file(
+                      widget.capturedImage,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   // Menampilkan detail tanaman
                   PlantDescription(

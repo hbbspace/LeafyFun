@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/editProfile.dart';
-import 'package:leafyfun/Screens/profile.dart';
+import 'package:leafyfun/Screens/login.dart';
 import 'package:leafyfun/providers/auth_provider.dart';
 import 'package:leafyfun/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -18,8 +17,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // File dummy yang diakses dari asset (pastikan ada di project).
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
@@ -30,7 +27,7 @@ class MyApp extends StatelessWidget {
         title: 'LeafyFun',
         theme: ThemeData(primarySwatch: Colors.green),
         // home: SplashScreen(),
-        home: EditProfilePage(),
+        home: LogInScreen(),
       ),
     );
   }

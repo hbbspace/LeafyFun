@@ -1,5 +1,7 @@
+import 'dart:io'; // Untuk menangani file
 import 'package:flutter/material.dart';
-import 'package:leafyfun/widgets/arrowBack_button.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:leafyfun/widgets/save_profile_button.dart'; // Paket untuk memilih gambar
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
@@ -12,13 +14,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  String profileImage =
-      'assets/images/profile_placeholder.png'; // Path to the profile image
+  File? _profileImage; // Untuk menyimpan gambar profil
 
   @override
   void initState() {
     super.initState();
-    // Set initial values (you can fetch these from a profile API or database)
     _usernameController.text = "CurrentUsername";
     _emailController.text = "user@example.com";
   }
@@ -32,12 +32,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void _saveProfile() {
     if (_formKey.currentState!.validate()) {
-      // Process the data (save to database or API)
       String updatedUsername = _usernameController.text;
       String updatedEmail = _emailController.text;
-      // You can add your saving logic here (API call, etc.)
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Profile Updated')));
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile =
+        await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path); // Simpan file yang dipilih
+      });
     }
   }
 
@@ -66,7 +76,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   'Edit Profile',
                   style: TextStyle(
                     fontFamily: 'Poppins',
-                    fontSize: 24,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
@@ -76,21 +86,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
             // Profile Picture
             Center(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
+              child: GestureDetector(
+                onTap: _pickImage, // Pilih gambar saat diketuk
                 child: CircleAvatar(
                   radius: 80,
                   backgroundColor: Colors.transparent,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(60),
-                    child: Image.asset(
-                      profileImage,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  backgroundImage: _profileImage != null
+                      ? FileImage(_profileImage!) // Gambar yang diunggah
+                      : AssetImage('assets/images/profilePicture.png')
+                          as ImageProvider, // Gambar default
+                  child: _profileImage == null
+                      ? Image.asset(
+                          'assets/images/edit_foto.png', // Path ke gambar edit_foto.png
+                          width: 40, // Atur ukuran gambar
+                          height: 40,
+                          fit: BoxFit.contain,
+                        )
+                      : null, // Tampilkan ikon edit hanya jika belum ada gambar profil
                 ),
               ),
             ),
+            SizedBox(height: 30),
 
             // Form Fields
             Form(
@@ -102,8 +118,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     controller: _usernameController,
                     decoration: InputDecoration(
                       labelText: 'Username',
-                      labelStyle:
-                          TextStyle(fontFamily: 'Poppins', fontSize: 13),
+                      hintText: 'Enter your username',
+                      hintStyle: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                        color: Colors.grey,
+                      ),
+                      labelStyle: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -118,8 +142,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     controller: _emailController,
                     decoration: InputDecoration(
                       labelText: 'Email',
-                      labelStyle:
-                          TextStyle(fontFamily: 'Poppins', fontSize: 13),
+                      hintText: 'Enter your email',
+                      hintStyle: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                        color: Colors.grey,
+                      ),
+                      labelStyle: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -127,23 +159,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       fillColor: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 40),
 
                   // Save Button
-                  ElevatedButton(
-                    onPressed: _saveProfile,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      padding: EdgeInsets.symmetric(vertical: 15.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Text(
-                      'Save',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
+                  SaveProfileButton(),
                 ],
               ),
             ),
