@@ -45,5 +45,5 @@ app.*.map.json
 
 
 # Big File
-venv/Lib/site-packages/clang/
-venv/Lib/site-packages/tensorflow/
+venv/Lib/site-packages/clang
+venv/Lib/site-packages/tensorflow
