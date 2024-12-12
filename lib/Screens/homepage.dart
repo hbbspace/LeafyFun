@@ -131,7 +131,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 20),
                     NewAddedPlantItem(
                       plantName: "Pohon Pepaya",
                       plantImage: "assets/images/plants1.png",
@@ -150,6 +150,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       plantDescription:
                           "Tanaman mangga yang menghasilkan buah besar dan manis.",
                     ),
+                    SizedBox(height: 200),
                   ],
                 ),
                 const SizedBox(height: 100),

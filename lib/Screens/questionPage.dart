@@ -121,6 +121,7 @@ class _QuestionPageState extends State<QuestionPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
       ),
       backgroundColor: Colors.white, // Tambahkan ini untuk warna latar body
       body: Padding(

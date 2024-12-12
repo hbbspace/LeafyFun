@@ -91,7 +91,7 @@ class UserProvider extends ChangeNotifier {
   Future<String?> getUsername(String userId) async {
     try {
       final response = await http.get(
-        Uri.parse('${dotenv.env['ENDPOINT_URL']}/users/$userId'),
+        Uri.parse('${dotenv.env['ENDPOINT_URL']}/$userId'),
         headers: {
           'ngrok-skip-browser-warning': 'true',  // Menambahkan header ini untuk menghindari halaman warning
         },
@@ -109,7 +109,7 @@ class UserProvider extends ChangeNotifier {
   Future<String?> getEmailFromUserId(String userId) async {
     try {
       final response = await http.get(
-        Uri.parse('${dotenv.env['ENDPOINT_URL']}/users/$userId'),
+        Uri.parse('${dotenv.env['ENDPOINT_URL']}/$userId'),
         headers: {
           'ngrok-skip-browser-warning': 'true',  // Menambahkan header ini untuk menghindari halaman warning
         },

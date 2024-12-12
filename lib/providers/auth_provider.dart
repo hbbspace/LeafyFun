@@ -15,7 +15,8 @@ class AuthProvider extends ChangeNotifier {
   // Fungsi untuk memeriksa jika token sudah kadaluarsa
   bool _isTokenExpired(String token) {
     final decodedToken = JwtDecoder.decode(token);
-    final expirationDate = DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000);
+    final expirationDate =
+        DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000);
     return expirationDate.isBefore(DateTime.now());
   }
 
@@ -24,48 +25,49 @@ class AuthProvider extends ChangeNotifier {
     if (email.isEmpty || password.isEmpty) {
       throw Exception("email dan password tidak boleh kosong");
     } else {
-        final url = '${dotenv.env['ENDPOINT_URL']}/login';
-        try {
-          final response = await http.post(
-            Uri.parse(url),
-            body: json.encode({
-              'email': email,
-              'password': password,
-            }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          );
+      final url = '${dotenv.env['ENDPOINT_URL']}/login';
+      try {
+        final response = await http.post(
+          Uri.parse(url),
+          body: json.encode({
+            'email': email,
+            'password': password,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        );
 
-          if (response.statusCode == 200) {
-            final responseData = json.decode(response.body);
-            final token = responseData['access_token'];
+        if (response.statusCode == 200) {
+          final responseData = json.decode(response.body);
+          final token = responseData['access_token'];
 
-            if (token != null) {
-              final storage = FlutterSecureStorage();
-              await storage.write(key: 'auth_token', value: token);
-              _token = token;
-              _isAuthenticated = true;
-              notifyListeners();
-              return true;
-            } else {
-              throw Exception(responseData['message'] ?? "Unknown error during login");
-            }
+          if (token != null) {
+            final storage = FlutterSecureStorage();
+            await storage.write(key: 'auth_token', value: token);
+            _token = token;
+            _isAuthenticated = true;
+            notifyListeners();
+            return true;
           } else {
-            throw Exception('HTTP Error: ${response.statusCode}');
+            throw Exception(
+                responseData['message'] ?? "Unknown error during login");
           }
-        } catch (error) {
-          print("Login error: $error");
-          rethrow;
+        } else {
+          throw Exception('HTTP Error: ${response.statusCode}');
         }
+      } catch (error) {
+        print("Login error: $error");
+        rethrow;
+      }
     }
   }
 
   // Tambahkan fungsi register di bawah class AuthProvider
-Future<bool> register(String username, String email, String password) async {
-  if (username.isEmpty || email.isEmpty || password.isEmpty) {
+  Future<bool> register(String username, String email, String password) async {
+    if (username.isEmpty || email.isEmpty || password.isEmpty) {
       throw Exception("All field must be filled.");
-  } else {
+    } else {
       final url = '${dotenv.env['ENDPOINT_URL']}/register';
       try {
         final response = await http.post(
@@ -88,10 +90,8 @@ Future<bool> register(String username, String email, String password) async {
         print("Register error: $error");
         rethrow;
       }
+    }
   }
-
-}
-
 
   // Fungsi logout yang menghapus token
   Future<void> logout() async {
@@ -106,7 +106,7 @@ Future<bool> register(String username, String email, String password) async {
   Future<void> checkAuthentication() async {
     final storage = FlutterSecureStorage();
     final token = await storage.read(key: 'auth_token');
-    
+
     if (token != null && !_isTokenExpired(token)) {
       _token = token;
       _isAuthenticated = true;
@@ -124,10 +124,11 @@ Future<bool> register(String username, String email, String password) async {
   }
 
   // Fungsi untuk mengirimkan request dengan token di header
-  Future<http.Response> authenticatedRequest(String url, {Map<String, String>? headers}) async {
+  Future<http.Response> authenticatedRequest(String url,
+      {Map<String, String>? headers}) async {
     final storage = FlutterSecureStorage();
     final token = await storage.read(key: 'auth_token');
-    
+
     if (token == null || _isTokenExpired(token)) {
       throw Exception('Token expired or not found');
     }
@@ -135,17 +136,17 @@ Future<bool> register(String username, String email, String password) async {
     final requestHeaders = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',
-      if (headers != null) ...headers,  // Menambahkan headers tambahan jika ada
+      if (headers != null) ...headers, // Menambahkan headers tambahan jika ada
     };
 
     return await http.get(Uri.parse(url), headers: requestHeaders);
   }
 
   Future<void> saveToken(String token) async {
-  final storage = FlutterSecureStorage();
-  await storage.write(key: 'auth_token', value: token);
-  _token = token;
-  _isAuthenticated = true;
-  notifyListeners();
-}
+    final storage = FlutterSecureStorage();
+    await storage.write(key: 'auth_token', value: token);
+    _token = token;
+    _isAuthenticated = true;
+    notifyListeners();
+  }
 }

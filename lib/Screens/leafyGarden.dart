@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leafyfun/Screens/historyPage.dart';
 import 'package:leafyfun/Screens/homepage.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/profile.dart';
@@ -77,21 +78,35 @@ class _LeafyGardenState extends State<LeafyGarden> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding:
+              const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 30, left: 0),
-                child: Text(
-                  'My Garden',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'My Garden',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
+                  IconButton(
+                    icon: Image.asset(
+                      'assets/images/history_logo.png',
+                      width: 40,
+                      height: 40,
+                    ),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HistoryPage()),
+                    ),
+                  ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10),

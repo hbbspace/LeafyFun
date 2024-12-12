@@ -3,6 +3,7 @@ import 'package:leafyfun/Screens/historyPage.dart';
 import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/login.dart';
 import 'package:leafyfun/Screens/questionPage.dart';
+import 'package:leafyfun/Screens/splashscreen.dart';
 import 'package:leafyfun/providers/auth_provider.dart';
 import 'package:leafyfun/providers/leafystate_provider.dart';
 import 'package:leafyfun/providers/user_provider.dart';
@@ -31,8 +32,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'LeafyFun',
         theme: ThemeData(primarySwatch: Colors.green),
-        // home: SplashScreen(),
-        home: HistoryPage(),
+        home: SplashScreen(),
+        // home: LeafyGarden(),
       ),
     );
   }
