@@ -71,61 +71,6 @@ def plant_init(db: Session):
                     region="Throughout Indonesia",
                     price_range="Rp10,000 - Rp50,000 per plant",
                     image_file="tomato.jpg"
-                ),
-
-                Plant(
-                    common_name="Guava",
-                    latin_name="Psidium guajava",
-                    description="Guava trees are tropical plants that produce sweet and fragrant fruits. They grow well in various soil types and require warm, sunny climates. Guavas are packed with vitamins and dietary fiber, supporting healthy digestion. They are a popular choice among tropical fruit lovers.",
-                    fruit_content="Vitamin C, Vitamin A, Dietary Fiber, Antioxidants",
-                    fruit_season="All year round",
-                    region="Throughout Indonesia",
-                    price_range="Rp50,000 - Rp200,000 per tree",
-                    image_file="guava.jpg"
-                ),
-
-                Plant(
-                    common_name="Mango",
-                    latin_name="Mangifera indica",
-                    description="Mango trees are large tropical plants producing sweet and juicy fruits. They grow best in warm, sunny regions with well-drained soil. Mangoes are a rich source of vitamins and minerals. These trees are a common sight in tropical countries like Indonesia.",
-                    fruit_content="Vitamin C, Vitamin A, Vitamin E, Fiber, Antioxidants",
-                    fruit_season="Summer",
-                    region="Throughout Indonesia",
-                    price_range="Rp100,000 - Rp500,000 per tree",
-                    image_file="mango.jpg"
-                ),
-
-                Plant(
-                    common_name="Lemon",
-                    latin_name="Citrus limon",
-                    description="Lemon trees produce tangy and aromatic fruits commonly used for cooking, beverages, and medicinal purposes. They thrive in warm climates and well-drained soil. Lemons are rich in vitamin C and other nutrients. The tree is small to medium-sized, often grown in home gardens.",
-                    fruit_content="Vitamin C, Potassium, Antioxidants",
-                    fruit_season="All year round",
-                    region="Bali, Lombok, and other warm regions in Indonesia",
-                    price_range="Rp50,000 - Rp200,000 per tree",
-                    image_file="lemon.jpg"
-                ),
-
-                Plant(
-                    common_name="Jackfruit",
-                    latin_name="Artocarpus heterophyllus",
-                    description="Jackfruit trees are large tropical plants producing the world's largest tree-borne fruit. The fruit has a sweet and distinctive flavor, often used in desserts or as a meat substitute. Jackfruits are high in vitamins and dietary fiber. The trees grow well in warm, humid climates.",
-                    fruit_content="Vitamin C, Vitamin B6, Potassium, Fiber",
-                    fruit_season="Summer",
-                    region="Throughout Indonesia",
-                    price_range="Rp200,000 - Rp600,000 per tree",
-                    image_file="jackfruit.jpg"
-                ),
-
-                Plant(
-                    common_name="Papaya",
-                    latin_name="Carica papaya",
-                    description="Papaya plants are fast-growing tropical trees producing sweet and juicy fruits. They grow best in warm climates with fertile, well-drained soil. Papayas are rich in vitamins and enzymes that aid digestion. The plants are relatively small and require minimal maintenance.",
-                    fruit_content="Vitamin C, Vitamin A, Folate, Potassium",
-                    fruit_season="All year round",
-                    region="Throughout Indonesia",
-                    price_range="Rp50,000 - Rp150,000 per tree",
-                    image_file="papaya.jpg"
                 )
             ]
             db.add_all(plants)

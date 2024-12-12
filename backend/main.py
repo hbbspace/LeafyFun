@@ -37,7 +37,7 @@ def on_startup():
         print(f"Error during startup: {e}")
 
 # Include Routers
-app.include_router(auth_router, prefix="", tags=["Auth"])
-app.include_router(user_router, prefix="/users", tags=["Users"])
-app.include_router(plant_router, prefix="/plants", tags=["Plants"])
-app.include_router(achievement_router, prefix="/achievements", tags=["Achievements"])
+app.include_router(auth_router, tags=["Auth"])
+app.include_router(user_router, tags=["Users"])
+app.include_router(plant_router, tags=["Plants"])
+app.include_router(achievement_router, tags=["Achievements"])

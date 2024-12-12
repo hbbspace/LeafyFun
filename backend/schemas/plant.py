@@ -11,7 +11,7 @@ class PlantBase(BaseModel):
     # image_file: str
 
     class Config:
-        orm_mode = True  # Menambahkan ini untuk mengonversi objek ORM ke JSON
+        from_attributes = True
 
 
 class PlantCreate(PlantBase):
