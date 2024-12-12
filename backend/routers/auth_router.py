@@ -27,8 +27,9 @@ async def login(login_request: LoginRequest, db: Session = Depends(get_db)):
     if not user or not verify_password(password, user.password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
+    # Menggunakan user_id sebagai sub dan menambahkan data lainnya dalam payload
     access_token = create_access_token(
-        data={"sub": user.email, "user_id": user.user_id, "username": user.username}
+        data={"sub": user.user_id, "user_id": user.user_id, "username": user.username, "email": user.email}
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
