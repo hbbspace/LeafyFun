@@ -1,33 +1,21 @@
 import 'package:flutter/material.dart';
 
 class HistoryPage extends StatelessWidget {
-  final List<String> historyItems;
+  // final List<String> historyItems;
 
-  const HistoryPage({super.key, required this.historyItems});
+  // const HistoryPage({super.key, required this.historyItems});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('History'),
+        backgroundColor: Colors.white,
       ),
-      body: ListView.builder(
-        itemCount: historyItems.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(historyItems[index]),
-            onTap: () {
-              // Navigasi ke halaman yang sesuai
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailPage(item: historyItems[index]),
-                ),
-              );
-            },
-          );
-        },
-      ),
+      // body: ListView.builder(
+      //   // itemCount: historyItems.length,
+        
+      // ),
     );
   }
 }

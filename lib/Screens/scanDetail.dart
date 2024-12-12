@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:leafyfun/widgets/add_leafyGarden_button.dart';
 import 'package:leafyfun/widgets/arrowBack_button.dart';
-import 'package:leafyfun/widgets/plantDescription.dart';
+import 'package:leafyfun/widgets/plantDescription_widget.dart';
 
 class ScanDetailPage extends StatefulWidget {
   final File capturedImage;

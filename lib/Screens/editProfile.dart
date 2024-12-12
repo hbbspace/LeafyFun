@@ -62,10 +62,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
           children: [
             // Arrow Back Button
             IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              icon: Image.asset(
+                'assets/images/ArrowLeftBlack.png', // Path ke gambar
+                width: 24, // Lebar gambar
+                height: 24, // Tinggi gambar
+              ),
+              onPressed: () => Navigator.pop(context),
             ),
 
             // Centered Edit Profile Title

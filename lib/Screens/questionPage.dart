@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leafyfun/widgets/option_tile_widget.dart';
 
 class QuestionPage extends StatefulWidget {
   const QuestionPage({super.key});
@@ -9,7 +10,9 @@ class QuestionPage extends StatefulWidget {
 
 class _QuestionPageState extends State<QuestionPage> {
   int currentQuestionIndex = 0; // Indeks pertanyaan saat ini
-  int? selectedOptionIndex; // Indeks jawaban yang dipilih
+
+  // Daftar jawaban yang dipilih oleh pengguna
+  List<int?> selectedAnswers = []; // Nilai null jika belum dijawab
 
   // Daftar pertanyaan
   final List<Question> questions = [
@@ -25,25 +28,71 @@ class _QuestionPageState extends State<QuestionPage> {
     ),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    // Inisialisasi daftar jawaban dengan null
+    selectedAnswers = List<int?>.filled(questions.length, null);
+  }
+
   void moveToNextQuestion() {
     if (currentQuestionIndex < questions.length - 1) {
       setState(() {
         currentQuestionIndex++;
-        selectedOptionIndex = null; // Reset pilihan
       });
     } else {
-      // Jika sudah di akhir pertanyaan
+      // Jika sudah di akhir pertanyaan, tampilkan dialog submit
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          title: Text("Quiz Completed"),
-          content: Text("You have completed all questions!"),
+          backgroundColor: Colors.white,
+          title: Text(
+            "Submit Answers",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          content: Text(
+            "Are you sure you want to submit your answers?",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: Colors.black,
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("OK"),
+              child: Text(
+                "Cancel",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: Color.fromRGBO(10, 66, 63, 1),
+                ),
+              ),
+            ),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                _submitAnswers();
+              },
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(
+                  color: Color.fromRGBO(10, 66, 63, 1), // Border hijau
+                ),
+                backgroundColor:
+                    Color.fromRGBO(10, 66, 63, 1), // Background hijau
+              ),
+              child: Text(
+                "Submit",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: Colors.white, // Teks putih
+                ),
+              ),
             ),
           ],
         ),
@@ -55,9 +104,14 @@ class _QuestionPageState extends State<QuestionPage> {
     if (currentQuestionIndex > 0) {
       setState(() {
         currentQuestionIndex--;
-        selectedOptionIndex = null; // Reset pilihan
       });
     }
+  }
+
+  void _submitAnswers() {
+    // Proses pengiriman jawaban ke server atau database
+    print("Submitted Answers: $selectedAnswers");
+    // TODO: Tambahkan logika untuk mengirim data ke server/database
   }
 
   @override
@@ -67,27 +121,37 @@ class _QuestionPageState extends State<QuestionPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Image.asset(
-            'assets/images/ArrowLeftBlack.png', // Path ke gambar
-            width: 24, // Lebar gambar
-            height: 24, // Tinggi gambar
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          'Quiz',
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
       ),
       backgroundColor: Colors.white, // Tambahkan ini untuk warna latar body
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15, top: 0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            IconButton(
+              icon: Image.asset(
+                'assets/images/ArrowLeftBlack.png', // Path ke gambar
+                width: 24, // Lebar gambar
+                height: 24, // Tinggi gambar
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                child: Text(
+                  'Leafy Quiz',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+
             // Progress bar
             Row(
               children: [
@@ -111,6 +175,7 @@ class _QuestionPageState extends State<QuestionPage> {
             Text(
               currentQuestion.question,
               style: TextStyle(
+                fontFamily: 'Poppins',
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -124,12 +189,13 @@ class _QuestionPageState extends State<QuestionPage> {
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedOptionIndex = index;
+                        selectedAnswers[currentQuestionIndex] = index;
                       });
                     },
                     child: OptionTile(
                       text: currentQuestion.options[index],
-                      isSelected: selectedOptionIndex == index,
+                      isSelected:
+                          selectedAnswers[currentQuestionIndex] == index,
                     ),
                   );
                 },
@@ -153,6 +219,7 @@ class _QuestionPageState extends State<QuestionPage> {
                     child: Text(
                       'Previous',
                       style: TextStyle(
+                        fontFamily: 'Poppins',
                         color: currentQuestionIndex > 0
                             ? Colors.black
                             : Colors.grey,
@@ -168,52 +235,19 @@ class _QuestionPageState extends State<QuestionPage> {
                         padding: EdgeInsets.symmetric(vertical: 16),
                         backgroundColor: Color.fromRGBO(10, 66, 63, 1)),
                     child: Text(
-                      'Next Question',
-                      style: TextStyle(color: Colors.white),
+                      currentQuestionIndex == questions.length - 1
+                          ? 'Submit'
+                          : 'Next Question',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Poppins',
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class OptionTile extends StatelessWidget {
-  final String text;
-  final bool isSelected;
-
-  const OptionTile({super.key, required this.text, this.isSelected = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.green[100] : Colors.white,
-          border: Border.all(
-            color: isSelected ? Color.fromRGBO(149, 164, 164, 1) : Colors.grey,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: ListTile(
-          title: Text(
-            text,
-            style: TextStyle(
-              color:
-                  isSelected ? Color.fromRGBO(116, 169, 154, 1) : Colors.black,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-          trailing: isSelected
-              ? Icon(Icons.check_circle,
-                  color: Color.fromRGBO(149, 164, 164, 1))
-              : null,
         ),
       ),
     );
