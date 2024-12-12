@@ -13,14 +13,13 @@ class HistoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-      ),
-
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   automaticallyImplyLeading: false,
+      // ),
       //
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.fromLTRB(20, 40, 20, 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

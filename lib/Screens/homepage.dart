@@ -40,7 +40,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
       case 0:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const LeafyQuiz()),
+          MaterialPageRoute(builder: (context) => const HomePageScreen()),
         );
         break;
       case 1:
@@ -97,19 +97,23 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                        'Article',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                    Align(
+                      alignment: Alignment
+                          .centerLeft, // Memastikan teks selalu di kiri
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 30),
+                        child: Text(
+                          'Article',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     ArticleSlider(),
                   ],
                 ),
@@ -117,20 +121,26 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
                 // New Added Plants
                 const Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                        'New Added Plants',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                    Align(
+                      alignment: Alignment
+                          .centerLeft, // Memastikan teks selalu di kiri
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 30),
+                        child: Text(
+                          'New Added Plants',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
+
                     SizedBox(height: 20),
                     NewAddedPlantItem(
                       plantName: "Pohon Pepaya",
@@ -150,7 +160,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       plantDescription:
                           "Tanaman mangga yang menghasilkan buah besar dan manis.",
                     ),
-                    SizedBox(height: 200),
+                    // SizedBox(height: 200), //buat ngakalin
                   ],
                 ),
                 const SizedBox(height: 100),

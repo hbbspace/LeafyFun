@@ -37,7 +37,7 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
   Future<void> fetchPlantData() async {
     try {
       final response = await http.get(
-        Uri.parse('${dotenv.env['ENDPOINT_URL']}/plants/plants/'),
+        Uri.parse('${dotenv.env['ENDPOINT_URL']}/plants/'),
         headers: {
           'ngrok-skip-browser-warning':
               'true', // Menambahkan header ini untuk menghindari halaman warning
@@ -110,7 +110,7 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
       body: Stack(
         children: [
           Positioned(
-            top: 20,
+            top: 50,
             left: 20,
             child: ArrowBackButton(
               onPressed: () {
@@ -150,6 +150,7 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: AddLeafygardenButton(),
                   ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),

@@ -121,22 +121,25 @@ class _LeafyGardenState extends State<LeafyGarden> {
                 ),
               ),
               const SizedBox(height: 20),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
-                  childAspectRatio: 1,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 0.8,
+                  ),
+                  itemCount: _plants.length,
+                  itemBuilder: (context, index) {
+                    return PlantCard(
+                      plantName: _plants[index]['plantName']!,
+                      imagePath: _plants[index]['imagePath']!,
+                    );
+                  },
                 ),
-                itemCount: _plants.length,
-                itemBuilder: (context, index) {
-                  return PlantCard(
-                    plantName: _plants[index]['plantName']!,
-                    imagePath: _plants[index]['imagePath']!,
-                  );
-                },
               ),
             ],
           ),
