@@ -13,7 +13,7 @@ class SaveProfileButton extends StatelessWidget {
           onPressed: () {
             // Menampilkan pesan saat tombol ditekan
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Save button pressed")),
+              const SnackBar(content: Text("Changed succesfull")),
             );
           },
           style: ElevatedButton.styleFrom(

@@ -77,13 +77,17 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: Colors.white,
       body: Consumer<UserProvider>(
         builder: (context, userProvider, child) {
-          final userName = userProvider.userName;
-          final email = userProvider.email;
+          // final userName = userProvider.userName;
+          // final email = userProvider.email;
+          final userName =
+              Provider.of<UserProvider>(context).userName ?? 'Loading...';
+          final email =
+              Provider.of<UserProvider>(context).email ?? 'Loading...';
 
-          // Jika username atau email masih null, tampilkan loading indicator
-          if (userName == null || email == null) {
-            return const Center(child: CircularProgressIndicator());
-          }
+          // // Jika username atau email masih null, tampilkan loading indicator
+          // if (userName == null || email == null) {
+          //   return const Center(child: CircularProgressIndicator());
+          // }
 
           return Stack(
             children: [
@@ -108,7 +112,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => EditProfilePage(),
+                                builder: (context) => EditProfilePage(
+                                  initialUsername: userName,
+                                  initialEmail: email,
+                                ),
                               ),
                             );
                           },

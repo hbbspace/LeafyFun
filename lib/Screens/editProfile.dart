@@ -4,7 +4,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:leafyfun/widgets/save_profile_button.dart'; // Paket untuk memilih gambar
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key});
+  final String initialUsername;
+  final String initialEmail;
+
+  const EditProfilePage({
+    super.key,
+    required this.initialUsername,
+    required this.initialEmail,
+  });
 
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
@@ -19,8 +26,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-    _usernameController.text = "CurrentUsername";
-    _emailController.text = "user@example.com";
+    // Set nilai awal username dan email dari parameter widget
+    _usernameController.text = widget.initialUsername;
+    _emailController.text = widget.initialEmail;
   }
 
   @override
