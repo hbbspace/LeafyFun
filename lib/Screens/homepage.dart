@@ -1,10 +1,13 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:leafyfun/widgets/NewAddedPlant.dart';
 import 'package:leafyfun/widgets/article_slider.dart';
 import 'package:leafyfun/widgets/floating_navbar.dart';
@@ -21,20 +24,96 @@ class HomePageScreen extends StatefulWidget {
 class _HomePageScreenState extends State<HomePageScreen> {
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   int _selectedIndex = 0;
+  List<dynamic> plants = [];
+  bool hasUserPlant = false;
+  bool _isDataInitialized = false;
+
+  // Gambar static untuk ditampilkan
+  final List<String> staticImages = [
+    'assets/images/plants1.png',
+    'assets/images/plants1.png',
+    'assets/images/plants1.png',
+    'assets/images/plants1.png',
+    'assets/images/plants1.png',
+  ];
 
   @override
   void initState() {
     super.initState();
-    // Load token and username from UserProvider
+    _initializeData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Pastikan data selalu diperbarui ketika halaman diaktifkan kembali
+    if (!_isDataInitialized) {
+      _initializeData();
+    }
+  }
+
+
+  Future<void> _initializeData() async {
+    if (_isDataInitialized) return;
+    _isDataInitialized = true;
+
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    userProvider.loadUserInfo();
+    await userProvider.loadUserInfo();
+    final userId = userProvider.userId;
+    if (userId != null) {
+      hasUserPlant = await userProvider.checkUserPlant(userId);
+    }
+    await fetchPlants();
+  }
+
+
+  Future<void> fetchPlants() async {
+    try {
+      final response = await http.get(
+        Uri.parse('${dotenv.env['ENDPOINT_URL']}/plants/'),
+        headers: {
+          'ngrok-skip-browser-warning':
+              'true', // Menambahkan header ini untuk menghindari halaman warning
+        },
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        setState(() {
+          plants = data;
+        });
+      } else {
+        debugPrint('Failed to fetch plants');
+      }
+    } catch (e) {
+      debugPrint('Error: $e');
+    }
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  if (_selectedIndex == index) return;
 
+  setState(() {
+    _selectedIndex = index;
+  });
+
+  if ((index == 1 || index == 3) && !hasUserPlant) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Akses Ditolak'),
+        content: const Text(
+            'Silakan tambahkan tanaman ke garden dengan melakukan scan terlebih dahulu.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+    return;
+  }
     // Tambahkan logika navigasi di sini
     switch (index) {
       case 0:
@@ -72,9 +151,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Mendapatkan username dari UserProvider
-    final userName =
-        Provider.of<UserProvider>(context).userName ?? 'Loading...';
+    final userName = Provider.of<UserProvider>(context).userName ?? 'Loading...';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -84,11 +161,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
           SingleChildScrollView(
             child: Column(
               children: [
-                // Top Bar Widget
                 const SizedBox(height: 50),
                 TopbarHomepage(
                   greeting: "Hello,",
-                  userName: userName, // Tampilkan username
+                  userName: userName,
                   profileImagePath: 'assets/images/profilePicture.png',
                 ),
                 const SizedBox(height: 20),
@@ -97,19 +173,15 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Align(
-                      alignment: Alignment
-                          .centerLeft, // Memastikan teks selalu di kiri
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 30),
-                        child: Text(
-                          'Article',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: const Text(
+                        'Article',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
                     ),
@@ -120,55 +192,38 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 const SizedBox(height: 30),
 
                 // New Added Plants
-                const Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: Alignment
-                          .centerLeft, // Memastikan teks selalu di kiri
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 30),
-                        child: Text(
-                          'New Added Plants',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: const Text(
+                    'New Added Plants',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
-
-                    SizedBox(height: 20),
-                    NewAddedPlantItem(
-                      plantName: "Pohon Pepaya",
-                      plantImage: "assets/images/plants1.png",
-                      plantDescription:
-                          "Tanaman pepaya dengan rasa manis segar.",
-                    ),
-                    NewAddedPlantItem(
-                      plantName: "Pohon Jambu",
-                      plantImage: "assets/images/plants2.png",
-                      plantDescription:
-                          "Tanaman Jambu yang menghasilkan buah besar dan manis.",
-                    ),
-                    NewAddedPlantItem(
-                      plantName: "Lemon",
-                      plantImage: "assets/images/plants3.png",
-                      plantDescription:
-                          "Tanaman mangga yang menghasilkan buah besar dan manis.",
-                    ),
-                    // SizedBox(height: 200), //buat ngakalin
-                  ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  children: List.generate(
+                    plants.length,
+                    (index) {
+                      final plant = plants[index];
+                      return NewAddedPlantItem(
+                        plantName: plant['common_name'] ?? 'Unknown Plant',
+                        plantImage: staticImages[index % staticImages.length], // Gambar static
+                        plantDescription: plant['region'] ?? 'No description available',
+                      );
+                    },
+                  ),
                 ),
                 const SizedBox(height: 100),
               ],
             ),
           ),
 
-          // Floating Navigation Bar Tetap di Bawah
+          // Floating Navigation Bar
           Positioned(
             bottom: 15,
             left: 20,

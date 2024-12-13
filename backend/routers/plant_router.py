@@ -1,5 +1,6 @@
 import os
 import numpy as np
+from typing import List
 from datetime import datetime
 from fastapi.responses import JSONResponse
 # Menonaktifkan optimasi oneDNN
@@ -8,15 +9,39 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from sqlalchemy.orm import Session
 from backend.models.plant import Plant as PlantModel
+from backend.models.user_plant import UserPlant as UserPlantModel
+from backend.schemas.user_plant import UserPlantRead, UserPlantCountResponse
 from backend.schemas.plant import PlantCreate, PlantRead
 from backend.services.database import get_db
-from fastapi import APIRouter, Depends, File, UploadFile, HTTPException, status
+from fastapi import APIRouter, Depends, File, Query, UploadFile, HTTPException, status
 from backend.services.plant_services import get_plants
 
 router = APIRouter()
 
+# Endpoint untuk mendapatkan daftar tanaman
+@router.get("/plants/", response_model=list[PlantRead], status_code=status.HTTP_200_OK)
+async def read_plants(db: Session = Depends(get_db)):
+    plants = get_plants(db)
+    return plants
+
+# Endpoint untuk mendapatkan user_plant
+@router.get("/get_user_plants/{user_id}", response_model=List[UserPlantRead], status_code=status.HTTP_200_OK)
+async def get_user_plants(user_id: int, db: Session = Depends(get_db)):
+    # Ambil semua user_plants berdasarkan user_id
+    user_plants = db.query(UserPlantModel).filter(UserPlantModel.user_id == user_id).all()
+
+    # Jika tidak ditemukan, kembalikan response 404
+    if not user_plants:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No plants found for user with ID {user_id}"
+        )
+
+    return user_plants
+
+
 # Endpoint untuk menambahkan tanaman baru
-@router.post("/addPlant", response_model=PlantRead, status_code=status.HTTP_201_CREATED)
+@router.post("/add_leaf_scan", response_model=PlantRead, status_code=status.HTTP_201_CREATED)
 async def add_user_plant(plant: PlantCreate, db: Session = Depends(get_db)):
     new_plant = PlantModel(
         common_name=plant.common_name,
@@ -34,7 +59,7 @@ async def add_user_plant(plant: PlantCreate, db: Session = Depends(get_db)):
     return new_plant
 
 # Endpoint untuk mendapatkan detail tanaman berdasarkan ID
-@router.get("/scanDetail/{plant_id}", response_model=PlantRead, status_code=status.HTTP_200_OK)
+@router.get("/scan_detail/{plant_id}", response_model=PlantRead, status_code=status.HTTP_200_OK)
 async def read_plant_detail(plant_id: int, db: Session = Depends(get_db)):
     # Mengambil detail tanaman berdasarkan plant_id
     plant = db.query(PlantModel).filter(PlantModel.plant_id == plant_id).first()
@@ -48,11 +73,6 @@ async def read_plant_detail(plant_id: int, db: Session = Depends(get_db)):
     
     return plant
 
-# Endpoint untuk mendapatkan daftar tanaman
-@router.get("/plants/", response_model=list[PlantRead], status_code=status.HTTP_200_OK)
-async def read_plants(db: Session = Depends(get_db)):
-    plants = get_plants(db)
-    return plants
 
 # Endpoint prediksi
 @router.post("/predict/")

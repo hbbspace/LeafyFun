@@ -34,6 +34,8 @@ class _LeafyGardenState extends State<LeafyGarden> {
   ];
 
   void _onItemTapped(int index) {
+    if (_selectedIndex == index) return; // Avoid navigating to the same page
+
     setState(() {
       _selectedIndex = index;
     });

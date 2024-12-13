@@ -66,7 +66,7 @@ async def get_current_user_data(current_user: str = Depends(get_current_user), d
 #         raise HTTPException(status_code=404, detail="User not found")
 #     return {"user_id": user.user_id, "username": user.username, "email": user.email}
 
-@router.put("/updateProfile", status_code=status.HTTP_200_OK)
+@router.put("/update_profile", status_code=status.HTTP_200_OK)
 async def update_profile(
     user_update: UserUpdate,
     current_user: str = Depends(get_current_user),

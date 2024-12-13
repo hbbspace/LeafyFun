@@ -8,9 +8,12 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 class UserProvider extends ChangeNotifier {
   final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   String? token;
-  String? userId;
+  int? userId;
   String? userName;
   String? email;
+  bool _hasUserPlant = false;
+
+  bool get hasUserPlant => _hasUserPlant;
 
   Future<String?> getToken() async {
     return await secureStorage.read(key: 'jwt_token');
@@ -26,6 +29,8 @@ class UserProvider extends ChangeNotifier {
       final response = await http.get(
         Uri.parse('${dotenv.env['ENDPOINT_URL']}/user'),
         headers: {
+          'ngrok-skip-browser-warning':
+              'true', // Menambahkan header ini untuk menghindari halaman warning
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
@@ -63,7 +68,7 @@ class UserProvider extends ChangeNotifier {
         debugPrint('JWT Payload: $payload');
 
         // Ambil user_id, username dan email dari payload
-        userId = payload['user_id']?.toString();
+        userId = payload['user_id'];
         userName = payload['username'] ?? 'User';
         email = payload['email'] ?? 'unknown@example.com';
 
@@ -78,4 +83,50 @@ class UserProvider extends ChangeNotifier {
       debugPrint('Error loading token: $e');
     }
   }
+
+  Future<bool> checkUserPlant(int userId) async {
+  try {
+    // Buat URL endpoint dengan query parameter user_id
+    final url = Uri.parse('${dotenv.env['ENDPOINT_URL']}/get_user_plants/$userId');
+
+    // Kirim permintaan HTTP GET
+    final response = await http.get(
+      url,
+      headers: {
+        'ngrok-skip-browser-warning':
+              'true', // Menambahkan header ini untuk menghindari halaman warning
+      },
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        // Parse respons dari server dan periksa data
+        final data = jsonDecode(response.body) as List<dynamic>;
+        _hasUserPlant = data.isNotEmpty;
+
+        debugPrint('User has plants: $_hasUserPlant');
+        break;
+
+      case 401:
+        // Token invalid atau expired
+        await secureStorage.delete(key: 'jwt_token');
+        debugPrint('Authorization failed. Token removed.');
+        break;
+
+      default:
+        // Status code lain
+        debugPrint('Failed to fetch user plant data: ${response.body}');
+        break;
+    }
+
+    notifyListeners(); // Memperbarui UI setelah status berubah
+    return response.statusCode == 200;
+  } catch (e) {
+    debugPrint('Error fetching user plant data: $e');
+    notifyListeners(); // Memperbarui UI setelah status berubah
+    return false;
+  }
+}
+
+
 }

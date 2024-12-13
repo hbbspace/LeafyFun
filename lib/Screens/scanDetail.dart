@@ -46,7 +46,7 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
 
       if (response.statusCode == 200) {
         // Menampilkan respons body untuk debug
-        print(
+        debugPrint(
             'Response body: ${response.body}'); // Menampilkan respons untuk memeriksa masalah
 
         // Cek header Content-Type untuk memastikan JSON
@@ -82,7 +82,7 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
       }
     } catch (e) {
       // Tangani kesalahan lainnya seperti jaringan atau parsing
-      print('Error: $e');
+      debugPrint('Error: $e');
       showDialog(
         context: context,
         builder: (BuildContext context) {
