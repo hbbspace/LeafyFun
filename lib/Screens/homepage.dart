@@ -5,6 +5,7 @@ import 'package:leafyfun/Screens/leafyGarden.dart';
 import 'package:leafyfun/Screens/leafyQuiz.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scanPage.dart';
+import 'package:leafyfun/widgets/popup_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -53,7 +54,6 @@ class _HomePageScreenState extends State<HomePageScreen> {
     }
   }
 
-
   Future<void> _initializeData() async {
     if (_isDataInitialized) return;
     _isDataInitialized = true;
@@ -66,7 +66,6 @@ class _HomePageScreenState extends State<HomePageScreen> {
     }
     await fetchPlants();
   }
-
 
   Future<void> fetchPlants() async {
     try {
@@ -91,29 +90,27 @@ class _HomePageScreenState extends State<HomePageScreen> {
   }
 
   void _onItemTapped(int index) {
-  if (_selectedIndex == index) return;
+    if (_selectedIndex == index) return;
 
-  setState(() {
-    _selectedIndex = index;
-  });
+    setState(() {
+      _selectedIndex = index;
+    });
 
-  if ((index == 1 || index == 3) && !hasUserPlant) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Akses Ditolak'),
-        content: const Text(
-            'Silakan tambahkan tanaman ke garden dengan melakukan scan terlebih dahulu.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-    return;
-  }
+    if ((index == 1 || index == 3) && !hasUserPlant) {
+      showDialog(
+        context: context,
+        builder: (context) => PopupWidget(
+          title: 'Akses Ditolak',
+          buttonText: 'OK',
+          imagePath: 'assets/images/page_lock.png', // Path gambar yang sesuai
+          onTap: () {
+            Navigator.of(context).pop(); // Menutup dialog saat tombol ditekan
+          },
+        ),
+      );
+      return;
+    }
+
     // Tambahkan logika navigasi di sini
     switch (index) {
       case 0:
@@ -151,7 +148,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userName = Provider.of<UserProvider>(context).userName ?? 'Loading...';
+    final userName =
+        Provider.of<UserProvider>(context).userName ?? 'Loading...';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -171,17 +169,20 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
                 // ArticleSlider
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 30),
-                      child: const Text(
-                        'Article',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: const Text(
+                          'Article',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
@@ -193,14 +194,17 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
                 // New Added Plants
                 Padding(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: const Text(
-                    'New Added Plants',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: const Text(
+                      'New Added Plants',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
@@ -212,13 +216,16 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       final plant = plants[index];
                       return NewAddedPlantItem(
                         plantName: plant['common_name'] ?? 'Unknown Plant',
-                        plantImage: staticImages[index % staticImages.length], // Gambar static
-                        plantDescription: plant['region'] ?? 'No description available',
+                        plantImage: staticImages[
+                            index % staticImages.length], // Gambar static
+                        plantDescription:
+                            plant['region'] ?? 'No description available',
                       );
                     },
                   ),
                 ),
-                const SizedBox(height: 100),
+                // 240 diganti 100 jika ada new added plants ada isinya
+                SizedBox(height: hasUserPlant ? 100 : 240),
               ],
             ),
           ),
