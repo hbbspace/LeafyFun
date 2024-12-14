@@ -11,8 +11,10 @@ class UserProvider extends ChangeNotifier {
   int? userId;
   String? userName;
   String? email;
+  List<dynamic> _userPlant = [];
   bool _hasUserPlant = false;
 
+  List<dynamic> get userPlant => _userPlant;
   bool get hasUserPlant => _hasUserPlant;
 
   Future<String?> getToken() async {
@@ -103,6 +105,8 @@ class UserProvider extends ChangeNotifier {
         // Parse respons dari server dan periksa data
         final data = jsonDecode(response.body) as List<dynamic>;
         _hasUserPlant = data.isNotEmpty;
+
+        _userPlant = data;
 
         debugPrint('User has plants: $_hasUserPlant');
         break;

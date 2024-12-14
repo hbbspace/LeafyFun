@@ -10,7 +10,7 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from sqlalchemy.orm import Session
 from backend.models.plant import Plant as PlantModel
 from backend.models.user_plant import UserPlant as UserPlantModel
-from backend.schemas.user_plant import UserPlantRead, UserPlantCountResponse
+from backend.schemas.user_plant import UserPlantRead
 from backend.schemas.plant import PlantCreate, PlantRead
 from backend.services.database import get_db
 from fastapi import APIRouter, Depends, File, Query, UploadFile, HTTPException, status
@@ -25,10 +25,25 @@ async def read_plants(db: Session = Depends(get_db)):
     return plants
 
 # Endpoint untuk mendapatkan user_plant
+from sqlalchemy.orm import joinedload
+
 @router.get("/get_user_plants/{user_id}", response_model=List[UserPlantRead], status_code=status.HTTP_200_OK)
 async def get_user_plants(user_id: int, db: Session = Depends(get_db)):
-    # Ambil semua user_plants berdasarkan user_id
-    user_plants = db.query(UserPlantModel).filter(UserPlantModel.user_id == user_id).all()
+
+    # Join antara tabel UserPlantModel dan PlantModel
+    user_plants = (
+        db.query(
+            UserPlantModel.user_plant_id,
+            UserPlantModel.user_id,
+            UserPlantModel.plant_id,
+            UserPlantModel.date_saved,
+            PlantModel.common_name,
+            PlantModel.latin_name
+        )
+        .join(PlantModel, UserPlantModel.plant_id == PlantModel.plant_id)
+        .filter(UserPlantModel.user_id == user_id)
+        .all()
+    )
 
     # Jika tidak ditemukan, kembalikan response 404
     if not user_plants:
@@ -37,7 +52,20 @@ async def get_user_plants(user_id: int, db: Session = Depends(get_db)):
             detail=f"No plants found for user with ID {user_id}"
         )
 
-    return user_plants
+    # Format ulang data agar sesuai dengan response_model
+    result = [
+        {
+            "user_plant_id": user_plant.user_plant_id,
+            "user_id": user_plant.user_id,
+            "plant_id": user_plant.plant_id,
+            "date_saved": user_plant.date_saved,
+            "common_name": user_plant.common_name,
+            "latin_name": user_plant.latin_name
+        }
+        for user_plant in user_plants
+    ]
+
+    return result
 
 
 # Endpoint untuk menambahkan tanaman baru

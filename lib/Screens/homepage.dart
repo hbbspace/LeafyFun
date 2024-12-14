@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/leafyGarden.dart';
-import 'package:leafyfun/Screens/leafyQuiz.dart';
+import 'package:leafyfun/Screens/leafy_garden.dart';
+import 'package:leafyfun/Screens/leafy_quiz.dart';
 import 'package:leafyfun/Screens/profile.dart';
-import 'package:leafyfun/Screens/scanPage.dart';
+import 'package:leafyfun/Screens/scan_page.dart';
 import 'package:leafyfun/widgets/popup_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -100,7 +100,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
       showDialog(
         context: context,
         builder: (context) => PopupWidget(
-          title: 'Akses Ditolak',
+          title: 'Access Denied',
+          desc: 'Please Scan First & Save The Plant',
           buttonText: 'OK',
           imagePath: 'assets/images/page_lock.png', // Path gambar yang sesuai
           onTap: () {
@@ -108,6 +109,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
           },
         ),
       );
+      _selectedIndex = 0;
       return;
     }
 
@@ -176,7 +178,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: const Text(
-                          'Article',
+                          'Articles',
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 30,

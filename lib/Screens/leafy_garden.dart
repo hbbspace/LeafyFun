@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/historyPage.dart';
+import 'package:leafyfun/Screens/history_page.dart';
 import 'package:leafyfun/Screens/homepage.dart';
-import 'package:leafyfun/Screens/leafyQuiz.dart';
+import 'package:leafyfun/Screens/leafy_quiz.dart';
 import 'package:leafyfun/Screens/profile.dart';
-import 'package:leafyfun/Screens/scanPage.dart';
+import 'package:leafyfun/Screens/scan_page.dart';
 import 'package:leafyfun/Widgets/floating_navbar.dart';
+import 'package:leafyfun/providers/user_provider.dart';
 import 'package:leafyfun/widgets/plantCard.dart';
+import 'package:provider/provider.dart';
 
 class LeafyGarden extends StatefulWidget {
   const LeafyGarden({super.key});
@@ -16,6 +18,8 @@ class LeafyGarden extends StatefulWidget {
 
 class _LeafyGardenState extends State<LeafyGarden> {
   int _selectedIndex = 3;
+  List<dynamic> userPlants = [];
+  bool _isDataInitialized = false;
 
   // List data tanaman dan gambar
   final List<Map<String, String>> _plants = [
@@ -32,6 +36,39 @@ class _LeafyGardenState extends State<LeafyGarden> {
       'imagePath': 'assets/images/plants3.png',
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Pastikan data selalu diperbarui ketika halaman diaktifkan kembali
+    if (!_isDataInitialized) {
+      _initializeData();
+    }
+  }
+
+  Future<void> _initializeData() async {
+  if (_isDataInitialized) return;
+  _isDataInitialized = true;
+
+  final userProvider = Provider.of<UserProvider>(context, listen: false);
+  await userProvider.loadUserInfo();
+  final userId = userProvider.userId;
+  if (userId != null) {
+    await userProvider.checkUserPlant(userId);
+    
+    // Perbarui userPlants hanya setelah data diterima
+    setState(() {
+      userPlants = userProvider.userPlant;
+    });
+  }
+}
 
   void _onItemTapped(int index) {
     if (_selectedIndex == index) return; // Avoid navigating to the same page
@@ -80,15 +117,15 @@ class _LeafyGardenState extends State<LeafyGarden> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding:
-              const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 20),
+          padding: const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'My Garden',
                     style: TextStyle(
                       fontFamily: 'Poppins',
@@ -110,46 +147,51 @@ class _LeafyGardenState extends State<LeafyGarden> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: const Text(
-                  'You have 3 plants.',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.black54,
-                  ),
+              const SizedBox(height: 10),
+              Text(
+                'You have ${userPlants.length} plants.',
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black54,
                 ),
               ),
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  physics: AlwaysScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
-                    childAspectRatio: 0.8,
-                  ),
-                  itemCount: _plants.length,
-                  itemBuilder: (context, index) {
-                    return PlantCard(
-                      plantName: _plants[index]['plantName']!,
-                      imagePath: _plants[index]['imagePath']!,
-                    );
-                  },
-                ),
-              ),
+              userPlants.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No plants found.',
+                        style: TextStyle(fontSize: 18, color: Colors.black54),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 20,
+                          mainAxisSpacing: 20,
+                          childAspectRatio: 0.8,
+                        ),
+                        itemCount: userPlants.length,
+                        itemBuilder: (context, index) {
+                          final plant = userPlants[index];
+                          return PlantCard(
+                            plantName: plant['common_name'] ?? 'Unknown',
+                            imagePath: _plants[index]['imagePath'] ?? 'assets/images/default_image.png',
+                          );
+                        },
+                      ),
+                    ),
             ],
           ),
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(
-            bottom: 15, left: 20, right: 20), // Space di bawah
+        padding: const EdgeInsets.only(bottom: 15, left: 20, right: 20),
         child: Material(
           borderRadius: BorderRadius.circular(35),
           child: FloatingNavigationButtonBar(

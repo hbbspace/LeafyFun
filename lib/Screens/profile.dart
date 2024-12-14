@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/editProfile.dart';
+import 'package:leafyfun/Screens/edit_profile.dart';
 import 'package:leafyfun/Screens/homepage.dart';
-import 'package:leafyfun/Screens/leafyGarden.dart';
-import 'package:leafyfun/Screens/leafyQuiz.dart';
-import 'package:leafyfun/Screens/scanPage.dart';
+import 'package:leafyfun/Screens/leafy_garden.dart';
+import 'package:leafyfun/Screens/leafy_quiz.dart';
+import 'package:leafyfun/Screens/scan_page.dart';
 import 'package:leafyfun/providers/user_provider.dart';
 import 'package:leafyfun/widgets/activity_button.dart';
 import 'package:leafyfun/widgets/floating_navbar.dart';
 import 'package:leafyfun/widgets/logout_confirmation_dialog.dart';
+import 'package:leafyfun/widgets/popup_widget.dart';
 import 'package:leafyfun/widgets/profile_header.dart';
 import 'package:provider/provider.dart';
 
@@ -20,14 +21,35 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int _selectedIndex = 4;
+  bool hasUserPlant = false;
+  bool _isDataInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Load token and username from UserProvider
-      Provider.of<UserProvider>(context, listen: false).loadUserInfo();
-    });
+    _initializeData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Pastikan data selalu diperbarui ketika halaman diaktifkan kembali
+    if (!_isDataInitialized) {
+      _initializeData();
+    }
+  }
+
+  Future<void> _initializeData() async {
+    if (_isDataInitialized) return;
+    _isDataInitialized = true;
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    await userProvider.loadUserInfo();
+    final userId = userProvider.userId;
+    if (userId != null) {
+      hasUserPlant = await userProvider.checkUserPlant(userId);
+    }
   }
 
   void _onItemTapped(int index) {
@@ -36,6 +58,23 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       _selectedIndex = index;
     });
+
+    if ((index == 1 || index == 3) && !hasUserPlant) {
+      showDialog(
+        context: context,
+        builder: (context) => PopupWidget(
+          title: 'Access Denied',
+          desc: 'Please Scan First & Save The Plant',
+          buttonText: 'OK',
+          imagePath: 'assets/images/page_lock.png', // Path gambar yang sesuai
+          onTap: () {
+            Navigator.of(context).pop(); // Menutup dialog saat tombol ditekan
+          },
+        ),
+      );
+      _selectedIndex = 4;
+      return;
+    }
 
     switch (index) {
       case 0:

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/homepage.dart';
-import 'package:leafyfun/Screens/leafyGarden.dart';
+import 'package:leafyfun/Screens/leafy_garden.dart';
 import 'package:leafyfun/Screens/profile.dart';
-import 'package:leafyfun/Screens/scanPage.dart';
+import 'package:leafyfun/Screens/scan_page.dart';
 import 'package:leafyfun/Widgets/floating_navbar.dart';
 import 'package:leafyfun/providers/user_provider.dart';
 import 'package:leafyfun/widgets/finished_quiz.dart';

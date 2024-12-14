@@ -4,8 +4,8 @@ import 'package:camera/camera.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path; // Berikan alias pada 'path'
 import 'package:file_picker/file_picker.dart';
-import '../widgets/arrowBack_button.dart';
-import 'scanDetail.dart'; // Import halaman detail
+import 'package:leafyfun/widgets/arrowBack_button.dart';
+import 'scan_detail.dart'; // Import halaman detail
 
 class ScanPage extends StatefulWidget {
   const ScanPage({super.key});
@@ -37,7 +37,7 @@ class _ScanPageState extends State<ScanPage> {
       await _cameraController?.initialize();
       setState(() {});
     } else {
-      print("No camera found");
+      debugPrint("No camera found");
     }
   }
 
@@ -70,7 +70,7 @@ class _ScanPageState extends State<ScanPage> {
           );
         }
       } catch (e) {
-        print("Error capturing image: $e");
+        debugPrint("Error capturing image: $e");
       }
     }
   }
@@ -85,7 +85,7 @@ class _ScanPageState extends State<ScanPage> {
         );
         setState(() {});
       } catch (e) {
-        print("Error toggling flash: $e");
+        debugPrint("Error toggling flash: $e");
       }
     }
   }
