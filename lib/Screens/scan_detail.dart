@@ -186,7 +186,29 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
           MaterialPageRoute(builder: (context) => LeafyGarden()),
         );
       } else {
-        throw Exception('Failed to add user plant');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LeafyGarden()),
+        );
+        if (mounted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Already Have a Plant'),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
       }
     }
   } catch (e) {
