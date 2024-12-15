@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:camera/camera.dart';
@@ -80,75 +79,75 @@ class _ScanPageState extends State<ScanPage> {
   }
 
   Future<void> _sendToPredict(File image) async {
-  String predictUrl = "${dotenv.env['ENDPOINT_URL']}/predict/";
-  String addScanUrl = "${dotenv.env['ENDPOINT_URL']}/add_leaf_scan/";
+    String predictUrl = "${dotenv.env['ENDPOINT_URL']}/predict/";
+    String addScanUrl = "${dotenv.env['ENDPOINT_URL']}/add_leaf_scan";
 
-  try {
-    // Membaca file gambar menjadi bytes
-    final bytes = await image.readAsBytes();
-    final base64Image = base64Encode(bytes);  // Menyandikan gambar menjadi base64
+    try {
+      // Membaca file gambar menjadi bytes
+      final bytes = await image.readAsBytes();
+      final base64Image = base64Encode(bytes);  // Menyandikan gambar menjadi base64
 
-    // Membuat payload data untuk dikirim
-    final Map<String, String> payload = {
-      "file": base64Image, // File dikirim sebagai base64 string
-    };
+      // Membuat payload data untuk dikirim
+      final Map<String, String> payload = {
+        "file": base64Image, // File dikirim sebagai base64 string
+      };
 
-    // Mengirim permintaan HTTP POST
-    final response = await http.post(
-      Uri.parse(predictUrl),
-      headers: {
-        'ngrok-skip-browser-warning': 'true', // Menghindari halaman warning ngrok
-        'Content-Type': 'application/json',   // Menyatakan tipe konten sebagai JSON
-      },
-      body: jsonEncode(payload),  // Mengirim data dalam format JSON
-    );
+      // Mengirim permintaan HTTP POST
+      final response = await http.post(
+        Uri.parse(predictUrl),
+        headers: {
+          'ngrok-skip-browser-warning': 'true', // Menghindari halaman warning ngrok
+          'Content-Type': 'application/json',   // Menyatakan tipe konten sebagai JSON
+        },
+        body: jsonEncode(payload),  // Mengirim data dalam format JSON
+      );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
 
-      if (data["plant_id"] != 0) {
-        // Kirim hasil ke endpoint add_leaf_scan
-        final addResponse = await http.post(
-          Uri.parse(addScanUrl),
-          headers: {
-            'ngrok-skip-browser-warning': 'true', // Menambahkan header yang sama
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({
-            "file_name": path.basename(image.path),
-            "predicted_class": data["predicted_class"],
-            "confidence": data["confidence"],
-          }),
-        );
+        if (data["plant_id"] != 0) {
+          // Kirim hasil ke endpoint add_leaf_scan
+          final addResponse = await http.post(
+            Uri.parse(addScanUrl),
+            headers: {
+              'ngrok-skip-browser-warning': 'true', // Menambahkan header yang sama
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({
+              "file_name": path.basename(image.path),
+              "predicted_class": data["predicted_class"],
+              "confidence": data["confidence"],
+            }),
+          );
 
-        if (addResponse.statusCode == 200) {
-          // Navigasi ke halaman detail
-          if (mounted) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ScanDetailPage(
-                  capturedImage: image,
-                  prediction: data["plant_id"],
-                  confidence: data["confidence"],
+          if (addResponse.statusCode == 201) {
+            // Navigasi ke halaman detail
+            if (mounted) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ScanDetailPage(
+                    capturedImage: image,
+                    prediction: data["plant_id"],
+                    confidence: data["confidence"],
+                  ),
                 ),
-              ),
-            );
+              );
+            }
+          } else {
+            debugPrint("Gagal menyimpan hasil scan.");
           }
         } else {
-          debugPrint ("Gagal menyimpan hasil scan.");
+          debugPrint("Confidence terlalu rendah untuk prediksi.");
         }
       } else {
-        debugPrint("Confidence terlalu rendah untuk prediksi.");
+        debugPrint("Gagal memproses gambar.");
       }
-    } else {
-      debugPrint("Gagal memproses gambar.");
+    } catch (e) {
+      debugPrint("Error sending to predict: $e");
+      debugPrint("Terjadi kesalahan saat memproses gambar.");
     }
-  } catch (e) {
-    debugPrint("Error sending to predict: $e");
-    debugPrint("Terjadi kesalahan saat memproses gambar.");
   }
-}
 
   Future<void> _toggleFlash() async {
     if (_cameraController != null && _cameraController!.value.isInitialized) {

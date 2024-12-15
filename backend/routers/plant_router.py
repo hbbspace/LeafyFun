@@ -72,27 +72,6 @@ async def get_user_plants(user_id: int, db: Session = Depends(get_db)):
     return result
 
 
-# Endpoint untuk menambahkan tanaman baru
-@router.post("/add_leaf_scan", response_model=LeafScanRead, status_code=status.HTTP_201_CREATED)
-async def add_leaf_scan(
-    leaf_scan: LeafScanCreate, 
-    db: Session = Depends(get_db)
-):
-    # Buat instance baru untuk tabel LeafScan
-    new_leaf_scan = LeafScanModel(
-        user_id=leaf_scan.user_id,
-        scan_image=leaf_scan.scan_image,
-        plant_id=leaf_scan.plant_id,
-        scan_date=datetime.utcnow().strftime("%d-%m-%Y"),
-        confidence_score=leaf_scan.confidence_score
-    )
-
-    # Tambahkan data ke database
-    db.add(new_leaf_scan)
-    db.commit()
-    db.refresh(new_leaf_scan)
-
-    return new_leaf_scan
 
 # Endpoint untuk mendapatkan detail tanaman berdasarkan ID
 @router.get("/scan_detail/{plant_id}", response_model=PlantRead, status_code=status.HTTP_200_OK)
@@ -109,6 +88,24 @@ async def read_plant_detail(plant_id: int, db: Session = Depends(get_db)):
     
     return plant
 
+# Endpoint untuk menambahkan leaf scan baru
+@router.post("/add_leaf_scan", response_model=LeafScanRead, status_code=status.HTTP_201_CREATED)
+async def add_leaf_scan(leaf_scan: LeafScanCreate, db: Session = Depends(get_db)):
+    # Buat instance baru untuk tabel LeafScan
+    new_leaf_scan = LeafScanModel(
+        user_id=leaf_scan.user_id,
+        scan_image=leaf_scan.scan_image,
+        plant_id=leaf_scan.plant_id,
+        scan_date=datetime.utcnow().strftime("%d-%m-%Y"),
+        confidence_score=leaf_scan.confidence_score
+    )
+
+    # Tambahkan data ke database
+    db.add(new_leaf_scan)
+    db.commit()
+    db.refresh(new_leaf_scan)
+
+    return new_leaf_scan
 
 # Endpoint prediksi
 @router.post("/predict/")
@@ -133,7 +130,7 @@ async def predict(file: UploadFile = File(...)):
 
     # Simpan file dengan nama unik (menggunakan timestamp)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    file_name = f"{timestamp}"
+    file_name = f"{timestamp}.jpg"
     file_path = os.path.join(UPLOAD_DIR, file_name)
     with open(file_path, "wb") as f:
         f.write(await file.read())
