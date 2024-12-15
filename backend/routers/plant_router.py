@@ -8,11 +8,13 @@ os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from sqlalchemy.orm import Session
+from backend.models.user_plant import UserPlant as UserPlantModel
+from backend.schemas.user_plant import UserPlantCreate, UserPlantRead
 from backend.models.leaf_scan import LeafScan as LeafScanModel
 from backend.schemas.leaf_scan import LeafScanCreate, LeafScanRead
-from backend.models.plant import Plant as PlantModel
 from backend.models.user_plant import UserPlant as UserPlantModel
 from backend.schemas.user_plant import UserPlantRead
+from backend.models.plant import Plant as PlantModel
 from backend.schemas.plant import PlantCreate, PlantRead
 from backend.services.database import get_db
 from fastapi import APIRouter, Depends, File, Query, UploadFile, HTTPException, status
@@ -71,8 +73,6 @@ async def get_user_plants(user_id: int, db: Session = Depends(get_db)):
 
     return result
 
-
-
 # Endpoint untuk mendapatkan detail tanaman berdasarkan ID
 @router.get("/scan_detail/{plant_id}", response_model=PlantRead, status_code=status.HTTP_200_OK)
 async def read_plant_detail(plant_id: int, db: Session = Depends(get_db)):
@@ -88,22 +88,32 @@ async def read_plant_detail(plant_id: int, db: Session = Depends(get_db)):
     
     return plant
 
-# Endpoint untuk menambahkan leaf scan baru
 @router.post("/add_leaf_scan", response_model=LeafScanRead, status_code=status.HTTP_201_CREATED)
 async def add_leaf_scan(leaf_scan: LeafScanCreate, db: Session = Depends(get_db)):
+    # Ambil scan_id terakhir dari database
+    last_scan = db.query(LeafScanModel).order_by(LeafScanModel.scan_id.desc()).first()
+
+    # Tentukan scan_id baru
+    new_scan_id = last_scan.scan_id + 1 if last_scan else 1
+
     # Buat instance baru untuk tabel LeafScan
     new_leaf_scan = LeafScanModel(
+        # scan_id=new_scan_id,  # Gunakan scan_id yang baru
         user_id=leaf_scan.user_id,
         scan_image=leaf_scan.scan_image,
         plant_id=leaf_scan.plant_id,
-        scan_date=datetime.utcnow().strftime("%d-%m-%Y"),
+        # scan_date=datetime.utcnow().strftime("%d-%m-%Y"),
         confidence_score=leaf_scan.confidence_score
     )
 
-    # Tambahkan data ke database
-    db.add(new_leaf_scan)
-    db.commit()
-    db.refresh(new_leaf_scan)
+    try:
+        # Tambahkan data ke database
+        db.add(new_leaf_scan)
+        db.commit()
+        db.refresh(new_leaf_scan)
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Terjadi kesalahan saat menyimpan data.")
 
     return new_leaf_scan
 
@@ -146,17 +156,17 @@ async def predict(file: UploadFile = File(...)):
     predicted_index = np.argmax(predictions)
 
     # Cek confidence threshold
-    if confidence < 0.5:
+    if confidence < 0.8:
         response = {
             'plant_id': 0,
-            'confidence': float(confidence),
+            'confidence': round(float(confidence), 2),
             'message': "Prediksi tidak dapat dilakukan dengan keyakinan yang cukup",
             'file_name': file_name
         }
     else:
         response = {
             'plant_id': int(predicted_index + 1),
-            'confidence': float(confidence),
+            'confidence': round(float(confidence), 2),
             'predicted_class': class_names[predicted_index],
             'file_name': file_name
         }

@@ -8,15 +8,13 @@ class LeafScanBase(BaseModel):
     plant_id: int
     confidence_score: float
 
-
-class LeafScanCreate(LeafScanBase):
+class LeafScanRead(LeafScanBase):
+    # scan_id: int
+    # scan_date: str
     pass
 
-
-class LeafScanRead(LeafScanBase):
-    scan_id: int
-    scan_date: datetime
-
+class LeafScanCreate(LeafScanRead):
+    pass
 
 class LeafScanOut(LeafScanRead):
     class Config:

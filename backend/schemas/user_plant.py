@@ -8,9 +8,8 @@ class UserPlantBase(BaseModel):
 
 
 class UserPlantCreate(UserPlantBase):
-    user_plant_id: int
-    date_saved: str
-    quiz_score: int
+    quiz_score: int = 0
+    date_saved: str = datetime.utcnow().strftime("%d-%m-%Y")
 
 
 class UserPlantRead(UserPlantBase):

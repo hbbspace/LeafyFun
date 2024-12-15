@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:leafyfun/Screens/leafy_garden.dart';
+import 'package:leafyfun/providers/user_provider.dart';
 import 'package:leafyfun/widgets/add_leafyGarden_button.dart';
 import 'package:leafyfun/widgets/arrowBack_button.dart';
 import 'package:leafyfun/widgets/plantDescription_widget.dart';
+import 'package:provider/provider.dart';
 
 class ScanDetailPage extends StatefulWidget {
   final File capturedImage;
@@ -33,11 +36,33 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
   String fruitSeason = "";
   String region = "";
   String priceRange = "";
+  bool _isDataInitialized = false;
 
   @override
   void initState() {
     super.initState();
     fetchPlantData(); // Fetch plant data when the page is loaded
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Pastikan data selalu diperbarui ketika halaman diaktifkan kembali
+    if (!_isDataInitialized) {
+      _initializeData();
+    }
+  }
+
+  Future<void> _initializeData() async {
+    if (_isDataInitialized) return;
+    _isDataInitialized = true;
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    await userProvider.loadUserInfo();
+    
+    
+    await fetchPlantData();
   }
 
   Future<void> fetchPlantData() async {
@@ -115,6 +140,79 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
     }
   }
 
+  Future<void> addUserPlant() async {
+  try {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final userId = userProvider.userId;
+
+    // Ambil plantId dari prediksi
+    final plantId = widget.prediction - 1; // Prediction sebagai indeks untuk plantId
+
+    // Periksa apakah user sudah memiliki plant yang sama
+    final checkResponse = await http.get(
+      Uri.parse('${dotenv.env['ENDPOINT_URL']}/user_plants/$userId/$plantId'),
+      headers: {
+        'ngrok-skip-browser-warning': 'true',
+      },
+    );
+
+    if (checkResponse.statusCode == 200) {
+      // User sudah memiliki plant, arahkan ke LeafyGarden
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LeafyGarden()),
+      );
+    } else {
+      // Tambahkan plant baru untuk user
+      final response = await http.post(
+        Uri.parse('${dotenv.env['ENDPOINT_URL']}/add_user_plant'),
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true',
+        },
+        body: json.encode({
+          'user_id': userId,
+          'plant_id': plantId,
+          'date_saved': DateTime.now().toIso8601String(),
+          'quiz_score': 0, // Atur quiz_score jika diperlukan
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        // Plant berhasil ditambahkan untuk user, arahkan ke LeafyGarden
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LeafyGarden()),
+        );
+      } else {
+        throw Exception('Failed to add user plant');
+      }
+    }
+  } catch (e) {
+    debugPrint('Error: $e');
+    // Tangani kesalahan, tampilkan pesan ke pengguna jika diperlukan
+    if (mounted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Failed to add user plant: $e'),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,7 +258,9 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
                   // Tombol untuk menambah ke LeafyGarden
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: AddLeafygardenButton(),
+                    child: AddLeafygardenButton(
+                      onPressed: addUserPlant,
+                    ),
                   ),
                   const SizedBox(height: 20),
                 ],

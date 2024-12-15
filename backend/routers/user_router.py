@@ -3,6 +3,13 @@ from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 from backend.models.user import User as UserModel
 from backend.schemas.user import UserCreate, UserRead, UserUpdate
+from backend.models.user_plant import UserPlant as UserPlantModel
+from backend.schemas.user_plant import UserPlantCreate, UserPlantRead
+from backend.models.user_plant import UserPlant as UserPlantModel
+from backend.schemas.user_plant import UserPlantRead
+from backend.models.plant import Plant as PlantModel
+from backend.models.leaf_scan import LeafScan as LeafScanModel
+from backend.schemas.leaf_scan import LeafScanCreate, LeafScanRead
 from backend.services.database import get_db
 from backend.services.utils import hash_password, verify_password, verify_jwt_token
 from fastapi.security import OAuth2PasswordBearer
@@ -38,33 +45,96 @@ async def get_current_user_data(current_user: str = Depends(get_current_user), d
         raise HTTPException(status_code=404, detail="User not found")
     return {"user_id": user.user_id, "username": user.username, "email": user.email}
 
-# @router.get("/quiz")
-# async def get_current_user_data(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
-#     user = db.query(UserModel).filter(UserModel.email == current_user).first()
-#     if not user:
-#         raise HTTPException(status_code=404, detail="User not found")
-#     return {"user_id": user.user_id, "username": user.username, "email": user.email}
+@router.get("/user_plants/{user_id}/{plant_id}", response_model=UserPlantRead)
+async def get_user_plant(user_id: int, plant_id: int, db: Session = Depends(get_db)):
+    # Query untuk mendapatkan entri UserPlant dengan user_id dan plant_id
+    user_plant = db.query(UserPlantModel).filter(
+        UserPlantModel.user_id == user_id, UserPlantModel.plant_id == plant_id
+    ).first()
 
-# @router.get("/scan")
-# async def get_current_user_data(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
-#     user = db.query(UserModel).filter(UserModel.email == current_user).first()
-#     if not user:
-#         raise HTTPException(status_code=404, detail="User not found")
-#     return {"user_id": user.user_id, "username": user.username, "email": user.email}
+    if user_plant is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User does not have this plant."
+        )
 
-# @router.get("/garden")
-# async def get_current_user_data(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
-#     user = db.query(UserModel).filter(UserModel.email == current_user).first()
-#     if not user:
-#         raise HTTPException(status_code=404, detail="User not found")
-#     return {"user_id": user.user_id, "username": user.username, "email": user.email}
+    # Query untuk mendapatkan informasi dari tabel Plant
+    plant = db.query(PlantModel).filter(PlantModel.plant_id == plant_id).first()
 
-# @router.get("/profile")
-# async def get_current_user_data(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
-#     user = db.query(UserModel).filter(UserModel.email == current_user).first()
-#     if not user:
-#         raise HTTPException(status_code=404, detail="User not found")
-#     return {"user_id": user.user_id, "username": user.username, "email": user.email}
+    if plant is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Plant data not found."
+        )
+
+    # Menggabungkan data dari UserPlant dan Plant
+    return UserPlantRead(
+        user_plant_id=user_plant.user_plant_id,
+        user_id=user_plant.user_id,
+        plant_id=user_plant.plant_id,
+        date_saved=user_plant.date_saved,
+        quiz_score=user_plant.quiz_score,
+        common_name=plant.common_name,
+        latin_name=plant.latin_name
+    )
+
+# Endpoint untuk menambahkan UserPlant
+@router.post("/add_user_plant", response_model=UserPlantRead, status_code=status.HTTP_201_CREATED)
+async def add_user_plant(user_plant: UserPlantCreate, db: Session = Depends(get_db)):
+    # Membuat entri UserPlant baru
+    new_user_plant = UserPlantModel(
+        user_id=user_plant.user_id,
+        plant_id=user_plant.plant_id,
+        date_saved=user_plant.date_saved,
+        quiz_score=user_plant.quiz_score
+    )
+
+    # Menyimpan entri ke dalam database
+    db.add(new_user_plant)
+    db.commit()
+    db.refresh(new_user_plant)
+
+    # Mengambil data tambahan dari tabel Plant untuk response
+    plant = db.query(PlantModel).filter(PlantModel.plant_id == new_user_plant.plant_id).first()
+
+    # Menyusun response yang lebih lengkap
+    return UserPlantRead(
+        user_plant_id=new_user_plant.user_plant_id,
+        user_id=new_user_plant.user_id,
+        plant_id=new_user_plant.plant_id,
+        date_saved=new_user_plant.date_saved,
+        quiz_score=new_user_plant.quiz_score,
+        common_name=plant.common_name,
+        latin_name=plant.latin_name
+    )
+
+@router.get("/history/{user_id}", status_code=status.HTTP_200_OK)
+async def get_user_history(user_id: int, db: Session = Depends(get_db)):
+
+    history = (
+        db.query(LeafScanModel, PlantModel)
+        .join(PlantModel, LeafScanModel.plant_id == PlantModel.plant_id)
+        .filter(LeafScanModel.user_id == user_id)
+        .order_by(LeafScanModel.scan_date.desc())
+        .all()
+    )
+
+    if not history:
+        raise HTTPException(status_code=404, detail="No history found for this user.")
+
+    # Prepare the response
+    response = [
+        {
+            "scan_id": leaf_scan.scan_id,
+            "scan_date": leaf_scan.scan_date,
+            "plant_name": plant.common_name,
+            "accuracy": f"{leaf_scan.confidence_score:.0f}%"
+        }
+        for leaf_scan, plant in history
+    ]
+
+    return {"user_id": user_id, "history": response}
+
 
 @router.put("/update_profile", status_code=status.HTTP_200_OK)
 async def update_profile(
@@ -72,18 +142,6 @@ async def update_profile(
     current_user: str = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """
-    Update the current user's profile information.
-
-    Args:
-        user_update (UserUpdate): Data to update the user's profile.
-        current_user (str): Current user's email from the JWT token.
-        db (Session): Database session dependency.
-
-    Returns:
-        dict: A success message with updated user details.
-    """
-    # Fetch current user from the database
     user = db.query(UserModel).filter(UserModel.email == current_user).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
