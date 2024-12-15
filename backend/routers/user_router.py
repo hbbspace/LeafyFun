@@ -128,12 +128,12 @@ async def get_user_history(user_id: int, db: Session = Depends(get_db)):
             "scan_id": leaf_scan.scan_id,
             "scan_date": leaf_scan.scan_date,
             "plant_name": plant.common_name,
-            "accuracy": f"{leaf_scan.confidence_score:.0f}%"
+            "accuracy": f"{leaf_scan.confidence_score * 100:.0f}%"
         }
         for leaf_scan, plant in history
     ]
 
-    return {"user_id": user_id, "history": response}
+    return response
 
 
 @router.put("/update_profile", status_code=status.HTTP_200_OK)

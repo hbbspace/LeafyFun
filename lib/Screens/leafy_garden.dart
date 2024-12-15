@@ -20,6 +20,7 @@ class _LeafyGardenState extends State<LeafyGarden> {
   int _selectedIndex = 3;
   List<dynamic> userPlants = [];
   bool _isDataInitialized = false;
+  int? userId;
 
   // List data tanaman dan gambar
   final List<Map<String, String>> _plants = [
@@ -155,7 +156,8 @@ class _LeafyGardenState extends State<LeafyGarden> {
                     ),
                     onPressed: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HistoryPage()),
+                      MaterialPageRoute(
+                          builder: (context) => HistoryPage()),
                     ),
                   ),
                 ],

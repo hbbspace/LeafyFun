@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'LeafyFun',
         theme: ThemeData(primarySwatch: Colors.green),
-        // home: SplashScreen(),
-        home: LeafyQuiz(),
+        home: SplashScreen(),
+        // home: LeafyQuiz(),
       ),
     );
   }
