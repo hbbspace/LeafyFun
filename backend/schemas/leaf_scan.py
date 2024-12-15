@@ -7,7 +7,6 @@ class LeafScanBase(BaseModel):
     scan_image: str
     plant_id: int
     confidence_score: float
-    status: str
 
 
 class LeafScanCreate(LeafScanBase):

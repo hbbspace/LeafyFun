@@ -8,6 +8,8 @@ os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from sqlalchemy.orm import Session
+from backend.models.leaf_scan import LeafScan as LeafScanModel
+from backend.schemas.leaf_scan import LeafScanCreate, LeafScanRead
 from backend.models.plant import Plant as PlantModel
 from backend.models.user_plant import UserPlant as UserPlantModel
 from backend.schemas.user_plant import UserPlantRead
@@ -37,6 +39,7 @@ async def get_user_plants(user_id: int, db: Session = Depends(get_db)):
             UserPlantModel.user_id,
             UserPlantModel.plant_id,
             UserPlantModel.date_saved,
+            UserPlantModel.quiz_score,
             PlantModel.common_name,
             PlantModel.latin_name
         )
@@ -59,6 +62,7 @@ async def get_user_plants(user_id: int, db: Session = Depends(get_db)):
             "user_id": user_plant.user_id,
             "plant_id": user_plant.plant_id,
             "date_saved": user_plant.date_saved,
+            "quiz_score": user_plant.quiz_score,
             "common_name": user_plant.common_name,
             "latin_name": user_plant.latin_name
         }
@@ -69,22 +73,26 @@ async def get_user_plants(user_id: int, db: Session = Depends(get_db)):
 
 
 # Endpoint untuk menambahkan tanaman baru
-@router.post("/add_leaf_scan", response_model=PlantRead, status_code=status.HTTP_201_CREATED)
-async def add_user_plant(plant: PlantCreate, db: Session = Depends(get_db)):
-    new_plant = PlantModel(
-        common_name=plant.common_name,
-        latin_name=plant.latin_name,
-        description=plant.description,
-        fruit_content=plant.fruit_content,
-        fruit_season=plant.fruit_season,
-        region=plant.region,
-        price_range=plant.price_range,
-        image_file=plant.image_file
+@router.post("/add_leaf_scan", response_model=LeafScanRead, status_code=status.HTTP_201_CREATED)
+async def add_leaf_scan(
+    leaf_scan: LeafScanCreate, 
+    db: Session = Depends(get_db)
+):
+    # Buat instance baru untuk tabel LeafScan
+    new_leaf_scan = LeafScanModel(
+        user_id=leaf_scan.user_id,
+        scan_image=leaf_scan.scan_image,
+        plant_id=leaf_scan.plant_id,
+        scan_date=datetime.utcnow().strftime("%d-%m-%Y"),
+        confidence_score=leaf_scan.confidence_score
     )
-    db.add(new_plant)
+
+    # Tambahkan data ke database
+    db.add(new_leaf_scan)
     db.commit()
-    db.refresh(new_plant)
-    return new_plant
+    db.refresh(new_leaf_scan)
+
+    return new_leaf_scan
 
 # Endpoint untuk mendapatkan detail tanaman berdasarkan ID
 @router.get("/scan_detail/{plant_id}", response_model=PlantRead, status_code=status.HTTP_200_OK)
@@ -107,11 +115,11 @@ async def read_plant_detail(plant_id: int, db: Session = Depends(get_db)):
 async def predict(file: UploadFile = File(...)):
 
     # Direktori penyimpanan gambar
-    UPLOAD_DIR = "assets/"
+    UPLOAD_DIR = "assets/leaf_scan/"
     os.makedirs(UPLOAD_DIR, exist_ok=True)
 
     # Load model
-    model_path = '../services/LeafyFunModel.h5'
+    model_path = 'backend/services/LeafyFunModel.h5' 
     if not os.path.exists(model_path):
         raise FileNotFoundError(f"Model tidak ditemukan di: {model_path}")
     model = load_model(model_path)
@@ -120,12 +128,13 @@ async def predict(file: UploadFile = File(...)):
     class_names = ['Apple', 'Cherry', 'Grape', 'Strawberry', 'Tomato']
 
     # Validasi file
-    if not file.filename.endswith(('.jpg', '.jpeg', '.png')):
+    if not file.filename.endswith(('.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG')):
         raise HTTPException(status_code=400, detail="File harus berupa gambar dengan format JPG, JPEG, atau PNG")
 
     # Simpan file dengan nama unik (menggunakan timestamp)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    file_path = os.path.join(UPLOAD_DIR, f"{timestamp}_{file.filename}")
+    file_name = f"{timestamp}"
+    file_path = os.path.join(UPLOAD_DIR, file_name)
     with open(file_path, "wb") as f:
         f.write(await file.read())
 
@@ -145,14 +154,14 @@ async def predict(file: UploadFile = File(...)):
             'plant_id': 0,
             'confidence': float(confidence),
             'message': "Prediksi tidak dapat dilakukan dengan keyakinan yang cukup",
-            'file_path': file_path
+            'file_name': file_name
         }
     else:
         response = {
             'plant_id': int(predicted_index + 1),
             'confidence': float(confidence),
             'predicted_class': class_names[predicted_index],
-            'file_path': file_path
+            'file_name': file_name
         }
 
     return JSONResponse(content=response)

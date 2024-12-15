@@ -8,12 +8,15 @@ class UserPlantBase(BaseModel):
 
 
 class UserPlantCreate(UserPlantBase):
-    pass
+    user_plant_id: int
+    date_saved: str
+    quiz_score: int
 
 
 class UserPlantRead(UserPlantBase):
     user_plant_id: int
     date_saved: str
+    quiz_score: int
     common_name: str
     latin_name: str
 

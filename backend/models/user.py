@@ -25,6 +25,7 @@ def user_init(db: Session):
             users = [
                 User(username="Habibatul", email="hbb@gmail.com", password=hash_password("123")),
                 User(username="Diantoro", email="diantoro@gmail.com", password=hash_password("234")),
+                User(username="Akun Sultan", email="sultan@gmail.com", password=hash_password("345")),
             ]
             db.add_all(users)
             db.flush()  # Catat perubahan

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -9,10 +10,16 @@ import 'package:leafyfun/widgets/plantDescription_widget.dart';
 
 class ScanDetailPage extends StatefulWidget {
   final File capturedImage;
+  final int prediction;
+  final Float confidence;
+
+  int get getprediction => prediction;
 
   const ScanDetailPage({
     super.key,
     required this.capturedImage,
+    required this.prediction,
+    required this.confidence,
   });
 
   @override
@@ -28,6 +35,7 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
   String region = "";
   String priceRange = "";
 
+
   @override
   void initState() {
     super.initState();
@@ -35,31 +43,30 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
   }
 
   Future<void> fetchPlantData() async {
-    try {
-      final response = await http.get(
-        Uri.parse('${dotenv.env['ENDPOINT_URL']}/plants/'),
-        headers: {
-          'ngrok-skip-browser-warning':
-              'true', // Menambahkan header ini untuk menghindari halaman warning
-        },
-      );
+  try {
+    final response = await http.get(
+      Uri.parse('${dotenv.env['ENDPOINT_URL']}/plants/'),
+      headers: {
+        'ngrok-skip-browser-warning':
+            'true', // Menambahkan header ini untuk menghindari halaman warning
+      },
+    );
 
-      if (response.statusCode == 200) {
-        // Menampilkan respons body untuk debug
-        debugPrint(
-            'Response body: ${response.body}'); // Menampilkan respons untuk memeriksa masalah
+    if (response.statusCode == 200) {
+      // Menampilkan respons body untuk debug
+      debugPrint(
+          'Response body: ${response.body}'); // Menampilkan respons untuk memeriksa masalah
 
-        // Cek header Content-Type untuk memastikan JSON
-        if (response.headers['content-type']?.contains('application/json') ??
-            false) {
-          List<dynamic> plantList = json.decode(response.body);
+      // Cek header Content-Type untuk memastikan JSON
+      if (response.headers['content-type']?.contains('application/json') ?? false) {
+        List<dynamic> plantList = json.decode(response.body);
 
-          // Ambil data tanaman pertama jika ada
-          var plant = plantList.isNotEmpty
-              ? plantList[0]
-              : null; // Mengambil tanaman pertama
+        // Ambil data tanaman berdasarkan nilai prediction
+        var plant = plantList.isNotEmpty ? plantList[widget.prediction] : null; // Menggunakan widget.prediction sebagai indeks
 
-          if (plant != null) {
+        if (plant != null) {
+          // Pastikan widget masih terpasang sebelum memanggil setState
+          if (mounted) {
             setState(() {
               commonName = plant['common_name'];
               latinName = plant['latin_name'];
@@ -69,20 +76,23 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
               region = plant['region'];
               priceRange = plant['price_range'];
             });
-          } else {
-            throw Exception('No plant data available');
           }
         } else {
-          throw Exception(
-              'Server did not return JSON, Content-Type is not application/json');
+          throw Exception('No plant data available');
         }
       } else {
         throw Exception(
-            'Failed to load plant data. Status code: ${response.statusCode}');
+            'Server did not return JSON, Content-Type is not application/json');
       }
-    } catch (e) {
-      // Tangani kesalahan lainnya seperti jaringan atau parsing
-      debugPrint('Error: $e');
+    } else {
+      throw Exception(
+          'Failed to load plant data. Status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    // Tangani kesalahan lainnya seperti jaringan atau parsing
+    debugPrint('Error: $e');
+    // Pastikan widget masih terpasang sebelum menampilkan dialog error
+    if (mounted) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -102,6 +112,7 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
       );
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {

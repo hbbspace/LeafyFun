@@ -18,7 +18,12 @@ class UserPlant(Base):
 def user_plan_init(db:Session):
     if db.query(UserPlant).count() == 0:
         userplant = [
-            UserPlant(user_plant_id = 1, user_id = 2, plant_id = 1, date_saved = datetime.utcnow().strftime("%d-%m-%Y"))
+            UserPlant(user_plant_id = 1, user_id = 2, plant_id = 1, date_saved = datetime.utcnow().strftime("%d-%m-%Y")),
+            UserPlant(user_plant_id = 2, user_id = 3, plant_id = 1, date_saved = datetime.utcnow().strftime("%d-%m-%Y")),
+            UserPlant(user_plant_id = 3, user_id = 3, plant_id = 2, date_saved = datetime.utcnow().strftime("%d-%m-%Y")),
+            UserPlant(user_plant_id = 4, user_id = 3, plant_id = 3, date_saved = datetime.utcnow().strftime("%d-%m-%Y")),
+            UserPlant(user_plant_id = 5, user_id = 3, plant_id = 4, date_saved = datetime.utcnow().strftime("%d-%m-%Y")),
+            UserPlant(user_plant_id = 6, user_id = 3, plant_id = 5, date_saved = datetime.utcnow().strftime("%d-%m-%Y")),
         ]
         db.add_all(userplant)
         db.flush()
