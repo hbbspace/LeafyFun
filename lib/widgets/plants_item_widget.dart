@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class NewAddedPlantItem extends StatelessWidget {
+class PlantsItem extends StatelessWidget {
   final String plantName;
   final String plantImage;
   final String plantDescription;
 
-  const NewAddedPlantItem({
+  const PlantsItem({
     super.key,
     required this.plantName,
     required this.plantImage,

@@ -28,8 +28,8 @@ class PopupWidget extends StatelessWidget {
         children: [
           Image.asset(
             imagePath, // Path gambar yang dapat disesuaikan
-            height: 80,
-            width: 80,
+            height: 100,
+            width: 100,
           ),
           SizedBox(height: 16),
           Text(

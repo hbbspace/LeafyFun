@@ -9,7 +9,7 @@ import 'package:leafyfun/widgets/popup_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:leafyfun/widgets/NewAddedPlant.dart';
+import 'package:leafyfun/widgets/plants_item_widget.dart';
 import 'package:leafyfun/widgets/article_slider.dart';
 import 'package:leafyfun/widgets/floating_navbar.dart';
 import 'package:leafyfun/widgets/topbar_homepage.dart';
@@ -31,11 +31,11 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   // Gambar static untuk ditampilkan
   final List<String> staticImages = [
-    'assets/images/plants1.png',
-    'assets/images/plants1.png',
-    'assets/images/plants1.png',
-    'assets/images/plants1.png',
-    'assets/images/plants1.png',
+    'assets/images/apple_plants.jpg',
+    'assets/images/cherry_plants.jpg',
+    'assets/images/grape_plants.jpg',
+    'assets/images/strawberry_plants.jpg',
+    'assets/images/tomato_plants.jpg',
   ];
 
   @override
@@ -200,7 +200,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: const Text(
-                      'New Added Plants',
+                      'Plants',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 30,
@@ -216,7 +216,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     plants.length,
                     (index) {
                       final plant = plants[index];
-                      return NewAddedPlantItem(
+                      return PlantsItem(
                         plantName: plant['common_name'] ?? 'Unknown Plant',
                         plantImage: staticImages[
                             index % staticImages.length], // Gambar static
@@ -226,8 +226,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     },
                   ),
                 ),
-                // 240 diganti 100 jika ada new added plants ada isinya
-                SizedBox(height: hasUserPlant ? 100 : 240),
+
+                SizedBox(height: 100),
               ],
             ),
           ),
