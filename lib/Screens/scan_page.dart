@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:leafyfun/providers/user_provider.dart';
+import 'package:leafyfun/widgets/popup_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'scan_detail.dart';
 import 'package:leafyfun/widgets/arrowBack_button.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -49,8 +52,7 @@ class _ScanPageState extends State<ScanPage> {
         final image = await _cameraController!.takePicture();
 
         final directory = await getApplicationDocumentsDirectory();
-        final imagePath = path.join(
-            directory.path, '${DateTime.now()}.jpg');
+        final imagePath = path.join(directory.path, '${DateTime.now()}.jpg');
         final savedImage = await File(image.path).copy(imagePath);
 
         setState(() {
@@ -79,44 +81,42 @@ class _ScanPageState extends State<ScanPage> {
   }
 
   Future<void> _sendToPredict(File image) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    await userProvider.loadUserInfo();
+    final userId = userProvider.userId;
+
     String predictUrl = "${dotenv.env['ENDPOINT_URL']}/predict/";
     String addScanUrl = "${dotenv.env['ENDPOINT_URL']}/add_leaf_scan";
 
     try {
-      // Membaca file gambar menjadi bytes
-      final bytes = await image.readAsBytes();
-      final base64Image = base64Encode(bytes);  // Menyandikan gambar menjadi base64
+      // Buat request multipart
+      final request = http.MultipartRequest('POST', Uri.parse(predictUrl))
+        ..headers.addAll({
+          'ngrok-skip-browser-warning': 'true',
+        })
+        ..files.add(await http.MultipartFile.fromPath('file', image.path));
 
-      // Membuat payload data untuk dikirim
-      final Map<String, String> payload = {
-        "file": base64Image, // File dikirim sebagai base64 string
-      };
-
-      // Mengirim permintaan HTTP POST
-      final response = await http.post(
-        Uri.parse(predictUrl),
-        headers: {
-          'ngrok-skip-browser-warning': 'true', // Menghindari halaman warning ngrok
-          'Content-Type': 'application/json',   // Menyatakan tipe konten sebagai JSON
-        },
-        body: jsonEncode(payload),  // Mengirim data dalam format JSON
-      );
+      // Kirim request dan tunggu respon
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        debugPrint("${data}");
 
         if (data["plant_id"] != 0) {
           // Kirim hasil ke endpoint add_leaf_scan
           final addResponse = await http.post(
             Uri.parse(addScanUrl),
             headers: {
-              'ngrok-skip-browser-warning': 'true', // Menambahkan header yang sama
+              'ngrok-skip-browser-warning': 'true',
               'Content-Type': 'application/json',
             },
             body: jsonEncode({
-              "file_name": path.basename(image.path),
-              "predicted_class": data["predicted_class"],
-              "confidence": data["confidence"],
+              "user_id": userId,
+              "scan_image": data["file_name"],
+              "plant_id": data["plant_id"],
+              "confidence_score": data["confidence"],
             }),
           );
 
@@ -129,7 +129,7 @@ class _ScanPageState extends State<ScanPage> {
                   builder: (context) => ScanDetailPage(
                     capturedImage: image,
                     prediction: data["plant_id"],
-                    confidence: data["confidence"],
+                    // confidence: data["confidence"],
                   ),
                 ),
               );
@@ -138,10 +138,24 @@ class _ScanPageState extends State<ScanPage> {
             debugPrint("Gagal menyimpan hasil scan.");
           }
         } else {
+          showDialog(
+            context: context,
+            builder: (context) => PopupWidget(
+              title: 'Confidence is too low',
+              desc: '',
+              buttonText: 'OK',
+              imagePath: 'assets/images/cancel.png', // Path gambar yang sesuai
+              onTap: () {
+                Navigator.of(context)
+                    .pop(); // Menutup dialog saat tombol ditekan
+              },
+            ),
+          );
           debugPrint("Confidence terlalu rendah untuk prediksi.");
         }
       } else {
-        debugPrint("Gagal memproses gambar.");
+        debugPrint(
+            "Gagal memproses gambar. Status code: ${response.statusCode}");
       }
     } catch (e) {
       debugPrint("Error sending to predict: $e");

@@ -26,6 +26,7 @@ class PopupWidget extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          SizedBox(height: 20),
           Image.asset(
             imagePath, // Path gambar yang dapat disesuaikan
             height: 100,

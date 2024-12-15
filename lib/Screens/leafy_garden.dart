@@ -24,16 +24,28 @@ class _LeafyGardenState extends State<LeafyGarden> {
   // List data tanaman dan gambar
   final List<Map<String, String>> _plants = [
     {
+      'plantName': 'Mango',
+      'imagePath': 'assets/images/tomato_plants.jpg',
+    },
+    {
       'plantName': 'Orange',
-      'imagePath': 'assets/images/orange_garden.png',
+      'imagePath': 'assets/images/apple_plants.jpg',
     },
     {
       'plantName': 'Apple',
-      'imagePath': 'assets/images/apple_garden.png',
+      'imagePath': 'assets/images/cherry_plants.jpg',
     },
     {
       'plantName': 'Mango',
-      'imagePath': 'assets/images/plants3.png',
+      'imagePath': 'assets/images/grape_plants.jpg',
+    },
+    {
+      'plantName': 'Mango',
+      'imagePath': 'assets/images/strawberry_plants.jpg',
+    },
+    {
+      'plantName': 'Mango',
+      'imagePath': 'assets/images/tomato_plants.jpg',
     },
   ];
 
@@ -54,21 +66,21 @@ class _LeafyGardenState extends State<LeafyGarden> {
   }
 
   Future<void> _initializeData() async {
-  if (_isDataInitialized) return;
-  _isDataInitialized = true;
+    if (_isDataInitialized) return;
+    _isDataInitialized = true;
 
-  final userProvider = Provider.of<UserProvider>(context, listen: false);
-  await userProvider.loadUserInfo();
-  final userId = userProvider.userId;
-  if (userId != null) {
-    await userProvider.checkUserPlant(userId);
-    
-    // Perbarui userPlants hanya setelah data diterima
-    setState(() {
-      userPlants = userProvider.userPlant;
-    });
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    await userProvider.loadUserInfo();
+    final userId = userProvider.userId;
+    if (userId != null) {
+      await userProvider.checkUserPlant(userId);
+
+      // Perbarui userPlants hanya setelah data diterima
+      setState(() {
+        userPlants = userProvider.userPlant;
+      });
+    }
   }
-}
 
   void _onItemTapped(int index) {
     if (_selectedIndex == index) return; // Avoid navigating to the same page
@@ -117,7 +129,8 @@ class _LeafyGardenState extends State<LeafyGarden> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 20),
+          padding:
+              const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -170,7 +183,8 @@ class _LeafyGardenState extends State<LeafyGarden> {
                       child: GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 20,
                           mainAxisSpacing: 20,
@@ -179,10 +193,11 @@ class _LeafyGardenState extends State<LeafyGarden> {
                         itemCount: userPlants.length,
                         itemBuilder: (context, index) {
                           final plant = userPlants[index];
+                          final plantId = _plants[plant['plant_id']];
                           return PlantCard(
-                            plantName: plant['common_name'] ?? 'Unknown',
-                            imagePath: _plants[index]['imagePath'] ?? 'assets/images/default_image.png',
-                          );
+                              plantName: plant['common_name'] ?? 'Unknown',
+                              imagePath: plantId['imagePath'] ??
+                                  'assets/images/apple_garden.png');
                         },
                       ),
                     ),
