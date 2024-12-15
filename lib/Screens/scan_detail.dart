@@ -146,7 +146,7 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
     final userId = userProvider.userId;
 
     // Ambil plantId dari prediksi
-    final plantId = widget.prediction - 1; // Prediction sebagai indeks untuk plantId
+    var plantId = widget.prediction - 1; // Prediction sebagai indeks untuk plantId
 
     // Periksa apakah user sudah memiliki plant yang sama
     final checkResponse = await http.get(
@@ -163,6 +163,7 @@ class _ScanDetailPageState extends State<ScanDetailPage> {
         MaterialPageRoute(builder: (context) => LeafyGarden()),
       );
     } else {
+      plantId = widget.prediction + 1;
       // Tambahkan plant baru untuk user
       final response = await http.post(
         Uri.parse('${dotenv.env['ENDPOINT_URL']}/add_user_plant'),
