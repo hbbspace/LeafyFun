@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'LeafyFun',
         theme: ThemeData(primarySwatch: Colors.green),
-        // home: SplashScreen(),
-        home: HomePageScreen(),
+        home: SplashScreen(),
+        // home: HomePageScreen(),
       ),
     );
   }
