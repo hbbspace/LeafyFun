@@ -153,10 +153,10 @@ def quiz_option_init(db: Session):
             QuizOption(quiz_id=22, option_text="All of the above", is_correct=True),
             
             # Grape: Question 3
-            QuizOption(quiz_id=33, option_text="Tropical", is_correct=False),
-            QuizOption(quiz_id=33, option_text="Mediterranean", is_correct=True),
-            QuizOption(quiz_id=33, option_text="Cold", is_correct=False),
-            QuizOption(quiz_id=33, option_text="Desert", is_correct=False),
+            QuizOption(quiz_id=23, option_text="Tropical", is_correct=False),
+            QuizOption(quiz_id=23, option_text="Mediterranean", is_correct=True),
+            QuizOption(quiz_id=23, option_text="Cold", is_correct=False),
+            QuizOption(quiz_id=23, option_text="Desert", is_correct=False),
             
             # Grape: Question 4
             QuizOption(quiz_id=24, option_text="Tree", is_correct=False),

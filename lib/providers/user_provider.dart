@@ -131,6 +131,4 @@ class UserProvider extends ChangeNotifier {
     return false;
   }
 }
-
-
 }

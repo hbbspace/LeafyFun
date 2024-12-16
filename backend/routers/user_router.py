@@ -9,7 +9,8 @@ from backend.models.user_plant import UserPlant as UserPlantModel
 from backend.schemas.user_plant import UserPlantRead
 from backend.models.plant import Plant as PlantModel
 from backend.models.leaf_scan import LeafScan as LeafScanModel
-from backend.schemas.leaf_scan import LeafScanCreate, LeafScanRead
+from backend.models.quiz import Quiz as QuizModel
+from backend.models.quiz_option import QuizOption as QuizOptionModel
 from backend.services.database import get_db
 from backend.services.utils import hash_password, verify_password, verify_jwt_token
 from fastapi.security import OAuth2PasswordBearer
@@ -134,6 +135,65 @@ async def get_user_history(user_id: int, db: Session = Depends(get_db)):
     ]
 
     return response
+
+@router.get("/quizzes/{plant_id}")
+def get_quizzes(plant_id: int, db: Session = Depends(get_db)):
+    quizzes = db.query(QuizModel).filter(QuizModel.plant_id == plant_id).all()
+    
+    quiz_data = []
+    
+    for quiz in quizzes:
+        # Ambil pilihan jawaban untuk setiap quiz
+        options = db.query(QuizOptionModel).filter(QuizOptionModel.quiz_id == quiz.quiz_id).all()
+        
+        # Buat list opsi dengan teks pilihan dan status apakah benar atau tidak
+        option_texts = [option.option_text for option in options]
+        
+        # Tentukan indeks jawaban yang benar
+        correct_answer_index = next(
+            (index for index, option in enumerate(options) if option.is_correct), 
+            -1  # Jika tidak ada jawaban benar, kembalikan -1
+        )
+        
+        quiz_data.append({
+            "question_text": quiz.question_text,
+            "options": option_texts,
+            "correct_answer_index": correct_answer_index
+        })
+    
+    return quiz_data
+
+@router.post("/submit-quiz/{user_id}/{plant_id}")
+async def submit_quiz(user_id: int, plant_id: int, answers: list[int], db: Session = Depends(get_db)):
+    # Retrieve the quiz questions for the specific plant
+    questions = db.query(QuizModel).filter(QuizModel.plant_id == plant_id).all()
+    
+    if not questions:
+        raise HTTPException(status_code=404, detail="Questions not found for this plant")
+
+    # Calculate the quiz score
+    score = 0
+    for idx, question in enumerate(questions):
+        # Fetch all options for the current question
+        options = db.query(QuizOptionModel).filter(QuizOptionModel.quiz_id == question.quiz_id).order_by(QuizOptionModel.option_id).all()
+
+        # Ensure options exist and the selected answer index is valid
+        if options and 0 <= answers[idx] < len(options):
+            # Compare user's selected answer with the correct option
+            selected_option = options[answers[idx]]  # Get the option based on index
+            if selected_option.is_correct:
+                score += 10  # Add 10 points for a correct answer
+
+    # Update the quiz score in the user_plants table
+    user_plant = db.query(UserPlantModel).filter(UserPlantModel.user_id == user_id, UserPlantModel.plant_id == plant_id).first()
+    
+    if not user_plant:
+        raise HTTPException(status_code=404, detail="UserPlant not found")
+
+    user_plant.quiz_score = score
+    db.commit()  # Save the score update
+
+    return {"score": score, "message": "Quiz submitted successfully"}
 
 
 @router.put("/update_profile", status_code=status.HTTP_200_OK)

@@ -1,250 +1,224 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:leafyfun/widgets/option_tile_widget.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:leafyfun/providers/user_provider.dart';
+import 'package:provider/provider.dart';
+
+class Question {
+  final String questionText;
+  final List<String> options;
+  final int correctAnswerIndex;
+
+  Question({
+    required this.questionText,
+    required this.options,
+    required this.correctAnswerIndex,
+  });
+
+  // Factory untuk parsing JSON
+  factory Question.fromJson(Map<String, dynamic> json) {
+    return Question(
+      questionText: json['question_text'],
+      options: List<String>.from(json['options']),
+      correctAnswerIndex: json['correct_answer_index'],
+    );
+  }
+}
 
 class QuestionPage extends StatefulWidget {
-  const QuestionPage({super.key});
+  final int plantId;
+
+  const QuestionPage({super.key, required this.plantId});
 
   @override
   _QuestionPageState createState() => _QuestionPageState();
 }
 
 class _QuestionPageState extends State<QuestionPage> {
-  int currentQuestionIndex = 0; // Indeks pertanyaan saat ini
-
-  // Daftar jawaban yang dipilih oleh pengguna
-  List<int?> selectedAnswers = []; // Nilai null jika belum dijawab
-
-  // Daftar pertanyaan
-  final List<Question> questions = [
-    Question(
-      question: "What is the latin name for orange fruit?",
-      options: ["Citrus sinensis", "Malus", "Lionel Messi", "Vitis"],
-      correctAnswerIndex: 0,
-    ),
-    Question(
-      question: "Which part of the plant absorbs water?",
-      options: ["Roots", "Stem", "Leaves", "Flowers"],
-      correctAnswerIndex: 0,
-    ),
-  ];
+  List<Question> questions = [];
+  List<int?> selectedAnswers = [];
+  int currentQuestionIndex = 0;
+  bool isSubmitting = false;
 
   @override
-  void initState() {
-    super.initState();
-    // Inisialisasi daftar jawaban dengan null
-    selectedAnswers = List<int?>.filled(questions.length, null);
+void initState() {
+  super.initState();
+  loadUserIdAndFetchQuestions();
+}
+
+Future<void> loadUserIdAndFetchQuestions() async {
+  final userProvider = Provider.of<UserProvider>(context, listen: false);
+  await userProvider.loadUserInfo();
+  final userId = userProvider.userId;
+
+  if (userId == null) {
+    debugPrint("User ID is null. Redirecting or showing error.");
+    return; // You may want to handle this case with a redirect or error UI.
   }
 
-  void moveToNextQuestion() {
-    if (currentQuestionIndex < questions.length - 1) {
+  fetchQuestions();
+}
+
+  Future<void> fetchQuestions() async {
+  try {
+    final response = await http.get(
+        Uri.parse('${dotenv.env['ENDPOINT_URL']}/quizzes/${widget.plantId}'),
+        headers: {
+          'ngrok-skip-browser-warning':
+              'true', // Menambahkan header ini untuk menghindari halaman warning
+        },
+      );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
       setState(() {
-        currentQuestionIndex++;
+        questions = data.map((json) => Question.fromJson(json)).toList();
+        selectedAnswers = List<int?>.filled(questions.length, null);
       });
     } else {
-      // Jika sudah di akhir pertanyaan, tampilkan dialog submit
+      debugPrint('Failed to load questions. Status Code: ${response.statusCode}');
+    }
+  } catch (e) {
+    debugPrint("Error fetching questions: $e");
+  }
+}
+
+  void handleSubmit() async {
+  final userProvider = Provider.of<UserProvider>(context, listen: false);
+  await userProvider.loadUserInfo();
+  final userId = userProvider.userId;
+
+  // Debug untuk memastikan jawaban yang dipilih dikirim dengan benar
+  debugPrint("Selected Answers: ${jsonEncode(selectedAnswers)}");
+
+  setState(() {
+    isSubmitting = true;
+  });
+
+  try {
+    final response = await http.post(
+      Uri.parse('${dotenv.env['ENDPOINT_URL']}/submit-quiz/$userId/${widget.plantId}'),
+      headers: {
+        'ngrok-skip-browser-warning': 'true',
+        'Content-Type': 'application/json',
+        'accept': 'application/json',
+      },
+      body: jsonEncode(selectedAnswers), // Mengirim array jawaban langsung
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+
+      // Tampilkan pesan dan skor
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          backgroundColor: Colors.white,
-          title: Text(
-            "Submit Answers",
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          content: Text(
-            "Are you sure you want to submit your answers?",
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: Colors.black,
-            ),
-          ),
+          title: const Text('Quiz Completed'),
+          content: Text('Your score is: ${responseData['score']}'),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context); // Tutup dialog
+                Navigator.pop(context); // Kembali ke halaman sebelumnya
               },
-              child: Text(
-                "Cancel",
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: Color.fromRGBO(10, 66, 63, 1),
-                ),
-              ),
-            ),
-            OutlinedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                _submitAnswers();
-              },
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(
-                  color: Color.fromRGBO(10, 66, 63, 1), // Border hijau
-                ),
-                backgroundColor:
-                    Color.fromRGBO(10, 66, 63, 1), // Background hijau
-              ),
-              child: Text(
-                "Submit",
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: Colors.white, // Teks putih
-                ),
-              ),
+              child: const Text('OK'),
             ),
           ],
         ),
       );
+    } else {
+      debugPrint('Failed to submit quiz. Status Code: ${response.statusCode}');
+      showDialog(
+        context: context,
+        builder: (_) => const AlertDialog(
+          title: Text('Error'),
+          content: Text('Failed to submit the quiz. Please try again.'),
+        ),
+      );
     }
+  } catch (e) {
+    debugPrint("Error submitting quiz: $e");
+    showDialog(
+      context: context,
+      builder: (_) => const AlertDialog(
+        title: Text('Error'),
+        content: Text('An unexpected error occurred. Please try again later.'),
+      ),
+    );
+  } finally {
+    setState(() {
+      isSubmitting = false;
+    });
   }
+}
 
-  void moveToPreviousQuestion() {
-    if (currentQuestionIndex > 0) {
-      setState(() {
-        currentQuestionIndex--;
-      });
-    }
-  }
-
-  void _submitAnswers() {
-    // Proses pengiriman jawaban ke server atau database
-    print("Submitted Answers: $selectedAnswers");
-    // TODO: Tambahkan logika untuk mengirim data ke server/database
-  }
 
   @override
   Widget build(BuildContext context) {
-    final currentQuestion = questions[currentQuestionIndex];
+    if (questions.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Quiz')),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final question = questions[currentQuestionIndex];
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
+        title: Text('Question ${currentQuestionIndex + 1}/${questions.length}'),
       ),
-      backgroundColor: Colors.white, // Tambahkan ini untuk warna latar body
       body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15, top: 0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconButton(
-              icon: Image.asset(
-                'assets/images/ArrowLeftBlack.png', // Path ke gambar
-                width: 24, // Lebar gambar
-                height: 24, // Tinggi gambar
-              ),
-              onPressed: () => Navigator.pop(context),
-            ),
-
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: Text(
-                  'Leafy Quiz',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ),
-
-            // Progress bar
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: LinearProgressIndicator(
-                    value: (currentQuestionIndex + 1) / questions.length,
-                    backgroundColor: Color.fromRGBO(149, 164, 164, 1),
-                    color: Color.fromRGBO(10, 66, 63, 1),
-                  ),
-                ),
-                SizedBox(width: 8),
-                Text(
-                  "${currentQuestionIndex + 1}/${questions.length}",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            // Question text
             Text(
-              currentQuestion.question,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              questions[currentQuestionIndex].questionText,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
-            // Options
-            Expanded(
-              child: ListView.builder(
-                itemCount: currentQuestion.options.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedAnswers[currentQuestionIndex] = index;
-                      });
-                    },
-                    child: OptionTile(
-                      text: currentQuestion.options[index],
-                      isSelected:
-                          selectedAnswers[currentQuestionIndex] == index,
-                    ),
-                  );
+            const SizedBox(height: 16),
+            ...question.options.asMap().entries.map((entry) {
+              final index = entry.key;
+              final option = entry.value;
+
+              return RadioListTile<int>(
+                value: index,
+                groupValue: selectedAnswers[currentQuestionIndex],
+                onChanged: (value) {
+                  setState(() {
+                    selectedAnswers[currentQuestionIndex] = value;
+                  });
                 },
-              ),
-            ),
-            SizedBox(height: 20),
-            // Buttons
+                title: Text(option),
+              );
+            }),
+            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: currentQuestionIndex > 0
-                        ? moveToPreviousQuestion
-                        : null, // Disabled jika di pertanyaan pertama
-                    style: OutlinedButton.styleFrom(
-                      side:
-                          BorderSide(color: const Color.fromARGB(255, 0, 0, 0)),
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                    ),
-                    child: Text(
-                      'Previous',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: currentQuestionIndex > 0
-                            ? Colors.black
-                            : Colors.grey,
-                      ),
-                    ),
-                  ),
+                ElevatedButton(
+                  onPressed: currentQuestionIndex > 0
+                      ? () {
+                          setState(() {
+                            currentQuestionIndex--;
+                          });
+                        }
+                      : null,
+                  child: const Text('Previous'),
                 ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: moveToNextQuestion,
-                    style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        backgroundColor: Color.fromRGBO(10, 66, 63, 1)),
-                    child: Text(
-                      currentQuestionIndex == questions.length - 1
-                          ? 'Submit'
-                          : 'Next Question',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Poppins',
-                      ),
-                    ),
-                  ),
+                ElevatedButton(
+                  onPressed: currentQuestionIndex < questions.length - 1
+                      ? () {
+                          setState(() {
+                            currentQuestionIndex++;
+                          });
+                        }
+                      : handleSubmit,
+                  child: Text(currentQuestionIndex < questions.length - 1
+                      ? 'Next'
+                      : 'Submit'),
                 ),
               ],
             ),
@@ -253,16 +227,4 @@ class _QuestionPageState extends State<QuestionPage> {
       ),
     );
   }
-}
-
-class Question {
-  final String question;
-  final List<String> options;
-  final int correctAnswerIndex;
-
-  Question({
-    required this.question,
-    required this.options,
-    required this.correctAnswerIndex,
-  });
 }
