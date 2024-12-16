@@ -37,16 +37,16 @@ class SearchBarQuiz extends StatelessWidget {
             color: Colors.grey,
           ),
           border: InputBorder.none,
-          prefixIcon: const Icon(Icons.search, color: Colors.grey),
-          suffixIcon: controller.text.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.clear, color: Colors.grey),
-                  onPressed: () {
-                    controller.clear();
-                    onChanged(''); // Trigger perubahan untuk reset
-                  },
-                )
-              : null,
+          prefixIcon: Padding(
+            padding:
+                const EdgeInsets.all(8.0), // Sesuaikan padding jika diperlukan
+            child: Image.asset(
+              'assets/images/search.png', // Path ke file asset gambar search
+              width: 24,
+              height: 24,
+              color: Colors.grey, // Jika ingin mengganti warna gambar
+            ),
+          ),
         ),
       ),
     );
