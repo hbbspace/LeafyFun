@@ -275,34 +275,34 @@ def quiz_option_init(db: Session):
             QuizOption(quiz_id=42, option_text="Bush", is_correct=False),
             
             # Tomato: Question 3
-            QuizOption(quiz_id=43, option_text="Tropical", is_correct=False),
-            QuizOption(quiz_id=43, option_text="Temperate", is_correct=True),
-            QuizOption(quiz_id=43, option_text="Cold", is_correct=False),
-            QuizOption(quiz_id=43, option_text="Arctic", is_correct=False),
+            QuizOption(quiz_id=43, option_text="Solanum lycopersicum", is_correct=True),
+            QuizOption(quiz_id=43, option_text="Cucumis sativus", is_correct=False),
+            QuizOption(quiz_id=43, option_text="Capsicum annuum", is_correct=False),
+            QuizOption(quiz_id=43, option_text="Lycopersicon esculentum", is_correct=False),
             
             # Tomato: Question 4
-            QuizOption(quiz_id=44, option_text="Deep", is_correct=False),
-            QuizOption(quiz_id=44, option_text="Shallow", is_correct=True),
-            QuizOption(quiz_id=44, option_text="Medium", is_correct=False),
-            QuizOption(quiz_id=44, option_text="None", is_correct=False),
+            QuizOption(quiz_id=44, option_text="Tropical", is_correct=False),
+            QuizOption(quiz_id=44, option_text="Temperate", is_correct=True),
+            QuizOption(quiz_id=44, option_text="Cold", is_correct=False),
+            QuizOption(quiz_id=44, option_text="Arctic", is_correct=False),
             
             # Tomato: Question 5
-            QuizOption(quiz_id=45, option_text="1-2 months", is_correct=True),
-            QuizOption(quiz_id=45, option_text="3-4 months", is_correct=False),
-            QuizOption(quiz_id=45, option_text="5-6 months", is_correct=False),
-            QuizOption(quiz_id=45, option_text="7-8 months", is_correct=False),
+            QuizOption(quiz_id=45, option_text="Aphids", is_correct=True),
+            QuizOption(quiz_id=45, option_text="Ants", is_correct=False),
+            QuizOption(quiz_id=45, option_text="Whiteflies", is_correct=False),
+            QuizOption(quiz_id=45, option_text="Snails", is_correct=False),
             
             # Tomato: Question 6
-            QuizOption(quiz_id=46, option_text="Solanum lycopersicum", is_correct=True),
-            QuizOption(quiz_id=46, option_text="Cucumis sativus", is_correct=False),
-            QuizOption(quiz_id=46, option_text="Capsicum annuum", is_correct=False),
-            QuizOption(quiz_id=46, option_text="Lycopersicon esculentum", is_correct=False),
+            QuizOption(quiz_id=46, option_text="1-2 days per week", is_correct=False),
+            QuizOption(quiz_id=46, option_text="1-2 months", is_correct=False),
+            QuizOption(quiz_id=46, option_text="5-6 days per week", is_correct=False),
+            QuizOption(quiz_id=46, option_text="1-2 inches of water per week", is_correct=True),
             
             # Tomato: Question 7
-            QuizOption(quiz_id=47, option_text="Tropical", is_correct=False),
-            QuizOption(quiz_id=47, option_text="Temperate", is_correct=True),
-            QuizOption(quiz_id=47, option_text="Subtropical", is_correct=False),
-            QuizOption(quiz_id=47, option_text="Arctic", is_correct=False),
+            QuizOption(quiz_id=47, option_text="Sandy soil", is_correct=False),
+            QuizOption(quiz_id=47, option_text="Loamy soil", is_correct=True),
+            QuizOption(quiz_id=47, option_text="Clay soil", is_correct=False),
+            QuizOption(quiz_id=47, option_text="Peaty soil", is_correct=False),
             
             # Tomato: Question 8
             QuizOption(quiz_id=48, option_text="Summer", is_correct=True),
@@ -311,15 +311,15 @@ def quiz_option_init(db: Session):
             QuizOption(quiz_id=48, option_text="Autumn", is_correct=False),
             
             # Tomato: Question 9
-            QuizOption(quiz_id=49, option_text="2-4 days", is_correct=True),
-            QuizOption(quiz_id=49, option_text="4-6 days", is_correct=False),
-            QuizOption(quiz_id=49, option_text="6-8 days", is_correct=False),
-            QuizOption(quiz_id=49, option_text="8-10 days", is_correct=False),
+            QuizOption(quiz_id=49, option_text="2-4 hours", is_correct=False),
+            QuizOption(quiz_id=49, option_text="4-6 hours", is_correct=False),
+            QuizOption(quiz_id=49, option_text="6-8 hours", is_correct=True),
+            QuizOption(quiz_id=49, option_text="8-10 hours", is_correct=False),
             
             # Tomato: Question 10
             QuizOption(quiz_id=50, option_text="A", is_correct=False),
-            QuizOption(quiz_id=50, option_text="B", is_correct=True),
-            QuizOption(quiz_id=50, option_text="C", is_correct=False),
+            QuizOption(quiz_id=50, option_text="B", is_correct=False),
+            QuizOption(quiz_id=50, option_text="C", is_correct=True),
             QuizOption(quiz_id=50, option_text="D", is_correct=False),
         ]
             

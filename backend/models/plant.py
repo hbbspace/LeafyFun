@@ -26,7 +26,7 @@ def plant_init(db: Session):
                     fruit_season="Autumn",
                     region="Malang (East Java), Bandung (West Java), and other highland areas in Indonesia",
                     price_range="Rp150,000 - Rp500,000 per tree",
-                    image_file="apple.jpg"
+                    image_file="apple_plants.jpg"
                 ),
 
                 Plant(
@@ -37,7 +37,7 @@ def plant_init(db: Session):
                     fruit_season="Late spring to early summer",
                     region="Highland areas in Indonesia such as Malang and Bandung",
                     price_range="Rp300,000 - Rp700,000 per tree",
-                    image_file="cherry.jpg"
+                    image_file="cherry_plants.jpg"
                 ),
 
                 Plant(
@@ -48,7 +48,7 @@ def plant_init(db: Session):
                     fruit_season="Summer to early autumn",
                     region="Banyuwangi (East Java), Bali, and other warm regions in Indonesia",
                     price_range="Rp50,000 - Rp200,000 per vine",
-                    image_file="grape.jpg"
+                    image_file="grape_plants.jpg"
                 ),
 
                 Plant(
@@ -59,7 +59,7 @@ def plant_init(db: Session):
                     fruit_season="Spring to early summer",
                     region="Lembang (West Java), Batu (East Java), and other highland areas in Indonesia",
                     price_range="Rp30,000 - Rp150,000 per plant",
-                    image_file="strawberry.jpg"
+                    image_file="strawberry_plants.jpg"
                 ),
 
                 Plant(
@@ -70,7 +70,7 @@ def plant_init(db: Session):
                     fruit_season="All year round",
                     region="Throughout Indonesia",
                     price_range="Rp10,000 - Rp50,000 per plant",
-                    image_file="tomato.jpg"
+                    image_file="tomato_plants.jpg"
                 )
             ]
             db.add_all(plants)

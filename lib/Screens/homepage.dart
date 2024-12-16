@@ -101,7 +101,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
         context: context,
         builder: (context) => PopupWidget(
           title: 'Access Denied',
-          desc: 'Please Scan First & Save The Plant',
+          desc: 'Start Scan For Unlock',
           buttonText: 'OK',
           imagePath: 'assets/images/page_lock.png', // Path gambar yang sesuai
           onTap: () {
