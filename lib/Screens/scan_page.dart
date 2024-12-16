@@ -102,7 +102,6 @@ class _ScanPageState extends State<ScanPage> {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        debugPrint("${data}");
 
         if (data["plant_id"] != 0) {
           // Kirim hasil ke endpoint add_leaf_scan
