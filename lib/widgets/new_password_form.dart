@@ -41,11 +41,14 @@ class _NewPasswordFormState extends State<NewPasswordForm> {
               borderRadius: BorderRadius.circular(12),
             ),
             suffixIcon: IconButton(
-              icon: Icon(
-                _obscureText1 ? Icons.visibility : Icons.visibility_off,
+              icon: Image.asset(
+                _obscureText1
+                    ? 'assets/images/eye_on.png'
+                    : 'assets/images/eye_off.png',
+                width: 24,
+                height: 24,
               ),
-              onPressed:
-                  _togglePasswordVisibility1, // Menggunakan toggle pertama
+              onPressed: _togglePasswordVisibility1,
             ),
           ),
         ),
@@ -60,10 +63,14 @@ class _NewPasswordFormState extends State<NewPasswordForm> {
               borderRadius: BorderRadius.circular(12),
             ),
             suffixIcon: IconButton(
-              icon: Icon(
-                _obscureText2 ? Icons.visibility : Icons.visibility_off,
+              icon: Image.asset(
+                _obscureText2
+                    ? 'assets/images/eye_on.png'
+                    : 'assets/images/eye_off.png',
+                width: 24,
+                height: 24,
               ),
-              onPressed: _togglePasswordVisibility2, // Menggunakan toggle kedua
+              onPressed: _togglePasswordVisibility2,
             ),
           ),
         ),

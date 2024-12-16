@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/history_page.dart';
 import 'package:leafyfun/Screens/homepage.dart';
+import 'package:leafyfun/Screens/leafy_garden_detail.dart';
 import 'package:leafyfun/Screens/leafy_quiz.dart';
 import 'package:leafyfun/Screens/profile.dart';
 import 'package:leafyfun/Screens/scan_page.dart';
@@ -156,8 +157,7 @@ class _LeafyGardenState extends State<LeafyGarden> {
                     ),
                     onPressed: () => Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => HistoryPage()),
+                      MaterialPageRoute(builder: (context) => HistoryPage()),
                     ),
                   ),
                 ],
@@ -196,10 +196,24 @@ class _LeafyGardenState extends State<LeafyGarden> {
                         itemBuilder: (context, index) {
                           final plant = userPlants[index];
                           final plantId = _plants[plant['plant_id']];
-                          return PlantCard(
-                              plantName: plant['common_name'] ?? 'Unknown',
-                              imagePath: plantId['imagePath'] ??
-                                  'assets/images/apple_garden.png');
+                          return GestureDetector(
+                              onTap: () {
+                                // Arahkan ke halaman LeafyGardenDetail dan kirimkan plant_id
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LeafyGardenDetail(
+                                      plantId: plant[
+                                          'plant_id'], // Pastikan plant_id berasal dari data yang benar
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: PlantCard(
+                                  plantName: plant['common_name'] ??
+                                      'Unknown', // Gunakan fallback 'Unknown' jika null
+                                  imagePath: plantId['imagePath'] ??
+                                      'assets/images/apple_garden.png'));
                         },
                       ),
                     ),

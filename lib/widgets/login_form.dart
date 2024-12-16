@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leafyfun/Screens/forgot_password.dart';
 
-
 class LoginForm extends StatefulWidget {
   final TextEditingController usernameController;
   final TextEditingController passwordController;
@@ -50,8 +49,12 @@ class _LoginFormState extends State<LoginForm> {
               borderRadius: BorderRadius.circular(15),
             ),
             suffixIcon: IconButton(
-              icon: Icon(
-                _obscureText ? Icons.visibility : Icons.visibility_off,
+              icon: Image.asset(
+                _obscureText
+                    ? 'assets/images/eye_on.png'
+                    : 'assets/images/eye_off.png',
+                width: 24,
+                height: 24,
               ),
               onPressed: _togglePasswordVisibility,
             ),

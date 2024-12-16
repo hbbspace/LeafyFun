@@ -14,7 +14,6 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
-
   // Controller untuk username dan password
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
