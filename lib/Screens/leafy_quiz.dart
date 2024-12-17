@@ -24,7 +24,17 @@ class _LeafyQuizState extends State<LeafyQuiz> {
   bool _isDataInitialized = false;
   final TextEditingController _searchController = TextEditingController();
   List<dynamic> userPlants = []; // List to store user-owned plants
-  List<dynamic> _filteredQuizItems = []; // Filtered quiz items based on user's plants
+  List<dynamic> _filteredQuizItems =
+      []; // Filtered quiz items based on user's plants
+
+  final List<String> staticImages = [
+    'assets/images/apple_plants.jpg',
+    'assets/images/apple_plants.jpg',
+    'assets/images/cherry_plants.jpg',
+    'assets/images/grape_plants.jpg',
+    'assets/images/strawberry_plants.jpg',
+    'assets/images/tomato_plants.jpg',
+  ];
 
   @override
   void initState() {
@@ -54,12 +64,12 @@ class _LeafyQuizState extends State<LeafyQuiz> {
 
       setState(() {
         userPlants = userProvider.userPlant
-      .map((plant) => {
-            'plant_id': plant['plant_id'], // Ambil plant_id
-            'common_name': plant['common_name'] as String,
-            'quiz_score': plant['quiz_score'],
-          })
-      .toList();
+            .map((plant) => {
+                  'plant_id': plant['plant_id'], // Ambil plant_id
+                  'common_name': plant['common_name'] as String,
+                  'quiz_score': plant['quiz_score'],
+                })
+            .toList();
 
         _filteredQuizItems = List.from(userPlants); // Initialize filtered items
         debugPrint(userPlants.toString()); // Print userPlants for debugging
@@ -76,12 +86,12 @@ class _LeafyQuizState extends State<LeafyQuiz> {
 
     switch (index) {
       case 0:
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const HomePageScreen()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const HomePageScreen()));
         break;
       case 1:
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const LeafyQuiz()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const LeafyQuiz()));
         break;
       case 2:
         Navigator.pushReplacement(
@@ -92,15 +102,16 @@ class _LeafyQuizState extends State<LeafyQuiz> {
             context, MaterialPageRoute(builder: (context) => LeafyGarden()));
         break;
       case 4:
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const ProfilePage()));
         break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final userName = Provider.of<UserProvider>(context).userName ?? 'Loading...';
+    final userName =
+        Provider.of<UserProvider>(context).userName ?? 'Loading...';
 
     return Scaffold(
       body: Stack(
@@ -142,10 +153,10 @@ class _LeafyQuizState extends State<LeafyQuiz> {
                           _filteredQuizItems = List.from(userPlants);
                         } else {
                           _filteredQuizItems = userPlants
-                            .where((item) => item['common_name']
-                                .toLowerCase()
-                                .contains(query.toLowerCase()))
-                            .toList();
+                              .where((item) => item['common_name']
+                                  .toLowerCase()
+                                  .contains(query.toLowerCase()))
+                              .toList();
                         }
                       });
                     },
@@ -201,23 +212,26 @@ class _LeafyQuizState extends State<LeafyQuiz> {
                   ),
                   const SizedBox(height: 10),
                   ..._filteredQuizItems.map((quiz) {
-                  return GestureDetector(
-                    onTap: () {
-                      final plantId = quiz['plant_id']; // Ambil plant_id dari Map
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => QuestionPage(plantId: plantId),
-                        ),
-                      );
-                    },
-                    child: FinishedQuiz(
-                      plantName: quiz['common_name'],
-                      plantImage: 'assets/images/apple_plants.jpg',
-                      quizDescription: 'Your Last Score is ${quiz['quiz_score']}/100.',
-                    ),
-                  );
-                }),
+                    return GestureDetector(
+                      onTap: () {
+                        final plantId =
+                            quiz['plant_id']; // Ambil plant_id dari Map
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                QuestionPage(plantId: plantId),
+                          ),
+                        );
+                      },
+                      child: FinishedQuiz(
+                        plantName: quiz['common_name'],
+                        plantImage: staticImages[quiz['plant_id']],
+                        quizDescription:
+                            'Your Last Score is ${quiz['quiz_score']}/100.',
+                      ),
+                    );
+                  }),
                   const SizedBox(height: 100),
                 ],
               ),

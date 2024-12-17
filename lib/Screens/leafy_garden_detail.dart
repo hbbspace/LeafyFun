@@ -190,6 +190,7 @@ class _LeafyGardenDetailState extends State<LeafyGardenDetail> {
                     region: region,
                     priceRange: priceRange,
                   ),
+                  const SizedBox(height: 20)
                 ],
               ),
             ),
