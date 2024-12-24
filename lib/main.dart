@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:leafyfun/Screens/question_page.dart';
 import 'package:leafyfun/Screens/splashscreen.dart';
 import 'package:leafyfun/providers/auth_provider.dart';
 import 'package:leafyfun/providers/plant_provider.dart';

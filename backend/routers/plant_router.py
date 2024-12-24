@@ -170,5 +170,6 @@ async def predict(file: UploadFile = File(...)):
             'predicted_class': class_names[predicted_index],
             'file_name': file_name
         }
-
+    
+    print(response);
     return JSONResponse(content=response)
