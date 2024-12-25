@@ -36,7 +36,7 @@ class PlantCard extends StatelessWidget {
               child: Image.asset(
                 imagePath,
                 width: double.infinity,
-                height: 150,
+                height: 122,
                 fit: BoxFit.cover,
               ),
             ),
